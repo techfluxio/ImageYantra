@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact — ImageYantra</title>
+
+    <style>
+        :root {
+            --bg: #0c0c0f;
+            --surface: #16161c;
+            --border: rgba(255, 255, 255, 0.07);
+            --text: #eeeef2;
+            --text2: #8888a0;
+            --accent: #7c6dfa;
+            --accent-glow: rgba(124, 109, 250, 0.25);
+            --r: 12px;
+            --font-head: 'Syne', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 50px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-family: var(--font-head);
+            font-size: 34px;
+        }
+
+        .header p {
+            color: var(--text2);
+        }
+
+        /* Card */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            padding: 24px;
+            transition: 0.2s;
+        }
+
+        .card:hover {
+            box-shadow: 0 0 20px var(--accent-glow);
+            border-color: var(--accent);
+        }
+
+        /* Form */
+        input,
+        textarea {
+            width: 97%;
+            padding: 12px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: #1e1e27;
+            color: var(--text);
+            outline: none;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 8px var(--accent-glow);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: var(--r);
+            background: var(--accent);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        p {
+            color: var(--text2);
+            font-size: 14px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 20px;
+            color: var(--accent);
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="header">
+            <h1>📩 Contact Us</h1>
+            <p>Have questions or feedback? Reach out to us.</p>
+        </div>
+
+        <div class="card">
+
+            <p>We usually reply within 24 hours.</p>
+
+            <p>You can contact us anytime regarding:
+                <br>• Bug reports
+                <br>• Feature requests
+                <br>• Business inquiries
+            </p>
+
+            <hr style="border-color: var(--border); margin:20px 0;">
+
+            <!-- FORM -->
+            <form id="contactForm">
+
+                <input type="text" name="name" placeholder="Your Name" required>
+
+                <input type="email" name="email" placeholder="Your Email" required>
+
+                <textarea name="message" rows="4" placeholder="Your Message" required></textarea>
+
+                <button type="submit">Send Message</button>
+
+            </form>
+
+        </div>
+
+        <a href="index.html" class="back">← Back to Home</a>
+
+    </div>
+
+
+    <script>
+        document.getElementById("contactForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const form = e.target;
+
+            fetch("https://formspree.io/f/mjgjgvzw", {
+                method: "POST",
+                body: new FormData(form),
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = "thankyou.html";
+                    } else {
+                        alert("Something went wrong. Try again.");
+                    }
+                });
+        });
+    </script>
+
+</body>
+
+</html>
