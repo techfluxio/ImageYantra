@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — ImageYantra</title>
+
+<style>
+:root {
+  --bg:#0c0c0f;
+  --surface:#16161c;
+  --border:rgba(255,255,255,0.07);
+  --text:#eeeef2;
+  --text2:#8888a0;
+  --accent:#7c6dfa;
+  --accent-glow:rgba(124,109,250,0.25);
+  --r:12px;
+  --font-head:'Syne',sans-serif;
+  --font-body:'DM Sans',sans-serif;
+}
+
+body {
+  margin:0;
+  font-family:var(--font-body);
+  background:var(--bg);
+  color:var(--text);
+}
+
+.container {
+  max-width:1000px;
+  margin:auto;
+  padding:50px 20px;
+}
+
+.header {
+  text-align:center;
+  margin-bottom:40px;
+}
+
+.header h1 {
+  font-family:var(--font-head);
+  font-size:32px;
+}
+
+.header p {
+  color:var(--text2);
+}
+
+/* Blog Grid */
+.grid {
+  display:grid;
+  grid-template-columns:1fr;
+  gap:20px;
+}
+
+@media(min-width:700px){
+  .grid {
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+/* Card */
+.card {
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:20px;
+  transition:0.2s;
+  text-decoration:none;
+  color:var(--text);
+}
+
+.card:hover {
+  border-color:var(--accent);
+  box-shadow:0 0 20px var(--accent-glow);
+  transform:translateY(-3px);
+}
+
+.card h2 {
+  margin-bottom:10px;
+  color:var(--accent);
+  font-size:18px;
+}
+
+.card p {
+  font-size:14px;
+  color:var(--text2);
+}
+
+/* Back */
+.back {
+  display:inline-block;
+  margin-top:30px;
+  color:var(--accent);
+  text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>📘 ImageYantra Blog</h1>
+    <p>Guides, tips, and tutorials for image tools</p>
+  </div>
+
+  <div class="grid">
+
+    <a href="/jpg-to-pdf-guide/" class="card">
+      <h2>📄 Convert Images to PDF</h2>
+      <p>Learn how to convert images into PDF easily and for free.</p>
+    </a>
+
+    <a href="/compress-guide/" class="card">
+      <h2>📦 Compress Images</h2>
+      <p>Reduce image size without losing quality using simple methods.</p>
+    </a>
+
+    <a href="/image-size-guide/" class="card">
+      <h2>📐 Best Image Sizes Guide</h2>
+      <p>Find the perfect image dimensions for websites and social media.</p>
+    </a>
+
+  </div>
+
+  <a href="/" class="back">← Back to Home</a>
+
+</div>
+
+</body>
+</html>
