@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>ImageYantra — Free Image to PDF Converter, Compress & Resize Images Online</title>
 <meta name="google-site-verification" content="uu4oIKgVkF5WfTcksHgww-CUq6BR3s1_6W5I9K0Bxj0" />
 <meta name="description" content="ImageYantra is a free online toolkit to convert images to PDF, compress image online, resize image free, and change image resolution. No upload needed — works in your browser.">
@@ -15,8 +15,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<!-- Google AdSense placeholder -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2178808063904703" crossorigin="anonymous"></script>
 
 <style>
@@ -40,8 +38,7 @@
   --green:     #34d399;
   --amber:     #fbbf24;
   --red:       #f87171;
-  --nav-w:     240px;
-  --header-h:  64px;
+  --header-h:  60px;
   --font-head: 'Syne', sans-serif;
   --font-body: 'DM Sans', sans-serif;
   --r:         12px;
@@ -95,59 +92,59 @@ input, select { font-family: var(--font-body); }
   background: var(--bg);
   border-bottom: 1px solid var(--border);
   display: flex; align-items: center;
-  padding: 0 24px;
-  gap: 24px;
+  padding: 0 16px;
+  gap: 16px;
   backdrop-filter: blur(12px);
 }
 .header-logo {
-  display: flex; align-items: center; gap: 10px;
+  display: flex; align-items: center; gap: 8px;
   text-decoration: none; color: var(--text);
   flex-shrink: 0;
 }
 .header-logo-icon {
-  width: 36px; height: 36px; border-radius: 10px;
+  width: 32px; height: 32px; border-radius: 9px;
   background: linear-gradient(135deg, var(--accent), #a855f7);
   display: flex; align-items: center; justify-content: center;
-  font-size: 18px; box-shadow: 0 0 20px var(--accent-glow);
+  font-size: 16px; box-shadow: 0 0 20px var(--accent-glow);
+  flex-shrink: 0;
 }
-.header-logo-text { font-family: var(--font-head); font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+.header-logo-text { font-family: var(--font-head); font-size: 18px; font-weight: 800; letter-spacing: -0.5px; white-space: nowrap; }
 .header-logo-text span { color: var(--accent); }
 .header-tagline { font-size: 12px; color: var(--text2); display: none; }
 @media (min-width: 900px) { .header-tagline { display: block; } }
 
 .header-nav {
   display: none;
-  align-items: center; gap: 4px;
-  margin-left: 16px;
+  align-items: center; gap: 2px;
+  margin-left: 8px;
 }
 @media (min-width: 900px) { .header-nav { display: flex; } }
 .header-nav-btn {
-  padding: 7px 14px; border-radius: 8px;
+  padding: 6px 12px; border-radius: 8px;
   background: none; border: none; color: var(--text2);
-  font-size: 13.5px; font-weight: 500; transition: all 0.18s;
-  display: flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 500; transition: all 0.18s;
+  display: flex; align-items: center; gap: 5px; white-space: nowrap;
 }
 .header-nav-btn:hover { background: var(--surface2); color: var(--text); }
 .header-nav-btn.active { background: var(--surface2); color: var(--accent); }
-.header-nav-btn .icon { font-size: 15px; }
+.header-nav-btn .icon { font-size: 14px; }
 
-.header-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.header-right { margin-left: auto; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .theme-btn {
-  width: 36px; height: 36px; border-radius: 9px;
+  width: 34px; height: 34px; border-radius: 9px;
   background: var(--surface2); border: 1px solid var(--border2);
   display: flex; align-items: center; justify-content: center;
-  font-size: 17px; cursor: pointer; transition: all 0.18s;
+  font-size: 16px; cursor: pointer; transition: all 0.18s;
   color: var(--text2);
 }
 .theme-btn:hover { background: var(--surface3); color: var(--text); }
 
-/* Mobile menu toggle */
 .mobile-menu-btn {
   display: flex;
-  width: 36px; height: 36px; border-radius: 9px;
+  width: 34px; height: 34px; border-radius: 9px;
   background: var(--surface2); border: 1px solid var(--border2);
   align-items: center; justify-content: center;
-  font-size: 18px; cursor: pointer; color: var(--text2);
+  font-size: 17px; cursor: pointer; color: var(--text2);
 }
 @media (min-width: 900px) { .mobile-menu-btn { display: none; } }
 
@@ -157,16 +154,16 @@ input, select { font-family: var(--font-body); }
 .mobile-drawer {
   position: fixed; top: var(--header-h); left: 0; right: 0; bottom: 0;
   background: var(--bg); z-index: 190;
-  padding: 16px;
+  padding: 12px;
   display: none;
-  flex-direction: column; gap: 6px;
+  flex-direction: column; gap: 5px;
   overflow-y: auto;
   border-top: 1px solid var(--border);
 }
 .mobile-drawer.open { display: flex; }
 .mobile-drawer-btn {
   display: flex; align-items: center; gap: 12px;
-  padding: 13px 16px; border-radius: 10px;
+  padding: 12px 14px; border-radius: 10px;
   background: var(--surface); border: 1px solid var(--border);
   color: var(--text2); font-size: 15px; font-weight: 500;
   transition: all 0.18s;
@@ -200,10 +197,13 @@ input, select { font-family: var(--font-body); }
 .app-wrapper {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 28px 24px 60px;
+  padding: 20px 12px 60px;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 24px;
+  gap: 20px;
+}
+@media (min-width: 600px) {
+  .app-wrapper { padding: 24px 20px 60px; }
 }
 @media (min-width: 1100px) {
   .app-wrapper {
@@ -250,16 +250,15 @@ input, select { font-family: var(--font-body); }
 .panel { display: none; }
 .panel.active { display: block; }
 
-/* Panel header */
 .panel-header {
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 .panel-title {
   font-family: var(--font-head);
-  font-size: 26px; font-weight: 800; letter-spacing: -0.5px;
+  font-size: clamp(20px, 5vw, 26px); font-weight: 800; letter-spacing: -0.5px;
   margin-bottom: 6px;
 }
-.panel-sub { font-size: 14px; color: var(--text2); }
+.panel-sub { font-size: 13px; color: var(--text2); }
 
 /* ═══════════════════════════════════════════════
    TOOL LAYOUT (2-col on desktop)
@@ -267,17 +266,17 @@ input, select { font-family: var(--font-body); }
 .tool-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 20px;
+  gap: 16px;
 }
-@media (min-width: 760px) {
+@media (min-width: 700px) {
   .tool-grid {
-    grid-template-columns: 340px 1fr;
+    grid-template-columns: minmax(0, 340px) 1fr;
     align-items: start;
   }
 }
 
-.tool-controls { display: flex; flex-direction: column; gap: 16px; }
-.tool-preview-area { display: flex; flex-direction: column; gap: 16px; }
+.tool-controls { display: flex; flex-direction: column; gap: 14px; }
+.tool-preview-area { display: flex; flex-direction: column; gap: 14px; }
 
 /* ═══════════════════════════════════════════════
    CARDS
@@ -286,13 +285,13 @@ input, select { font-family: var(--font-body); }
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
-  padding: 20px;
+  padding: 16px;
 }
 .card-title {
   font-family: var(--font-head);
   font-size: 11px; font-weight: 700;
   color: var(--text3); text-transform: uppercase; letter-spacing: 1px;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 /* ═══════════════════════════════════════════════
@@ -303,7 +302,7 @@ input, select { font-family: var(--font-body); }
   border: 2px dashed var(--border2);
   border-radius: var(--r-lg);
   background: var(--surface);
-  padding: 36px 24px;
+  padding: 28px 16px;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s;
@@ -324,29 +323,25 @@ input, select { font-family: var(--font-body); }
 .drop-zone input[type="file"] {
   position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
 }
-.drop-icon {
-  font-size: 44px; margin-bottom: 14px;
-  display: block;
-  filter: drop-shadow(0 0 12px var(--accent-glow));
-}
-.drop-title { font-family: var(--font-head); font-size: 17px; font-weight: 700; margin-bottom: 6px; }
-.drop-sub { font-size: 13px; color: var(--text2); }
+.drop-icon { font-size: 36px; margin-bottom: 10px; display: block; filter: drop-shadow(0 0 12px var(--accent-glow)); }
+.drop-title { font-family: var(--font-head); font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+.drop-sub { font-size: 12px; color: var(--text2); }
 .drop-hint {
   display: inline-flex; align-items: center; gap: 6px;
-  margin-top: 14px; padding: 6px 14px;
+  margin-top: 10px; padding: 5px 12px;
   background: var(--surface2); border: 1px solid var(--border2);
-  border-radius: 99px; font-size: 12px; color: var(--text2);
+  border-radius: 99px; font-size: 11px; color: var(--text2);
 }
 
 /* ═══════════════════════════════════════════════
    FORM CONTROLS
 ═══════════════════════════════════════════════ */
-.field { margin-bottom: 14px; }
+.field { margin-bottom: 12px; }
 .field:last-child { margin-bottom: 0; }
-.field label { display: block; font-size: 12px; font-weight: 600; color: var(--text2); margin-bottom: 7px; letter-spacing: 0.3px; }
+.field label { display: block; font-size: 12px; font-weight: 600; color: var(--text2); margin-bottom: 6px; letter-spacing: 0.3px; }
 .field input[type="number"],
 .field select {
-  width: 100%; padding: 10px 13px;
+  width: 100%; padding: 9px 12px;
   background: var(--surface2); border: 1px solid var(--border2);
   border-radius: var(--r-sm); color: var(--text); font-size: 14px;
   outline: none; transition: border-color 0.2s, box-shadow 0.2s;
@@ -362,18 +357,17 @@ input, select { font-family: var(--font-body); }
   box-shadow: 0 0 0 3px var(--accent-glow);
 }
 .field input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer; }
-.row { display: flex; gap: 12px; }
-.row .field { flex: 1; }
+.row { display: flex; gap: 10px; }
+.row .field { flex: 1; min-width: 0; }
 
-/* Toggle */
 .toggle-row {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 14px; background: var(--surface2);
+  padding: 10px 12px; background: var(--surface2);
   border-radius: var(--r-sm); margin-bottom: 12px;
   border: 1px solid var(--border);
 }
 .toggle-label { font-size: 14px; font-weight: 500; }
-.toggle-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
+.toggle-sub { font-size: 11px; color: var(--text2); margin-top: 2px; }
 .toggle {
   position: relative; width: 42px; height: 23px;
   background: var(--surface3); border-radius: 99px;
@@ -392,7 +386,7 @@ input, select { font-family: var(--font-body); }
    BUTTONS
 ═══════════════════════════════════════════════ */
 .btn-primary {
-  width: 100%; padding: 13px 20px; border-radius: var(--r);
+  width: 100%; padding: 12px 16px; border-radius: var(--r);
   background: var(--accent); color: #fff; border: none;
   font-size: 14px; font-weight: 600; font-family: var(--font-head);
   letter-spacing: 0.2px;
@@ -410,7 +404,7 @@ input, select { font-family: var(--font-body); }
 .btn-primary:active { transform: scale(0.98) translateY(0); }
 .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
 .btn-secondary {
-  width: 100%; padding: 11px 18px; border-radius: var(--r);
+  width: 100%; padding: 10px 16px; border-radius: var(--r);
   background: var(--surface2); color: var(--text);
   border: 1px solid var(--border2);
   font-size: 14px; font-weight: 500; cursor: pointer;
@@ -418,39 +412,41 @@ input, select { font-family: var(--font-body); }
   display: flex; align-items: center; justify-content: center; gap: 8px;
 }
 .btn-secondary:hover { background: var(--surface3); }
-.btn-sm {
-  padding: 7px 14px; font-size: 13px; border-radius: var(--r-sm);
-  width: auto;
-}
+.btn-secondary:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-sm { padding: 7px 14px; font-size: 13px; border-radius: var(--r-sm); width: auto; }
+
+.btn-row { display: flex; gap: 10px; }
+.btn-row .btn-primary, .btn-row .btn-secondary { flex: 1; }
 
 /* ═══════════════════════════════════════════════
    IMAGE GRID (PDF images)
 ═══════════════════════════════════════════════ */
 .img-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-  gap: 10px;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 8px;
 }
 .img-thumb {
   position: relative; aspect-ratio: 1;
   border-radius: var(--r-sm); overflow: hidden;
   background: var(--surface2); border: 1px solid var(--border);
-  transition: transform 0.15s;
+  transition: transform 0.15s; cursor: grab;
 }
 .img-thumb:hover { transform: scale(1.02); }
+.img-thumb.dragging { opacity: 0.5; cursor: grabbing; }
 .img-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .img-thumb .remove-btn {
-  position: absolute; top: 4px; right: 4px;
-  width: 22px; height: 22px; border-radius: 50%;
+  position: absolute; top: 3px; right: 3px;
+  width: 20px; height: 20px; border-radius: 50%;
   background: rgba(0,0,0,0.75); backdrop-filter: blur(4px);
-  color: #fff; border: none; cursor: pointer; font-size: 13px;
+  color: #fff; border: none; cursor: pointer; font-size: 12px;
   display: flex; align-items: center; justify-content: center;
   opacity: 0; transition: opacity 0.15s;
 }
 .img-thumb:hover .remove-btn { opacity: 1; }
 .img-thumb .order-badge {
-  position: absolute; bottom: 4px; left: 4px;
+  position: absolute; bottom: 3px; left: 3px;
   background: var(--accent); color: #fff;
-  font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;
+  font-size: 10px; font-weight: 700; padding: 2px 5px; border-radius: 4px;
   font-family: var(--font-head);
 }
 
@@ -463,35 +459,35 @@ input, select { font-family: var(--font-body); }
   border-radius: var(--r-lg);
   overflow: hidden;
   display: flex; align-items: center; justify-content: center;
-  min-height: 240px; position: relative;
+  min-height: 200px; position: relative;
 }
-.preview-box img { max-width: 100%; max-height: 380px; object-fit: contain; display: block; }
+.preview-box img { max-width: 100%; max-height: 340px; object-fit: contain; display: block; }
 .preview-placeholder { color: var(--text3); font-size: 13px; text-align: center; padding: 20px; }
-.preview-placeholder .ico { font-size: 40px; margin-bottom: 10px; }
+.preview-placeholder .ico { font-size: 36px; margin-bottom: 10px; }
 
 /* ═══════════════════════════════════════════════
    STATS BADGES
 ═══════════════════════════════════════════════ */
 .stats-row { display: flex; gap: 10px; }
 .stat-badge {
-  flex: 1; padding: 12px; text-align: center;
+  flex: 1; padding: 10px; text-align: center;
   background: var(--surface2); border-radius: var(--r);
   border: 1px solid var(--border);
 }
-.stat-badge .val { font-family: var(--font-head); font-size: 18px; font-weight: 800; }
-.stat-badge .lbl { font-size: 11px; color: var(--text2); margin-top: 3px; text-transform: uppercase; letter-spacing: 0.5px; }
+.stat-badge .val { font-family: var(--font-head); font-size: 16px; font-weight: 800; }
+.stat-badge .lbl { font-size: 10px; color: var(--text2); margin-top: 3px; text-transform: uppercase; letter-spacing: 0.5px; }
 .stat-badge.green .val { color: var(--green); }
 .stat-badge.amber .val { color: var(--amber); }
-.stat-badge.arrow { flex: 0 0 40px; font-size: 22px; color: var(--text3); display: flex; align-items: center; justify-content: center; background: none; border: none; }
+.stat-badge.arrow { flex: 0 0 36px; font-size: 20px; color: var(--text3); display: flex; align-items: center; justify-content: center; background: none; border: none; }
 
 /* ═══════════════════════════════════════════════
    COMPRESSION LEVELS
 ═══════════════════════════════════════════════ */
-.level-btns { display: flex; gap: 8px; margin-bottom: 14px; }
+.level-btns { display: flex; gap: 6px; margin-bottom: 12px; }
 .level-btn {
-  flex: 1; padding: 9px 8px; text-align: center; border-radius: var(--r-sm);
+  flex: 1; padding: 8px 6px; text-align: center; border-radius: var(--r-sm);
   border: 1px solid var(--border2); background: var(--surface2);
-  color: var(--text2); font-size: 13px; font-weight: 500; cursor: pointer;
+  color: var(--text2); font-size: 12px; font-weight: 500; cursor: pointer;
   transition: all 0.18s;
 }
 .level-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
@@ -500,72 +496,72 @@ input, select { font-family: var(--font-body); }
 /* ═══════════════════════════════════════════════
    RESOLUTION GRID
 ═══════════════════════════════════════════════ */
-.res-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+.res-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 7px; margin-bottom: 12px; }
 .res-btn {
-  padding: 10px 6px; text-align: center; border-radius: var(--r-sm);
+  padding: 9px 5px; text-align: center; border-radius: var(--r-sm);
   border: 1px solid var(--border2); background: var(--surface2);
-  color: var(--text2); font-size: 12.5px; font-weight: 500; cursor: pointer;
+  color: var(--text2); font-size: 11.5px; font-weight: 500; cursor: pointer;
   transition: all 0.18s; line-height: 1.3;
 }
-.res-btn span { display: block; font-size: 10px; color: var(--text3); margin-top: 3px; font-family: monospace; }
+.res-btn span { display: block; font-size: 9.5px; color: var(--text3); margin-top: 2px; font-family: monospace; }
 .res-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(124,109,250,0.08); }
 .res-btn:not(.active):hover { background: var(--surface3); color: var(--text); }
 
 /* ═══════════════════════════════════════════════
    PROGRESS BAR
 ═══════════════════════════════════════════════ */
-.progress-wrap { margin: 14px 0; display: none; }
+.progress-wrap { margin: 12px 0; display: none; }
 .progress-wrap.show { display: block; }
 .progress-bar-bg { height: 5px; background: var(--surface3); border-radius: 99px; overflow: hidden; }
 .progress-bar-fill {
   height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2));
   border-radius: 99px; width: 0%; transition: width 0.3s;
 }
-.progress-label { font-size: 12px; color: var(--text2); margin-top: 7px; }
+.progress-label { font-size: 12px; color: var(--text2); margin-top: 6px; }
 
 /* ═══════════════════════════════════════════════
    FILE MANAGER
 ═══════════════════════════════════════════════ */
 .file-list-header {
   display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
-.file-list-title { font-family: var(--font-head); font-size: 18px; font-weight: 700; }
+.file-list-title { font-family: var(--font-head); font-size: 17px; font-weight: 700; }
 .file-item {
-  display: flex; align-items: center; gap: 14px;
-  padding: 14px 16px;
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px;
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--r); margin-bottom: 8px;
   transition: border-color 0.18s;
 }
 .file-item:hover { border-color: var(--border2); }
-.file-icon { font-size: 30px; flex-shrink: 0; }
+.file-icon { font-size: 26px; flex-shrink: 0; }
 .file-info { flex: 1; min-width: 0; }
 .file-name { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.file-meta { font-size: 12px; color: var(--text2); margin-top: 3px; }
-.file-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.file-meta { font-size: 11px; color: var(--text2); margin-top: 2px; }
+.file-actions { display: flex; gap: 5px; flex-shrink: 0; }
 .icon-btn {
-  width: 34px; height: 34px; border-radius: var(--r-sm);
+  width: 32px; height: 32px; border-radius: var(--r-sm);
   background: var(--surface2); border: 1px solid var(--border);
   display: flex; align-items: center; justify-content: center;
-  cursor: pointer; font-size: 14px; transition: all 0.18s;
+  cursor: pointer; font-size: 13px; transition: all 0.18s;
   color: var(--text2);
 }
 .icon-btn:hover { background: var(--surface3); color: var(--text); }
 
-.empty-state { text-align: center; padding: 60px 20px; color: var(--text3); }
-.empty-state .empty-icon { font-size: 56px; margin-bottom: 16px; }
-.empty-state .empty-text { font-size: 15px; line-height: 1.7; }
+.empty-state { text-align: center; padding: 48px 20px; color: var(--text3); }
+.empty-state .empty-icon { font-size: 48px; margin-bottom: 14px; }
+.empty-state .empty-text { font-size: 14px; line-height: 1.7; }
 
 /* ═══════════════════════════════════════════════
    TOAST
 ═══════════════════════════════════════════════ */
 #toast {
-  position: fixed; bottom: 32px; left: 50%;
+  position: fixed; bottom: 24px; left: 50%;
   transform: translateX(-50%) translateY(20px);
   background: var(--surface2); color: var(--text);
-  padding: 11px 22px; border-radius: 99px;
-  font-size: 13.5px; font-weight: 500;
+  padding: 10px 20px; border-radius: 99px;
+  font-size: 13px; font-weight: 500;
   opacity: 0; transition: all 0.25s; z-index: 9999;
   border: 1px solid var(--border2);
   box-shadow: var(--shadow);
@@ -577,11 +573,62 @@ input, select { font-family: var(--font-body); }
 #toast.error { border-color: var(--red); color: var(--red); }
 
 /* ═══════════════════════════════════════════════
+   PDF PREVIEW MODAL
+═══════════════════════════════════════════════ */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; z-index: 500;
+  background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+  align-items: center; justify-content: center; padding: 16px;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: var(--r-lg); width: 100%; max-width: 860px;
+  max-height: 90vh; display: flex; flex-direction: column;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px; border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.modal-title { font-family: var(--font-head); font-size: 15px; font-weight: 700; }
+.modal-close {
+  width: 32px; height: 32px; border-radius: var(--r-sm);
+  background: var(--surface2); border: 1px solid var(--border);
+  color: var(--text2); font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.18s;
+}
+.modal-close:hover { background: var(--surface3); color: var(--text); }
+.modal-body { flex: 1; overflow: auto; padding: 0; }
+.modal-body iframe { width: 100%; height: 100%; min-height: 60vh; border: none; display: block; }
+.modal-footer {
+  padding: 12px 18px; border-top: 1px solid var(--border);
+  display: flex; gap: 10px; flex-shrink: 0;
+}
+.modal-footer .btn-primary, .modal-footer .btn-secondary { flex: 1; }
+
+/* ═══════════════════════════════════════════════
+   SECTION SEPARATOR / ADVANCED TOGGLE
+═══════════════════════════════════════════════ */
+.advanced-toggle {
+  display: flex; align-items: center; gap: 8px;
+  cursor: pointer; color: var(--text2); font-size: 12px; font-weight: 600;
+  padding: 6px 0; user-select: none; letter-spacing: 0.3px;
+}
+.advanced-toggle .chevron { transition: transform 0.2s; font-size: 10px; }
+.advanced-toggle.open .chevron { transform: rotate(180deg); }
+.advanced-section { display: none; }
+.advanced-section.open { display: block; }
+
+/* ═══════════════════════════════════════════════
    AD — BOTTOM (mobile only)
 ═══════════════════════════════════════════════ */
 .ad-bottom-mobile {
   display: flex; align-items: center; justify-content: center;
-  padding: 16px;
+  padding: 14px;
   background: var(--surface);
   border-top: 1px solid var(--border);
   margin-top: 8px;
@@ -595,8 +642,8 @@ input, select { font-family: var(--font-body); }
 .footer {
   background: var(--surface);
   border-top: 1px solid var(--border);
-  padding: 28px 24px;
-  margin-top: 24px;
+  padding: 24px 16px;
+  margin-top: 20px;
 }
 .footer-inner {
   max-width: 1280px; margin: 0 auto;
@@ -609,38 +656,86 @@ input, select { font-family: var(--font-body); }
 .footer-logo { font-family: var(--font-head); font-size: 16px; font-weight: 800; }
 .footer-logo span { color: var(--accent); }
 .footer-tagline { font-size: 12px; color: var(--text2); margin-top: 3px; }
-.footer-links { display: flex; gap: 20px; }
+.footer-links { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
 .footer-links a { font-size: 13px; color: var(--text2); transition: color 0.18s; }
 .footer-links a:hover { color: var(--accent); }
-.footer-copy { font-size: 12px; color: var(--text3); }
+.footer-copy { font-size: 12px; color: var(--text3); white-space: nowrap; }
 
 /* ═══════════════════════════════════════════════
-   LOADING OVERLAY (spinner)
+   MISC UTILITIES
 ═══════════════════════════════════════════════ */
 .spinner {
   display: inline-block;
-  width: 16px; height: 16px; border-radius: 50%;
+  width: 14px; height: 14px; border-radius: 50%;
   border: 2px solid rgba(255,255,255,0.3);
   border-top-color: #fff;
   animation: spin 0.6s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
-
-/* ═══════════════════════════════════════════════
-   MISC UTILITIES
-═══════════════════════════════════════════════ */
 canvas { display: none; }
-.divider { height: 1px; background: var(--border); margin: 16px 0; }
-.label-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; }
+.divider { height: 1px; background: var(--border); margin: 14px 0; }
+.label-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
 .label-row label { font-size: 12px; font-weight: 600; color: var(--text2); letter-spacing: 0.3px; }
 .label-val { font-size: 13px; font-weight: 700; color: var(--text); font-family: var(--font-head); }
-.info-text { font-size: 12.5px; color: var(--text2); text-align: center; padding: 6px 0; }
+.info-text { font-size: 12px; color: var(--text2); text-align: center; padding: 6px 0; }
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 9px; border-radius: 99px; font-size: 11px; font-weight: 600;
+  background: var(--surface2); border: 1px solid var(--border2); color: var(--text2);
+}
+.badge.green { background: rgba(52,211,153,0.1); border-color: rgba(52,211,153,0.3); color: var(--green); }
+.badge.amber { background: rgba(251,191,36,0.1); border-color: rgba(251,191,36,0.3); color: var(--amber); }
+
+/* Scaling options */
+.scale-opts { display: flex; gap: 6px; flex-wrap: wrap; }
+.scale-opt {
+  flex: 1; min-width: 70px; padding: 8px 6px; text-align: center; border-radius: var(--r-sm);
+  border: 1px solid var(--border2); background: var(--surface2);
+  color: var(--text2); font-size: 11.5px; font-weight: 500; cursor: pointer;
+  transition: all 0.18s; line-height: 1.4;
+}
+.scale-opt span { display: block; font-size: 9.5px; color: var(--text3); margin-top: 2px; }
+.scale-opt.active { border-color: var(--accent); color: var(--accent); background: rgba(124,109,250,0.08); }
+.scale-opt:not(.active):hover { background: var(--surface3); color: var(--text); }
+
+/* Alignment options */
+.align-opts { display: grid; grid-template-columns: repeat(3,1fr); gap: 5px; }
+.align-opt {
+  padding: 7px; text-align: center; border-radius: var(--r-sm);
+  border: 1px solid var(--border2); background: var(--surface2);
+  color: var(--text2); font-size: 11px; font-weight: 500; cursor: pointer;
+  transition: all 0.18s;
+}
+.align-opt.active { border-color: var(--accent); color: var(--accent); background: rgba(124,109,250,0.08); }
+.align-opt:not(.active):hover { background: var(--surface3); }
+
+/* Target size */
+.target-size-row { display: flex; gap: 8px; align-items: flex-end; }
+.target-size-row .field { flex: 1; margin-bottom: 0; }
+.target-size-row select { width: 80px; }
 </style>
 </head>
 <body data-theme="dark">
 <canvas id="workCanvas"></canvas>
 
-<!-- ═══════════════ HEADER ═══════════════ -->
+<!-- PDF Preview Modal -->
+<div class="modal-overlay" id="pdfModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">📄 PDF Preview</div>
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <div class="modal-body">
+      <iframe id="pdfPreviewFrame" title="PDF Preview"></iframe>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="modalClose2">✕ Close</button>
+      <button class="btn-primary" id="modalDownload">⬇️ Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
 <header class="header">
   <a href="#" class="header-logo">
     <div class="header-logo-icon">🖼️</div>
@@ -677,18 +772,11 @@ canvas { display: none; }
 
 <!-- Top Ad Banner -->
 <div class="ad-top-banner">
-  <div class="ad-placeholder">
-    <!-- Google AdSense Top Banner 728×90 -->
-    <!-- <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px"
-         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
-    AdSense Banner 728×90
-  </div>
+  <div class="ad-placeholder">AdSense Banner 728×90</div>
 </div>
 
-<!-- ═══════════════ APP WRAPPER ═══════════════ -->
+<!-- APP WRAPPER -->
 <div class="app-wrapper">
-  <!-- MAIN CONTENT -->
   <main class="main-content">
 
     <!-- ───── PDF PANEL ───── -->
@@ -708,6 +796,7 @@ canvas { display: none; }
             <div class="drop-hint">🖱️ Tap or drag & drop</div>
           </div>
 
+          <!-- PDF Core Settings -->
           <div class="card" id="pdfOptions" style="display:none">
             <div class="card-title">PDF Settings</div>
             <div class="field">
@@ -716,6 +805,7 @@ canvas { display: none; }
                 <option value="a4">A4 (210 × 297 mm)</option>
                 <option value="letter">Letter (8.5 × 11 in)</option>
                 <option value="a3">A3 (297 × 420 mm)</option>
+                <option value="a5">A5 (148 × 210 mm)</option>
                 <option value="fit">Fit to Image</option>
               </select>
             </div>
@@ -724,15 +814,64 @@ canvas { display: none; }
               <select id="pdfOrientation">
                 <option value="portrait">Portrait</option>
                 <option value="landscape">Landscape</option>
+                <option value="auto">Auto (per image)</option>
               </select>
             </div>
             <div class="field">
-              <label>Image Quality</label>
-              <select id="pdfQuality">
-                <option value="0.95">High (larger file)</option>
-                <option value="0.80" selected>Medium (recommended)</option>
-                <option value="0.60">Low (smaller file)</option>
-              </select>
+              <label>Image Scaling</label>
+              <div class="scale-opts" style="margin-top:4px;">
+                <button class="scale-opt active" data-scale="fit">Fit<span>keep ratio</span></button>
+                <button class="scale-opt" data-scale="fill">Fill<span>crop edges</span></button>
+                <button class="scale-opt" data-scale="stretch">Stretch<span>exact size</span></button>
+                <button class="scale-opt" data-scale="original">Original<span>no scale</span></button>
+              </div>
+            </div>
+
+            <!-- Advanced Options (collapsible) -->
+            <div class="divider"></div>
+            <div class="advanced-toggle" id="advancedToggle">
+              <span>⚙️ Advanced Options</span><span class="chevron">▼</span>
+            </div>
+            <div class="advanced-section" id="advancedSection">
+              <div style="height:10px;"></div>
+              <div class="field">
+                <label>Image Quality</label>
+                <select id="pdfQuality">
+                  <option value="0.95">High (95%) — larger file</option>
+                  <option value="0.80" selected>Medium (80%) — recommended</option>
+                  <option value="0.60">Low (60%) — smaller file</option>
+                  <option value="0.40">Very Low (40%) — tiny file</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Image Alignment on Page</label>
+                <div class="align-opts" style="margin-top:4px;">
+                  <button class="align-opt" data-align="top-left">↖ TL</button>
+                  <button class="align-opt" data-align="top-center">↑ TC</button>
+                  <button class="align-opt" data-align="top-right">↗ TR</button>
+                  <button class="align-opt active" data-align="center">⊙ Ctr</button>
+                  <button class="align-opt" data-align="bottom-left">↙ BL</button>
+                  <button class="align-opt" data-align="bottom-center">↓ BC</button>
+                </div>
+              </div>
+              <div class="field">
+                <label>Margin (mm)</label>
+                <input type="number" id="pdfMargin" value="5" min="0" max="50" placeholder="5">
+              </div>
+              <div class="toggle-row" style="margin-bottom:12px;">
+                <div>
+                  <div class="toggle-label" style="font-size:13px;">Page Numbering</div>
+                  <div class="toggle-sub">Add page numbers to footer</div>
+                </div>
+                <div class="toggle" id="pageNumToggle"><div class="toggle-knob"></div></div>
+              </div>
+              <div class="toggle-row">
+                <div>
+                  <div class="toggle-label" style="font-size:13px;">Watermark</div>
+                  <div class="toggle-sub">Add "ImageYantra" diagonal text</div>
+                </div>
+                <div class="toggle" id="watermarkToggle"><div class="toggle-knob"></div></div>
+              </div>
             </div>
           </div>
 
@@ -741,14 +880,26 @@ canvas { display: none; }
             <div class="progress-label" id="pdfProgressLabel">Converting…</div>
           </div>
 
+          <!-- Preview + Download buttons -->
+          <div class="btn-row" id="pdfBtnRow" style="display:none;">
+            <button class="btn-secondary" id="pdfPreviewBtn" disabled>
+              👁 Preview
+            </button>
+            <button class="btn-primary" id="pdfDownloadBtn" disabled>
+              ⬇️ Download PDF
+            </button>
+          </div>
           <button class="btn-primary" id="pdfConvertBtn" disabled>
-            📄 Convert to PDF
+            📄 Generate PDF
           </button>
         </div>
 
         <div class="tool-preview-area">
           <div class="card">
-            <div class="card-title">Selected Images</div>
+            <div class="card-title" style="display:flex;align-items:center;justify-content:space-between;">
+              <span>Selected Images</span>
+              <span id="pdfImageCount" style="font-size:11px;color:var(--accent);font-weight:700;"></span>
+            </div>
             <div id="pdfImgGrid" class="img-grid" style="display:none"></div>
             <div id="pdfEmptyGrid" style="text-align:center;padding:24px 0;color:var(--text3);font-size:13px;">No images selected yet</div>
           </div>
@@ -792,15 +943,15 @@ canvas { display: none; }
                 <input type="number" id="resizeH" placeholder="e.g. 1080" min="1">
               </div>
             </div>
-            <div id="origDims" style="font-size:12px;color:var(--text2);margin-top:-6px;margin-bottom:14px;"></div>
+            <div id="origDims" style="font-size:11px;color:var(--text2);margin-top:-6px;margin-bottom:12px;"></div>
             <button class="btn-primary" id="resizeApplyBtn" disabled>↔️ Resize & Download</button>
           </div>
         </div>
 
         <div class="tool-preview-area">
-          <div class="card" style="min-height:280px;">
+          <div class="card" style="min-height:240px;">
             <div class="card-title">Preview</div>
-            <div class="preview-box" id="resizePreview" style="min-height:220px;">
+            <div class="preview-box" id="resizePreview" style="min-height:200px;">
               <div class="preview-placeholder"><div class="ico">🖼️</div>Preview will appear here</div>
             </div>
           </div>
@@ -812,7 +963,7 @@ canvas { display: none; }
     <section class="panel" id="panel-compress">
       <div class="panel-header">
         <h2 class="panel-title">📦 Compress Image Online</h2>
-        <p class="panel-sub">Reduce image file size without losing quality. Choose from preset levels or fine-tune manually.</p>
+        <p class="panel-sub">Reduce image file size without losing quality. Choose from preset levels or target a specific file size.</p>
       </div>
 
       <div class="tool-grid">
@@ -840,13 +991,28 @@ canvas { display: none; }
               <input type="range" id="qualitySlider" min="5" max="100" value="70">
             </div>
             <div class="divider"></div>
+            <div class="field">
+              <label>Target File Size (optional)</label>
+              <div class="target-size-row">
+                <div class="field" style="margin-bottom:0;">
+                  <input type="number" id="targetSizeInput" placeholder="e.g. 200" min="10">
+                </div>
+                <select id="targetSizeUnit" style="width:72px;padding:9px 6px;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r-sm);color:var(--text);font-size:13px;outline:none;appearance:none;-webkit-appearance:none;">
+                  <option value="kb">KB</option>
+                  <option value="mb">MB</option>
+                </select>
+                <button class="btn-secondary btn-sm" id="targetSizeBtn" style="white-space:nowrap;width:auto;">Apply</button>
+              </div>
+              <div id="targetSizeInfo" style="font-size:11px;color:var(--text2);margin-top:6px;"></div>
+            </div>
+            <div class="divider"></div>
             <button class="btn-primary" id="compressSaveBtn">💾 Save Compressed Image</button>
           </div>
         </div>
 
         <div class="tool-preview-area">
           <div id="compressSizeDisplay" style="display:none">
-            <div class="stats-row" style="margin-bottom:16px;">
+            <div class="stats-row" style="margin-bottom:14px;">
               <div class="stat-badge amber">
                 <div class="val" id="origSize">—</div>
                 <div class="lbl">Original</div>
@@ -856,13 +1022,18 @@ canvas { display: none; }
                 <div class="val" id="compSize">—</div>
                 <div class="lbl">Compressed</div>
               </div>
+              <div class="stat-badge arrow">→</div>
+              <div class="stat-badge green">
+                <div class="val" id="compSavings">—</div>
+                <div class="lbl">Saved</div>
+              </div>
             </div>
           </div>
 
-          <div class="card" style="min-height:280px;">
+          <div class="card" style="min-height:240px;">
             <div class="card-title">Preview</div>
-            <div class="preview-box" style="min-height:220px;">
-              <img id="compressPreviewImg" style="max-width:100%;max-height:300px;object-fit:contain;display:none;" src="" alt="Compressed preview">
+            <div class="preview-box" style="min-height:200px;">
+              <img id="compressPreviewImg" style="max-width:100%;max-height:280px;object-fit:contain;display:none;" src="" alt="Compressed preview">
               <div class="preview-placeholder" id="compressPlaceholder"><div class="ico">📦</div>Compressed preview here</div>
             </div>
           </div>
@@ -911,10 +1082,10 @@ canvas { display: none; }
         </div>
 
         <div class="tool-preview-area">
-          <div class="card" style="min-height:280px;">
+          <div class="card" style="min-height:240px;">
             <div class="card-title">Preview</div>
-            <div class="preview-box" style="min-height:220px;">
-              <img id="resolutionPreviewImg" style="max-width:100%;max-height:300px;object-fit:contain;display:none;" src="" alt="Resolution preview">
+            <div class="preview-box" style="min-height:200px;">
+              <img id="resolutionPreviewImg" style="max-width:100%;max-height:280px;object-fit:contain;display:none;" src="" alt="Resolution preview">
               <div class="preview-placeholder" id="resolutionPlaceholder"><div class="ico">🔍</div>Preview will appear here</div>
             </div>
             <div class="info-text" id="resolutionInfo"></div>
@@ -936,22 +1107,14 @@ canvas { display: none; }
       <div id="fileList"></div>
     </section>
 
-  </main><!-- /main-content -->
+  </main>
 
   <!-- SIDEBAR -->
   <aside class="sidebar">
-    <!-- Sidebar Ad 300×250 -->
     <div class="sidebar-ad">
-      <div class="ad-placeholder">
-        <!-- Google AdSense Sidebar 300×250 -->
-        <!-- <ins class="adsbygoogle" style="display:block;width:300px;height:250px"
-             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
-        AdSense 300×250
-      </div>
+      <div class="ad-placeholder" style="height:250px;">AdSense 300×250</div>
     </div>
 
-    <!-- Tips Card -->
     <div class="sidebar-card">
       <h3>Tips & Info</h3>
       <div class="tip-item">
@@ -960,43 +1123,29 @@ canvas { display: none; }
       </div>
       <div class="tip-item">
         <span class="tip-icon">📄</span>
-        <div class="tip-text"><strong>PDF converter:</strong> Add multiple images and drag to reorder before converting.</div>
+        <div class="tip-text"><strong>PDF converter:</strong> Use <em>Fit</em> scaling to preserve aspect ratio. <em>Auto</em> orientation picks the best rotation per image.</div>
       </div>
       <div class="tip-item">
         <span class="tip-icon">📦</span>
-        <div class="tip-text"><strong>Compress:</strong> Medium quality (70%) gives the best file size vs. quality tradeoff.</div>
+        <div class="tip-text"><strong>Compress:</strong> Use the Target Size field to hit an exact KB or MB limit automatically.</div>
       </div>
       <div class="tip-item">
         <span class="tip-icon">🔍</span>
-        <div class="tip-text"><strong>Resolution change</strong> adds black letterboxing to maintain image ratio at new dimensions.</div>
+        <div class="tip-text"><strong>Resolution change</strong> uses letterboxing to maintain image ratio at new dimensions.</div>
       </div>
     </div>
 
-    <!-- Sidebar Ad 300×600 -->
     <div class="sidebar-ad">
-      <div class="ad-placeholder" style="height:600px;">
-        <!-- Google AdSense Sidebar 300×600 -->
-        <!-- <ins class="adsbygoogle" style="display:block;width:300px;height:600px"
-             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
-        AdSense 300×600
-      </div>
+      <div class="ad-placeholder" style="height:600px;">AdSense 300×600</div>
     </div>
   </aside>
-</div><!-- /app-wrapper -->
+</div>
 
 <!-- Bottom Ad (mobile only) -->
 <div class="ad-bottom-mobile">
-  <div class="ad-placeholder">
-    <!-- Google AdSense Mobile Bottom 320×50 -->
-    <!-- <ins class="adsbygoogle" style="display:inline-block;width:320px;height:50px"
-         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
-    AdSense 320×50 Mobile
-  </div>
+  <div class="ad-placeholder">AdSense 320×50 Mobile</div>
 </div>
 
-<!-- Footer -->
 <footer class="footer">
   <div class="footer-inner">
     <div>
@@ -1013,7 +1162,6 @@ canvas { display: none; }
   </div>
 </footer>
 
-<!-- Toast -->
 <div id="toast"></div>
 
 <!-- ═══════════════ JAVASCRIPT ═══════════════ -->
@@ -1032,6 +1180,12 @@ const state = {
   theme: localStorage.getItem('imageyantra_theme') || 'dark',
   _compressedDataUrl: null,
   _resolutionDataUrl: null,
+  _pdfDataUrl: null,
+  // PDF settings
+  pdfScale: 'fit',
+  pdfAlign: 'center',
+  pageNumOn: false,
+  watermarkOn: false,
 };
 
 try { state.savedFiles = JSON.parse(localStorage.getItem('imageyantra_files') || '[]'); } catch(e) {}
@@ -1044,7 +1198,7 @@ function toast(msg, type = '') {
   const t = document.getElementById('toast');
   t.textContent = msg; t.className = 'show ' + type;
   clearTimeout(t._timer);
-  t._timer = setTimeout(() => { t.className = ''; }, 2600);
+  t._timer = setTimeout(() => { t.className = ''; }, 2800);
 }
 
 function fmtSize(bytes) {
@@ -1092,10 +1246,67 @@ function downloadDataURL(dataUrl, filename) {
   document.body.removeChild(a);
 }
 
-function setProgress(fillId, labelId, pct, label) {
-  document.getElementById('pdfProgress').classList.toggle('show', pct < 100);
-  document.getElementById(fillId).style.width = pct + '%';
-  document.getElementById(labelId).textContent = label;
+/* ─── PAGE SIZE DIMENSIONS (mm) ─────────── */
+const PAGE_SIZES = {
+  a4:     { w: 210,   h: 297   },
+  letter: { w: 215.9, h: 279.4 },
+  a3:     { w: 297,   h: 420   },
+  a5:     { w: 148,   h: 210   },
+};
+// px per mm at 72dpi (jsPDF internal unit)
+const MM_TO_PX = 72 / 25.4;
+
+/* ─── GET PDF PAGE DIMS ──────────────────── */
+function getPageDims(pageSize, orientation, imgW, imgH) {
+  if (pageSize === 'fit') {
+    // Use image dimensions in mm (at 96dpi equivalent)
+    const w = imgW * 0.264583;
+    const h = imgH * 0.264583;
+    return { pw: w, ph: h, format: [w, h], orient: 'portrait' };
+  }
+  const base = PAGE_SIZES[pageSize] || PAGE_SIZES.a4;
+  let orient = orientation;
+  if (orientation === 'auto') {
+    orient = imgW >= imgH ? 'landscape' : 'portrait';
+  }
+  const pw = orient === 'landscape' ? base.h : base.w;
+  const ph = orient === 'landscape' ? base.w : base.h;
+  return { pw, ph, format: pageSize, orient };
+}
+
+/* ─── CALCULATE IMAGE POSITION ───────────── */
+function calcImagePos(pw, ph, imgW, imgH, scale, align, margin) {
+  const m = margin || 0;
+  const availW = pw - m * 2;
+  const availH = ph - m * 2;
+
+  let drawW, drawH;
+  if (scale === 'fit') {
+    const ratio = Math.min(availW / imgW, availH / imgH);
+    drawW = imgW * ratio; drawH = imgH * ratio;
+  } else if (scale === 'fill') {
+    const ratio = Math.max(availW / imgW, availH / imgH);
+    drawW = imgW * ratio; drawH = imgH * ratio;
+    // clamp to page
+    drawW = Math.min(drawW, availW); drawH = Math.min(drawH, availH);
+  } else if (scale === 'stretch') {
+    drawW = availW; drawH = availH;
+  } else { // original
+    drawW = Math.min(imgW * 0.264583, availW);
+    drawH = (drawW / imgW) * imgH;
+    if (drawH > availH) { drawH = availH; drawW = (drawH / imgH) * imgW; }
+  }
+
+  let x, y;
+  switch(align) {
+    case 'top-left':      x = m;                    y = m; break;
+    case 'top-center':    x = (pw - drawW) / 2;     y = m; break;
+    case 'top-right':     x = pw - drawW - m;        y = m; break;
+    case 'bottom-left':   x = m;                    y = ph - drawH - m; break;
+    case 'bottom-center': x = (pw - drawW) / 2;     y = ph - drawH - m; break;
+    default:              x = (pw - drawW) / 2;     y = (ph - drawH) / 2; break; // center
+  }
+  return { x, y, w: drawW, h: drawH };
 }
 
 /* ─── THEME ──────────────────────────────── */
@@ -1117,7 +1328,6 @@ function switchPanel(panel) {
   const target = document.getElementById('panel-' + panel);
   if (target) target.classList.add('active');
   if (panel === 'files') renderFileList();
-  // close mobile drawer
   document.getElementById('mobileDrawer').classList.remove('open');
 }
 
@@ -1125,10 +1335,8 @@ document.querySelectorAll('[data-panel]').forEach(btn => {
   btn.addEventListener('click', () => switchPanel(btn.dataset.panel));
 });
 
-const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-const mobileDrawer = document.getElementById('mobileDrawer');
-mobileMenuBtn.addEventListener('click', () => {
-  mobileDrawer.classList.toggle('open');
+document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+  document.getElementById('mobileDrawer').classList.toggle('open');
 });
 
 /* ─── DROP ZONES ─────────────────────────── */
@@ -1149,6 +1357,44 @@ function setupDropZone(zoneId, inputId, multiple, callback) {
   });
 }
 
+/* ─── PDF ADVANCED TOGGLE ────────────────── */
+document.getElementById('advancedToggle').addEventListener('click', () => {
+  const toggle = document.getElementById('advancedToggle');
+  const section = document.getElementById('advancedSection');
+  toggle.classList.toggle('open');
+  section.classList.toggle('open');
+});
+
+/* PDF Scale options */
+document.querySelectorAll('.scale-opt').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.scale-opt').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.pdfScale = btn.dataset.scale;
+  });
+});
+
+/* PDF Align options */
+document.querySelectorAll('.align-opt').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.align-opt').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.pdfAlign = btn.dataset.align;
+  });
+});
+
+/* Page numbering toggle */
+document.getElementById('pageNumToggle').addEventListener('click', () => {
+  state.pageNumOn = !state.pageNumOn;
+  document.getElementById('pageNumToggle').classList.toggle('on', state.pageNumOn);
+});
+
+/* Watermark toggle */
+document.getElementById('watermarkToggle').addEventListener('click', () => {
+  state.watermarkOn = !state.watermarkOn;
+  document.getElementById('watermarkToggle').classList.toggle('on', state.watermarkOn);
+});
+
 /* ─── PDF CONVERTER ──────────────────────── */
 setupDropZone('pdfDropZone', 'pdfFileInput', true, async files => {
   for (const f of files) {
@@ -1156,6 +1402,10 @@ setupDropZone('pdfDropZone', 'pdfFileInput', true, async files => {
     state.pdfImages.push({ dataUrl, name: f.name });
   }
   renderPdfGrid();
+  // Reset PDF state when images change
+  state._pdfDataUrl = null;
+  document.getElementById('pdfBtnRow').style.display = 'none';
+  document.getElementById('pdfConvertBtn').style.display = 'flex';
 });
 
 function renderPdfGrid() {
@@ -1163,86 +1413,218 @@ function renderPdfGrid() {
   const empty = document.getElementById('pdfEmptyGrid');
   const opts = document.getElementById('pdfOptions');
   const btn = document.getElementById('pdfConvertBtn');
+  const count = document.getElementById('pdfImageCount');
 
   if (!state.pdfImages.length) {
     grid.style.display = 'none';
     empty.style.display = 'block';
     opts.style.display = 'none';
     btn.disabled = true;
+    count.textContent = '';
     return;
   }
   grid.style.display = 'grid';
   empty.style.display = 'none';
   opts.style.display = 'block';
   btn.disabled = false;
+  count.textContent = state.pdfImages.length + ' image' + (state.pdfImages.length !== 1 ? 's' : '');
   grid.innerHTML = '';
 
   state.pdfImages.forEach((img, i) => {
     const div = document.createElement('div');
     div.className = 'img-thumb';
+    div.setAttribute('draggable', true);
+    div.dataset.index = i;
     div.innerHTML = `<img src="${img.dataUrl}" alt="Page ${i+1}">
       <div class="order-badge">${i + 1}</div>
       <button class="remove-btn" data-i="${i}" title="Remove">×</button>`;
     grid.appendChild(div);
   });
+
+  // Drag-to-reorder
+  let dragSrc = null;
+  grid.querySelectorAll('.img-thumb').forEach(el => {
+    el.addEventListener('dragstart', e => { dragSrc = el; el.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
+    el.addEventListener('dragend', () => { el.classList.remove('dragging'); });
+    el.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
+    el.addEventListener('drop', e => {
+      e.preventDefault();
+      if (dragSrc && dragSrc !== el) {
+        const fromIdx = +dragSrc.dataset.index;
+        const toIdx   = +el.dataset.index;
+        const tmp = state.pdfImages.splice(fromIdx, 1)[0];
+        state.pdfImages.splice(toIdx, 0, tmp);
+        state._pdfDataUrl = null;
+        renderPdfGrid();
+      }
+    });
+  });
+
   grid.querySelectorAll('.remove-btn').forEach(btn => {
     btn.addEventListener('click', e => {
       e.stopPropagation();
       state.pdfImages.splice(+e.target.dataset.i, 1);
+      state._pdfDataUrl = null;
       renderPdfGrid();
     });
   });
 }
 
+async function generatePDF() {
+  if (!state.pdfImages.length) return null;
+
+  const pageSize   = document.getElementById('pdfPageSize').value;
+  const orientSel  = document.getElementById('pdfOrientation').value;
+  const quality    = +document.getElementById('pdfQuality').value;
+  const margin     = +document.getElementById('pdfMargin').value || 0;
+  const scale      = state.pdfScale;
+  const align      = state.pdfAlign;
+  const pageNumOn  = state.pageNumOn;
+  const watermark  = state.watermarkOn;
+  const total      = state.pdfImages.length;
+
+  const { jsPDF } = window.jspdf;
+  let pdf = null;
+
+  for (let i = 0; i < total; i++) {
+    updateProgress(Math.round(i / total * 85), `Processing image ${i + 1} of ${total}…`);
+
+    const img = await loadImage(state.pdfImages[i].dataUrl);
+    const imgW = img.naturalWidth, imgH = img.naturalHeight;
+    const { pw, ph, format, orient } = getPageDims(pageSize, orientSel, imgW, imgH);
+
+    if (!pdf) {
+      pdf = new jsPDF({ orientation: orient, unit: 'mm', format: pageSize === 'fit' ? [pw, ph] : format });
+    } else {
+      pdf.addPage(pageSize === 'fit' ? [pw, ph] : format, orient);
+    }
+
+    const actualPw = pdf.internal.pageSize.getWidth();
+    const actualPh = pdf.internal.pageSize.getHeight();
+    const { x, y, w, h } = calcImagePos(actualPw, actualPh, imgW, imgH, scale, align, margin);
+
+    // Add image
+    pdf.addImage(state.pdfImages[i].dataUrl, 'JPEG', x, y, w, h, undefined, 'FAST');
+
+    // Page numbering
+    if (pageNumOn) {
+      pdf.setFontSize(9);
+      pdf.setTextColor(150);
+      pdf.text(`${i + 1} / ${total}`, actualPw / 2, actualPh - 4, { align: 'center' });
+    }
+
+    // Watermark
+    if (watermark) {
+      pdf.saveGraphicsState();
+      pdf.setFontSize(32);
+      pdf.setTextColor(180, 180, 180);
+      const pageDoc = pdf;
+      pageDoc.setGState(new pageDoc.GState({ opacity: 0.15 }));
+      // Diagonal watermark using rotation
+      pdf.text('ImageYantra', actualPw / 2, actualPh / 2, {
+        align: 'center', angle: 45
+      });
+      pdf.restoreGraphicsState();
+    }
+
+    await new Promise(r => setTimeout(r, 8));
+  }
+
+  updateProgress(95, 'Generating PDF…');
+  await new Promise(r => setTimeout(r, 80));
+  return pdf;
+}
+
+function updateProgress(pct, label) {
+  const wrap = document.getElementById('pdfProgress');
+  wrap.classList.toggle('show', pct < 100);
+  document.getElementById('pdfProgressFill').style.width = pct + '%';
+  document.getElementById('pdfProgressLabel').textContent = label;
+}
+
+function hideProgress() {
+  setTimeout(() => {
+    document.getElementById('pdfProgress').classList.remove('show');
+    document.getElementById('pdfProgressFill').style.width = '0%';
+  }, 1200);
+}
+
+/* Generate PDF button */
 document.getElementById('pdfConvertBtn').addEventListener('click', async () => {
   if (!state.pdfImages.length) return;
   const btn = document.getElementById('pdfConvertBtn');
   btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Converting…';
+  btn.innerHTML = '<span class="spinner"></span> Generating…';
 
-  const pageSize = document.getElementById('pdfPageSize').value;
-  const orient   = document.getElementById('pdfOrientation').value;
-  const quality  = +document.getElementById('pdfQuality').value;
-  const { jsPDF } = window.jspdf;
-  let pdf = null;
+  try {
+    const pdf = await generatePDF();
+    if (!pdf) throw new Error('PDF generation failed');
 
-  for (let i = 0; i < state.pdfImages.length; i++) {
-    setProgress('pdfProgressFill', 'pdfProgressLabel',
-      Math.round(i / state.pdfImages.length * 90),
-      `Processing image ${i + 1} of ${state.pdfImages.length}…`);
+    state._pdfDataUrl = pdf.output('datauristring');
+    updateProgress(100, 'Ready!');
+    hideProgress();
 
-    const img = await loadImage(state.pdfImages[i].dataUrl);
-    let pW, pH;
-    if (pageSize === 'a4')         { pW = 210; pH = 297; }
-    else if (pageSize === 'letter'){ pW = 215.9; pH = 279.4; }
-    else if (pageSize === 'a3')    { pW = 297; pH = 420; }
-    else                           { pW = img.width * 0.264583; pH = img.height * 0.264583; }
+    // Show Preview + Download buttons
+    btn.style.display = 'none';
+    const btnRow = document.getElementById('pdfBtnRow');
+    btnRow.style.display = 'flex';
+    document.getElementById('pdfPreviewBtn').disabled = false;
+    document.getElementById('pdfDownloadBtn').disabled = false;
 
-    const o = pageSize === 'fit' ? 'portrait' : orient;
-    if (!pdf) {
-      pdf = new jsPDF({ orientation: o, unit: 'mm', format: pageSize === 'fit' ? [pW, pH] : pageSize });
-    } else {
-      pdf.addPage(pageSize === 'fit' ? [pW, pH] : pageSize, o);
-    }
-    const [pw, ph] = [pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight()];
-    const scale = Math.min(pw / img.width, ph / img.height);
-    const iw = img.width * scale, ih = img.height * scale;
-    pdf.addImage(state.pdfImages[i].dataUrl, 'JPEG', (pw - iw) / 2, (ph - ih) / 2, iw, ih, undefined, 'FAST');
-    await new Promise(r => setTimeout(r, 10));
+    toast('✅ PDF ready! Use Preview or Download.', 'success');
+  } catch(err) {
+    toast('❌ Error generating PDF', 'error');
+    console.error(err);
   }
 
-  setProgress('pdfProgressFill', 'pdfProgressLabel', 95, 'Generating PDF…');
-  await new Promise(r => setTimeout(r, 100));
-
-  const pdfDataUrl = pdf.output('datauristring');
-  const name = 'ImageYantra_' + Date.now() + '.pdf';
-  saveFile(name, pdfDataUrl, 'pdf');
-  downloadDataURL(pdfDataUrl, name);
-  setProgress('pdfProgressFill', 'pdfProgressLabel', 100, 'Done!');
-  setTimeout(() => document.getElementById('pdfProgress').classList.remove('show'), 1500);
   btn.disabled = false;
-  btn.innerHTML = '📄 Convert to PDF';
+  btn.innerHTML = '📄 Generate PDF';
 });
+
+/* Preview button */
+document.getElementById('pdfPreviewBtn').addEventListener('click', () => {
+  if (!state._pdfDataUrl) return;
+  document.getElementById('pdfPreviewFrame').src = state._pdfDataUrl;
+  document.getElementById('pdfModal').classList.add('open');
+});
+
+/* Download button */
+document.getElementById('pdfDownloadBtn').addEventListener('click', () => {
+  if (!state._pdfDataUrl) return;
+  const name = 'ImageYantra_' + Date.now() + '.pdf';
+  saveFile(name, state._pdfDataUrl, 'pdf');
+  downloadDataURL(state._pdfDataUrl, name);
+});
+
+/* Modal controls */
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modalClose2').addEventListener('click', closeModal);
+document.getElementById('pdfModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('pdfModal')) closeModal();
+});
+document.getElementById('modalDownload').addEventListener('click', () => {
+  if (!state._pdfDataUrl) return;
+  const name = 'ImageYantra_' + Date.now() + '.pdf';
+  saveFile(name, state._pdfDataUrl, 'pdf');
+  downloadDataURL(state._pdfDataUrl, name);
+  closeModal();
+});
+function closeModal() {
+  document.getElementById('pdfModal').classList.remove('open');
+  document.getElementById('pdfPreviewFrame').src = '';
+}
+
+// Reset convert button when settings change so user re-generates
+function resetPdfBtn() {
+  state._pdfDataUrl = null;
+  document.getElementById('pdfBtnRow').style.display = 'none';
+  document.getElementById('pdfConvertBtn').style.display = 'flex';
+  document.getElementById('pdfConvertBtn').disabled = state.pdfImages.length === 0;
+}
+document.getElementById('pdfPageSize').addEventListener('change', resetPdfBtn);
+document.getElementById('pdfOrientation').addEventListener('change', resetPdfBtn);
+document.getElementById('pdfQuality').addEventListener('change', resetPdfBtn);
+document.getElementById('pdfMargin').addEventListener('change', resetPdfBtn);
 
 /* ─── RESIZER ────────────────────────────── */
 const aspectToggle = document.getElementById('aspectToggle');
@@ -1303,10 +1685,11 @@ document.getElementById('resizeApplyBtn').addEventListener('click', async () => 
 /* ─── COMPRESSOR ─────────────────────────── */
 setupDropZone('compressDropZone', 'compressFileInput', false, async ([file]) => {
   const dataUrl = await readFileAsDataURL(file);
-  state.compressImg = { dataUrl, name: file.name };
+  state.compressImg = { dataUrl, name: file.name, originalSize: file.size };
   document.getElementById('compressControlsCard').style.display = 'block';
   document.getElementById('compressSizeDisplay').style.display = 'block';
   document.getElementById('origSize').textContent = fmtSize(file.size);
+  document.getElementById('compSavings').textContent = '—';
   applyCompression();
 });
 
@@ -1322,8 +1705,14 @@ function applyCompression() {
     previewImg.src = dataUrl;
     previewImg.style.display = 'block';
     document.getElementById('compressPlaceholder').style.display = 'none';
-    document.getElementById('compSize').textContent = fmtSize(dataURLSize(dataUrl));
+    const compSize = dataURLSize(dataUrl);
+    const origSize = state.compressImg.originalSize;
+    document.getElementById('compSize').textContent = fmtSize(compSize);
+    const savings = Math.max(0, origSize - compSize);
+    const pct = origSize > 0 ? Math.round(savings / origSize * 100) : 0;
+    document.getElementById('compSavings').textContent = pct + '%';
     state._compressedDataUrl = dataUrl;
+    document.getElementById('targetSizeInfo').textContent = '';
   };
   img.src = state.compressImg.dataUrl;
 }
@@ -1347,6 +1736,63 @@ document.getElementById('qualitySlider').addEventListener('input', e => {
   document.getElementById('qualityVal').textContent = e.target.value;
   document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
   applyCompression();
+});
+
+/* Target size binary search */
+document.getElementById('targetSizeBtn').addEventListener('click', () => {
+  if (!state.compressImg) return;
+  const val = +document.getElementById('targetSizeInput').value;
+  const unit = document.getElementById('targetSizeUnit').value;
+  if (!val || val <= 0) { toast('Enter a target size', 'error'); return; }
+
+  const targetBytes = unit === 'kb' ? val * 1024 : val * 1024 * 1024;
+  const infoEl = document.getElementById('targetSizeInfo');
+  infoEl.textContent = 'Finding best quality…';
+
+  const img = new Image();
+  img.onload = () => {
+    canvas.width = img.naturalWidth; canvas.height = img.naturalHeight;
+    ctx.drawImage(img, 0, 0);
+
+    let lo = 0.01, hi = 1.0, bestQ = 0.5, bestDataUrl = '';
+    // Binary search ~12 iterations
+    for (let iter = 0; iter < 14; iter++) {
+      const mid = (lo + hi) / 2;
+      const dataUrl = canvas.toDataURL('image/jpeg', mid);
+      const size = dataURLSize(dataUrl);
+      if (size <= targetBytes) {
+        bestQ = mid; bestDataUrl = dataUrl;
+        lo = mid;
+      } else {
+        hi = mid;
+      }
+    }
+
+    if (!bestDataUrl) {
+      // Even lowest quality exceeds target
+      bestDataUrl = canvas.toDataURL('image/jpeg', 0.01);
+      bestQ = 0.01;
+    }
+
+    const actualSize = dataURLSize(bestDataUrl);
+    const qPct = Math.round(bestQ * 100);
+    state.compressQuality = bestQ;
+    document.getElementById('qualitySlider').value = qPct;
+    document.getElementById('qualityVal').textContent = qPct;
+    document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+
+    const previewImg = document.getElementById('compressPreviewImg');
+    previewImg.src = bestDataUrl;
+    previewImg.style.display = 'block';
+    document.getElementById('compressPlaceholder').style.display = 'none';
+    document.getElementById('compSize').textContent = fmtSize(actualSize);
+    const savings = Math.max(0, state.compressImg.originalSize - actualSize);
+    const pctSaved = state.compressImg.originalSize > 0 ? Math.round(savings / state.compressImg.originalSize * 100) : 0;
+    document.getElementById('compSavings').textContent = pctSaved + '%';
+    state._compressedDataUrl = bestDataUrl;
+    infoEl.textContent = `Set quality to ${qPct}% → ${fmtSize(actualSize)}`;
+  };
+  img.src = state.compressImg.dataUrl;
 });
 
 document.getElementById('compressSaveBtn').addEventListener('click', () => {
@@ -1465,9 +1911,39 @@ function renderFileList() {
   });
 }
 
-document.getElementById('clearFilesBtn').addEventListener('click', () => {
-  if (!state.savedFiles.length) return;
-  if (confirm('Delete all saved files?')) {
+const clearBtn = document.getElementById('clearFilesBtn');
+let clearConfirmPending = false;
+
+clearBtn.addEventListener('click', () => {
+  if (!state.savedFiles.length) {
+    toast('No files to clear', '');
+    return;
+  }
+
+  if (!clearConfirmPending) {
+    // First click — ask for confirmation inline
+    clearConfirmPending = true;
+    clearBtn.textContent = '⚠️ Confirm Clear?';
+    clearBtn.style.color = 'var(--red)';
+    clearBtn.style.borderColor = 'var(--red)';
+
+    // Auto-reset after 3 seconds if user doesn't confirm
+    setTimeout(() => {
+      if (clearConfirmPending) {
+        clearConfirmPending = false;
+        clearBtn.textContent = '🗑 Clear All';
+        clearBtn.style.color = '';
+        clearBtn.style.borderColor = '';
+      }
+    }, 3000);
+
+  } else {
+    // Second click — actually clear
+    clearConfirmPending = false;
+    clearBtn.textContent = '🗑 Clear All';
+    clearBtn.style.color = '';
+    clearBtn.style.borderColor = '';
+
     state.savedFiles = [];
     try { localStorage.removeItem('imageyantra_files'); } catch(e) {}
     renderFileList();
@@ -1475,7 +1951,6 @@ document.getElementById('clearFilesBtn').addEventListener('click', () => {
   }
 });
 
-// Initialize file list
 renderFileList();
 </script>
 </body>
