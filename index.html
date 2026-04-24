@@ -118,16 +118,16 @@ input, select { font-family: var(--font-body); }
   align-items: center; gap: 2px;
   margin-left: 8px;
 }
-@media (min-width: 900px) { .header-nav { display: flex; } }
+@media (min-width: 900px) { .header-nav { display: flex; flex-wrap: wrap; } }
 .header-nav-btn {
-  padding: 6px 12px; border-radius: 8px;
+  padding: 6px 10px; border-radius: 8px;
   background: none; border: none; color: var(--text2);
-  font-size: 13px; font-weight: 500; transition: all 0.18s;
+  font-size: 12px; font-weight: 500; transition: all 0.18s;
   display: flex; align-items: center; gap: 5px; white-space: nowrap;
 }
 .header-nav-btn:hover { background: var(--surface2); color: var(--text); }
 .header-nav-btn.active { background: var(--surface2); color: var(--accent); }
-.header-nav-btn .icon { font-size: 14px; }
+.header-nav-btn .icon { font-size: 13px; }
 
 .header-right { margin-left: auto; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .theme-btn {
@@ -139,14 +139,53 @@ input, select { font-family: var(--font-body); }
 }
 .theme-btn:hover { background: var(--surface3); color: var(--text); }
 
+/* ═══════════════════════════════════════════════
+   HAMBURGER / CLOSE BUTTON — ANIMATED
+═══════════════════════════════════════════════ */
 .mobile-menu-btn {
   display: flex;
   width: 34px; height: 34px; border-radius: 9px;
   background: var(--surface2); border: 1px solid var(--border2);
   align-items: center; justify-content: center;
-  font-size: 17px; cursor: pointer; color: var(--text2);
+  cursor: pointer; color: var(--text2);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  padding: 0;
 }
 @media (min-width: 900px) { .mobile-menu-btn { display: none; } }
+
+/* Hamburger SVG lines */
+.hamburger-icon {
+  width: 18px; height: 14px;
+  display: flex; flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+.hamburger-icon span {
+  display: block;
+  width: 100%; height: 2px;
+  background: var(--text2);
+  border-radius: 2px;
+  transform-origin: center;
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1),
+              opacity 0.3s cubic-bezier(0.4,0,0.2,1),
+              top 0.3s cubic-bezier(0.4,0,0.2,1),
+              width 0.3s cubic-bezier(0.4,0,0.2,1);
+  position: relative;
+}
+
+/* Open (X) state */
+.mobile-menu-btn.is-open .hamburger-icon span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+.mobile-menu-btn.is-open .hamburger-icon span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.mobile-menu-btn.is-open .hamburger-icon span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
 
 /* ═══════════════════════════════════════════════
    MOBILE NAV DRAWER
@@ -155,12 +194,22 @@ input, select { font-family: var(--font-body); }
   position: fixed; top: var(--header-h); left: 0; right: 0; bottom: 0;
   background: var(--bg); z-index: 190;
   padding: 12px;
-  display: none;
+  display: flex;
   flex-direction: column; gap: 5px;
   overflow-y: auto;
   border-top: 1px solid var(--border);
+  /* Slide animation */
+  transform: translateY(-8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.25s cubic-bezier(0.4,0,0.2,1),
+              opacity 0.25s cubic-bezier(0.4,0,0.2,1);
 }
-.mobile-drawer.open { display: flex; }
+.mobile-drawer.open {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: all;
+}
 .mobile-drawer-btn {
   display: flex; align-items: center; gap: 12px;
   padding: 12px 14px; border-radius: 10px;
@@ -508,6 +557,20 @@ input, select { font-family: var(--font-body); }
 .res-btn:not(.active):hover { background: var(--surface3); color: var(--text); }
 
 /* ═══════════════════════════════════════════════
+   FORMAT GRID
+═══════════════════════════════════════════════ */
+.fmt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-bottom: 12px; }
+.fmt-btn {
+  padding: 10px 8px; text-align: center; border-radius: var(--r-sm);
+  border: 1px solid var(--border2); background: var(--surface2);
+  color: var(--text2); font-size: 13px; font-weight: 600; cursor: pointer;
+  transition: all 0.18s; line-height: 1.3;
+}
+.fmt-btn span { display: block; font-size: 10px; color: var(--text3); margin-top: 2px; font-weight: 400; }
+.fmt-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(124,109,250,0.08); }
+.fmt-btn:not(.active):hover { background: var(--surface3); color: var(--text); }
+
+/* ═══════════════════════════════════════════════
    PROGRESS BAR
 ═══════════════════════════════════════════════ */
 .progress-wrap { margin: 12px 0; display: none; }
@@ -713,6 +776,47 @@ canvas { display: none; }
 .target-size-row { display: flex; gap: 8px; align-items: flex-end; }
 .target-size-row .field { flex: 1; margin-bottom: 0; }
 .target-size-row select { width: 80px; }
+
+/* Crop handles */
+.crop-container { position: relative; display: inline-block; max-width: 100%; }
+.crop-box {
+  position: absolute; border: 2px solid var(--accent);
+  box-shadow: 0 0 0 9999px rgba(0,0,0,0.5);
+  cursor: move;
+}
+.crop-handle {
+  position: absolute; width: 10px; height: 10px;
+  background: var(--accent); border-radius: 2px;
+}
+
+/* Watermark panel specifics */
+.wm-preview-wrap {
+  position: relative; display: inline-block;
+  max-width: 100%; overflow: hidden;
+}
+.wm-overlay-text {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%) rotate(-30deg);
+  font-size: 28px; font-weight: 800; white-space: nowrap;
+  pointer-events: none; user-select: none;
+  font-family: var(--font-head);
+}
+
+/* Color input */
+.color-input-wrap {
+  display: flex; gap: 8px; align-items: center;
+}
+.color-input-wrap input[type="color"] {
+  width: 38px; height: 38px; border-radius: var(--r-sm);
+  border: 1px solid var(--border2); padding: 2px; cursor: pointer;
+  background: var(--surface2);
+}
+.color-input-wrap input[type="text"] {
+  flex: 1; padding: 9px 12px;
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: var(--r-sm); color: var(--text); font-size: 13px;
+  outline: none;
+}
 </style>
 </head>
 <body data-theme="dark">
@@ -750,22 +854,37 @@ canvas { display: none; }
     <button class="header-nav-btn" data-panel="resize"><span class="icon">↔️</span> Resize</button>
     <button class="header-nav-btn" data-panel="compress"><span class="icon">📦</span> Compress</button>
     <button class="header-nav-btn" data-panel="resolution"><span class="icon">🔍</span> Resolution</button>
+    <button class="header-nav-btn" data-panel="convert"><span class="icon">🔄</span> Convert</button>
+    <button class="header-nav-btn" data-panel="crop"><span class="icon">✂️</span> Crop</button>
+    <button class="header-nav-btn" data-panel="watermark"><span class="icon">💧</span> Watermark</button>
+    <button class="header-nav-btn" data-panel="rotate"><span class="icon">🔃</span> Rotate/Flip</button>
     <button class="header-nav-btn" data-panel="files"><span class="icon">🗂️</span> Files</button>
     <a href="blogs/" class="header-nav-btn"><span class="icon">📰</span> Blog</a>
   </nav>
 
   <div class="header-right">
     <button class="theme-btn" id="themeBtn" title="Toggle theme">🌙</button>
-    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+    <!-- Animated Hamburger Button -->
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu" aria-expanded="false">
+      <div class="hamburger-icon">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </button>
   </div>
 </header>
 
 <!-- Mobile Drawer -->
-<div class="mobile-drawer" id="mobileDrawer">
+<div class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
   <button class="mobile-drawer-btn active" data-panel="pdf"><span class="icon">📄</span> Image to PDF</button>
   <button class="mobile-drawer-btn" data-panel="resize"><span class="icon">↔️</span> Resize Image</button>
   <button class="mobile-drawer-btn" data-panel="compress"><span class="icon">📦</span> Compress Image</button>
   <button class="mobile-drawer-btn" data-panel="resolution"><span class="icon">🔍</span> Change Resolution</button>
+  <button class="mobile-drawer-btn" data-panel="convert"><span class="icon">🔄</span> Convert Format</button>
+  <button class="mobile-drawer-btn" data-panel="crop"><span class="icon">✂️</span> Crop Image</button>
+  <button class="mobile-drawer-btn" data-panel="watermark"><span class="icon">💧</span> Add Watermark</button>
+  <button class="mobile-drawer-btn" data-panel="rotate"><span class="icon">🔃</span> Rotate / Flip</button>
   <button class="mobile-drawer-btn" data-panel="files"><span class="icon">🗂️</span> Saved Files</button>
   <a href="blogs/" class="mobile-drawer-btn"><span class="icon">📰</span> Blog</a>
 </div>
@@ -783,7 +902,7 @@ canvas { display: none; }
     <section class="panel active" id="panel-pdf">
       <div class="panel-header">
         <h1 class="panel-title">📄 Image to PDF Converter</h1>
-        <p class="panel-sub">Select multiple images and convert them to a single PDF — free, instant, in your browser.</p>
+        <p class="panel-sub">Select multiple images and convert them to a single PDF — free, instant, in your browser. Mobile photos are auto-corrected for orientation.</p>
       </div>
 
       <div class="tool-grid">
@@ -1094,6 +1213,238 @@ canvas { display: none; }
       </div>
     </section>
 
+    <!-- ───── FORMAT CONVERTER PANEL ───── -->
+    <section class="panel" id="panel-convert">
+      <div class="panel-header">
+        <h2 class="panel-title">🔄 Image Format Converter</h2>
+        <p class="panel-sub">Convert between JPG, PNG, WEBP, and BMP formats instantly in your browser.</p>
+      </div>
+
+      <div class="tool-grid">
+        <div class="tool-controls">
+          <div class="drop-zone" id="convertDropZone">
+            <input type="file" id="convertFileInput" accept="image/*">
+            <span class="drop-icon">🔄</span>
+            <div class="drop-title">Select Image</div>
+            <div class="drop-sub">JPG, PNG, WEBP, BMP, GIF supported</div>
+            <div class="drop-hint">🖱️ Tap or drag & drop</div>
+          </div>
+
+          <div class="card" id="convertControlsCard" style="display:none">
+            <div class="card-title">Output Format</div>
+            <div class="fmt-grid">
+              <button class="fmt-btn active" data-fmt="image/jpeg" data-ext="jpg">JPG<span>best for photos</span></button>
+              <button class="fmt-btn" data-fmt="image/png" data-ext="png">PNG<span>lossless + transparency</span></button>
+              <button class="fmt-btn" data-fmt="image/webp" data-ext="webp">WEBP<span>modern, small size</span></button>
+              <button class="fmt-btn" data-fmt="image/bmp" data-ext="bmp">BMP<span>uncompressed</span></button>
+            </div>
+            <div class="field" id="convertQualityField">
+              <div class="label-row">
+                <label>Quality</label>
+                <span class="label-val" id="convertQualityVal">90</span>%
+              </div>
+              <input type="range" id="convertQualitySlider" min="10" max="100" value="90">
+            </div>
+            <div class="divider"></div>
+            <button class="btn-primary" id="convertSaveBtn">🔄 Convert & Download</button>
+          </div>
+        </div>
+
+        <div class="tool-preview-area">
+          <div class="card" style="min-height:240px;">
+            <div class="card-title">Preview</div>
+            <div class="preview-box" style="min-height:200px;">
+              <img id="convertPreviewImg" style="max-width:100%;max-height:280px;object-fit:contain;display:none;" src="" alt="Convert preview">
+              <div class="preview-placeholder" id="convertPlaceholder"><div class="ico">🔄</div>Preview will appear here</div>
+            </div>
+            <div class="info-text" id="convertInfo"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───── CROP PANEL ───── -->
+    <section class="panel" id="panel-crop">
+      <div class="panel-header">
+        <h2 class="panel-title">✂️ Crop Image</h2>
+        <p class="panel-sub">Crop images to any size or common aspect ratios. Drag to adjust the crop area.</p>
+      </div>
+
+      <div class="tool-grid">
+        <div class="tool-controls">
+          <div class="drop-zone" id="cropDropZone">
+            <input type="file" id="cropFileInput" accept="image/*">
+            <span class="drop-icon">✂️</span>
+            <div class="drop-title">Select Image</div>
+            <div class="drop-sub">Any image format</div>
+            <div class="drop-hint">🖱️ Tap or drag & drop</div>
+          </div>
+
+          <div class="card" id="cropControlsCard" style="display:none">
+            <div class="card-title">Aspect Ratio</div>
+            <div class="fmt-grid">
+              <button class="fmt-btn active" data-ratio="free">Free<span>any size</span></button>
+              <button class="fmt-btn" data-ratio="1:1">1:1<span>square</span></button>
+              <button class="fmt-btn" data-ratio="4:3">4:3<span>standard</span></button>
+              <button class="fmt-btn" data-ratio="16:9">16:9<span>widescreen</span></button>
+              <button class="fmt-btn" data-ratio="3:2">3:2<span>photo</span></button>
+              <button class="fmt-btn" data-ratio="9:16">9:16<span>portrait/reel</span></button>
+            </div>
+            <div class="divider"></div>
+            <div class="row" id="cropDimsRow">
+              <div class="field"><label>X</label><input type="number" id="cropX" min="0" value="0"></div>
+              <div class="field"><label>Y</label><input type="number" id="cropY" min="0" value="0"></div>
+              <div class="field"><label>W</label><input type="number" id="cropW" min="1" value="100"></div>
+              <div class="field"><label>H</label><input type="number" id="cropH" min="1" value="100"></div>
+            </div>
+            <div class="divider"></div>
+            <button class="btn-primary" id="cropSaveBtn">✂️ Crop & Download</button>
+          </div>
+        </div>
+
+        <div class="tool-preview-area">
+          <div class="card" style="min-height:240px;">
+            <div class="card-title">Drag to Crop</div>
+            <div id="cropPreviewWrap" style="overflow:auto;">
+              <div class="preview-placeholder" id="cropPlaceholder"><div class="ico">✂️</div>Select an image to start cropping</div>
+              <canvas id="cropCanvas" style="display:none;max-width:100%;cursor:crosshair;border-radius:var(--r-sm);"></canvas>
+            </div>
+            <div class="info-text" id="cropInfo"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───── WATERMARK PANEL ───── -->
+    <section class="panel" id="panel-watermark">
+      <div class="panel-header">
+        <h2 class="panel-title">💧 Add Watermark</h2>
+        <p class="panel-sub">Add text or image watermarks to your photos. Control position, opacity, size, and color.</p>
+      </div>
+
+      <div class="tool-grid">
+        <div class="tool-controls">
+          <div class="drop-zone" id="wmDropZone">
+            <input type="file" id="wmFileInput" accept="image/*">
+            <span class="drop-icon">💧</span>
+            <div class="drop-title">Select Image</div>
+            <div class="drop-sub">Any image format</div>
+            <div class="drop-hint">🖱️ Tap or drag & drop</div>
+          </div>
+
+          <div class="card" id="wmControlsCard" style="display:none">
+            <div class="card-title">Watermark Text</div>
+            <div class="field">
+              <label>Text</label>
+              <input type="text" id="wmText" placeholder="© Your Name 2026" style="width:100%;padding:9px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r-sm);color:var(--text);font-size:14px;outline:none;">
+            </div>
+            <div class="row">
+              <div class="field">
+                <label>Font Size</label>
+                <input type="number" id="wmFontSize" value="36" min="10" max="200">
+              </div>
+              <div class="field">
+                <label>Color</label>
+                <div class="color-input-wrap">
+                  <input type="color" id="wmColor" value="#ffffff">
+                  <input type="text" id="wmColorHex" value="#ffffff" maxlength="7" placeholder="#ffffff">
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <div class="label-row">
+                <label>Opacity</label>
+                <span class="label-val" id="wmOpacityVal">50</span>%
+              </div>
+              <input type="range" id="wmOpacity" min="5" max="100" value="50">
+            </div>
+            <div class="field">
+              <label>Position</label>
+              <div class="align-opts" style="margin-top:4px;">
+                <button class="align-opt" data-wmpos="top-left">↖ TL</button>
+                <button class="align-opt" data-wmpos="top-center">↑ TC</button>
+                <button class="align-opt" data-wmpos="top-right">↗ TR</button>
+                <button class="align-opt active" data-wmpos="center">⊙ Ctr</button>
+                <button class="align-opt" data-wmpos="bottom-left">↙ BL</button>
+                <button class="align-opt" data-wmpos="bottom-right">↘ BR</button>
+              </div>
+            </div>
+            <div class="field">
+              <div class="label-row">
+                <label>Rotation (°)</label>
+                <span class="label-val" id="wmRotVal">-30</span>
+              </div>
+              <input type="range" id="wmRotation" min="-90" max="90" value="-30">
+            </div>
+            <div class="divider"></div>
+            <button class="btn-primary" id="wmSaveBtn">💧 Apply & Download</button>
+          </div>
+        </div>
+
+        <div class="tool-preview-area">
+          <div class="card" style="min-height:240px;">
+            <div class="card-title">Preview</div>
+            <div class="preview-box" style="min-height:200px;">
+              <canvas id="wmCanvas" style="display:none;max-width:100%;max-height:300px;border-radius:var(--r-sm);"></canvas>
+              <div class="preview-placeholder" id="wmPlaceholder"><div class="ico">💧</div>Preview will appear here</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───── ROTATE/FLIP PANEL ───── -->
+    <section class="panel" id="panel-rotate">
+      <div class="panel-header">
+        <h2 class="panel-title">🔃 Rotate & Flip Image</h2>
+        <p class="panel-sub">Rotate images by any angle or flip horizontally/vertically. Perfect for fixing mobile photo orientation.</p>
+      </div>
+
+      <div class="tool-grid">
+        <div class="tool-controls">
+          <div class="drop-zone" id="rotateDropZone">
+            <input type="file" id="rotateFileInput" accept="image/*">
+            <span class="drop-icon">🔃</span>
+            <div class="drop-title">Select Image</div>
+            <div class="drop-sub">Any image format</div>
+            <div class="drop-hint">🖱️ Tap or drag & drop</div>
+          </div>
+
+          <div class="card" id="rotateControlsCard" style="display:none">
+            <div class="card-title">Rotate</div>
+            <div class="fmt-grid">
+              <button class="fmt-btn" id="rotLeft">↺ 90° Left<span>counter-clockwise</span></button>
+              <button class="fmt-btn" id="rotRight">↻ 90° Right<span>clockwise</span></button>
+              <button class="fmt-btn" id="rot180">🔄 180°<span>upside down</span></button>
+              <button class="fmt-btn" id="flipH">⇄ Flip H<span>mirror horizontal</span></button>
+              <button class="fmt-btn" id="flipV">⇅ Flip V<span>mirror vertical</span></button>
+            </div>
+            <div class="divider"></div>
+            <div class="field">
+              <div class="label-row">
+                <label>Custom Angle</label>
+                <span class="label-val" id="rotAngleVal">0</span>°
+              </div>
+              <input type="range" id="rotAngle" min="-180" max="180" value="0">
+            </div>
+            <div class="divider"></div>
+            <button class="btn-primary" id="rotateSaveBtn" disabled>🔃 Save Rotated Image</button>
+          </div>
+        </div>
+
+        <div class="tool-preview-area">
+          <div class="card" style="min-height:240px;">
+            <div class="card-title">Preview</div>
+            <div class="preview-box" style="min-height:200px;overflow:hidden;">
+              <canvas id="rotateCanvas" style="display:none;max-width:100%;max-height:300px;border-radius:var(--r-sm);"></canvas>
+              <div class="preview-placeholder" id="rotatePlaceholder"><div class="ico">🔃</div>Preview will appear here</div>
+            </div>
+            <div class="info-text" id="rotateInfo"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ───── FILES PANEL ───── -->
     <section class="panel" id="panel-files">
       <div class="panel-header">
@@ -1122,6 +1473,10 @@ canvas { display: none; }
         <div class="tip-text">All processing happens <strong>in your browser</strong> — no files are uploaded to any server.</div>
       </div>
       <div class="tip-item">
+        <span class="tip-icon">📱</span>
+        <div class="tip-text"><strong>Mobile photos:</strong> EXIF orientation is automatically corrected so your PDF looks right.</div>
+      </div>
+      <div class="tip-item">
         <span class="tip-icon">📄</span>
         <div class="tip-text"><strong>PDF converter:</strong> Use <em>Fit</em> scaling to preserve aspect ratio. <em>Auto</em> orientation picks the best rotation per image.</div>
       </div>
@@ -1132,6 +1487,10 @@ canvas { display: none; }
       <div class="tip-item">
         <span class="tip-icon">🔍</span>
         <div class="tip-text"><strong>Resolution change</strong> uses letterboxing to maintain image ratio at new dimensions.</div>
+      </div>
+      <div class="tip-item">
+        <span class="tip-icon">🔄</span>
+        <div class="tip-text"><strong>Format convert:</strong> Use WEBP for best compression on web images.</div>
       </div>
     </div>
 
@@ -1172,6 +1531,10 @@ const state = {
   resizeImg: null,
   compressImg: null,
   resolutionImg: null,
+  convertImg: null,
+  cropImg: null,
+  wmImg: null,
+  rotateImg: null,
   savedFiles: [],
   aspectOn: true,
   compressQuality: 0.7,
@@ -1181,17 +1544,144 @@ const state = {
   _compressedDataUrl: null,
   _resolutionDataUrl: null,
   _pdfDataUrl: null,
+  _convertDataUrl: null,
+  _wmDataUrl: null,
+  _rotateDataUrl: null,
   // PDF settings
   pdfScale: 'fit',
   pdfAlign: 'center',
   pageNumOn: false,
   watermarkOn: false,
+  // Convert settings
+  convertFmt: 'image/jpeg',
+  convertExt: 'jpg',
+  convertQuality: 0.9,
+  // Watermark settings
+  wmPos: 'center',
+  wmRotation: -30,
+  // Rotate settings
+  rotateAngle: 0,
+  rotateFlipH: false,
+  rotateFlipV: false,
+  // Crop settings
+  cropRatio: 'free',
+  cropRect: { x: 0, y: 0, w: 100, h: 100 },
+  cropDragging: false,
+  cropStartX: 0,
+  cropStartY: 0,
+  cropHandle: null,
 };
 
 try { state.savedFiles = JSON.parse(localStorage.getItem('imageyantra_files') || '[]'); } catch(e) {}
 
 const canvas = document.getElementById('workCanvas');
 const ctx = canvas.getContext('2d');
+
+/* ═══════════════════════════════════════════════
+   FIX 1: EXIF ORIENTATION CORRECTION
+   Reads EXIF data from JPEG images (especially mobile camera shots)
+   and applies the correct rotation/flip so images appear right-side-up.
+═══════════════════════════════════════════════ */
+function getExifOrientation(arrayBuffer) {
+  const view = new DataView(arrayBuffer);
+  // Check JPEG marker
+  if (view.getUint16(0, false) !== 0xFFD8) return 1;
+
+  let offset = 2;
+  while (offset < view.byteLength) {
+    const marker = view.getUint16(offset, false);
+    offset += 2;
+    if (marker === 0xFFE1) {
+      // APP1 marker — EXIF data here
+      const exifLen = view.getUint16(offset, false);
+      const exifStart = offset + 2;
+      // Check Exif header
+      if (view.getUint32(exifStart, false) !== 0x45786966) return 1;
+      const tiffStart = exifStart + 6;
+      const littleEndian = view.getUint16(tiffStart, false) === 0x4949;
+      const ifdOffset = tiffStart + view.getUint32(tiffStart + 4, littleEndian);
+      const entries = view.getUint16(ifdOffset, littleEndian);
+      for (let i = 0; i < entries; i++) {
+        const entry = ifdOffset + 2 + i * 12;
+        if (view.getUint16(entry, littleEndian) === 0x0112) {
+          return view.getUint16(entry + 8, littleEndian);
+        }
+      }
+      return 1;
+    } else if ((marker & 0xFF00) !== 0xFF00) {
+      break;
+    } else {
+      offset += view.getUint16(offset, false);
+    }
+  }
+  return 1;
+}
+
+async function loadImageWithOrientation(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const arrayBuffer = e.target.result;
+      const orientation = getExifOrientation(arrayBuffer);
+
+      // Convert arrayBuffer to dataURL for image loading
+      const blob = new Blob([arrayBuffer], { type: file.type });
+      const dataUrl = await new Promise(res => {
+        const r2 = new FileReader();
+        r2.onload = ev => res(ev.target.result);
+        r2.readAsDataURL(blob);
+      });
+
+      const img = new Image();
+      img.onload = () => {
+        if (orientation === 1) {
+          // No correction needed
+          resolve({ img, dataUrl, orientation });
+          return;
+        }
+
+        // Apply EXIF orientation correction
+        const corrected = document.createElement('canvas');
+        const cx = corrected.getContext('2d');
+
+        let cw = img.naturalWidth;
+        let ch = img.naturalHeight;
+
+        // For 90/270 degree rotations, swap dimensions
+        if (orientation >= 5 && orientation <= 8) {
+          corrected.width = ch;
+          corrected.height = cw;
+        } else {
+          corrected.width = cw;
+          corrected.height = ch;
+        }
+
+        cx.save();
+        switch (orientation) {
+          case 2: cx.transform(-1, 0, 0, 1, cw, 0); break;
+          case 3: cx.transform(-1, 0, 0, -1, cw, ch); break;
+          case 4: cx.transform(1, 0, 0, -1, 0, ch); break;
+          case 5: cx.transform(0, 1, 1, 0, 0, 0); break;
+          case 6: cx.transform(0, 1, -1, 0, ch, 0); break;
+          case 7: cx.transform(0, -1, -1, 0, ch, cw); break;
+          case 8: cx.transform(0, -1, 1, 0, 0, cw); break;
+          default: break;
+        }
+        cx.drawImage(img, 0, 0);
+        cx.restore();
+
+        const correctedDataUrl = corrected.toDataURL('image/jpeg', 0.95);
+        const correctedImg = new Image();
+        correctedImg.onload = () => resolve({ img: correctedImg, dataUrl: correctedDataUrl, orientation });
+        correctedImg.src = correctedDataUrl;
+      };
+      img.onerror = reject;
+      img.src = dataUrl;
+    };
+    reader.onerror = reject;
+    reader.readAsArrayBuffer(file);
+  });
+}
 
 /* ─── UTILS ──────────────────────────────── */
 function toast(msg, type = '') {
@@ -1253,13 +1743,9 @@ const PAGE_SIZES = {
   a3:     { w: 297,   h: 420   },
   a5:     { w: 148,   h: 210   },
 };
-// px per mm at 72dpi (jsPDF internal unit)
-const MM_TO_PX = 72 / 25.4;
 
-/* ─── GET PDF PAGE DIMS ──────────────────── */
 function getPageDims(pageSize, orientation, imgW, imgH) {
   if (pageSize === 'fit') {
-    // Use image dimensions in mm (at 96dpi equivalent)
     const w = imgW * 0.264583;
     const h = imgH * 0.264583;
     return { pw: w, ph: h, format: [w, h], orient: 'portrait' };
@@ -1274,7 +1760,6 @@ function getPageDims(pageSize, orientation, imgW, imgH) {
   return { pw, ph, format: pageSize, orient };
 }
 
-/* ─── CALCULATE IMAGE POSITION ───────────── */
 function calcImagePos(pw, ph, imgW, imgH, scale, align, margin) {
   const m = margin || 0;
   const availW = pw - m * 2;
@@ -1287,11 +1772,10 @@ function calcImagePos(pw, ph, imgW, imgH, scale, align, margin) {
   } else if (scale === 'fill') {
     const ratio = Math.max(availW / imgW, availH / imgH);
     drawW = imgW * ratio; drawH = imgH * ratio;
-    // clamp to page
     drawW = Math.min(drawW, availW); drawH = Math.min(drawH, availH);
   } else if (scale === 'stretch') {
     drawW = availW; drawH = availH;
-  } else { // original
+  } else {
     drawW = Math.min(imgW * 0.264583, availW);
     drawH = (drawW / imgW) * imgH;
     if (drawH > availH) { drawH = availH; drawW = (drawH / imgH) * imgW; }
@@ -1299,12 +1783,12 @@ function calcImagePos(pw, ph, imgW, imgH, scale, align, margin) {
 
   let x, y;
   switch(align) {
-    case 'top-left':      x = m;                    y = m; break;
-    case 'top-center':    x = (pw - drawW) / 2;     y = m; break;
-    case 'top-right':     x = pw - drawW - m;        y = m; break;
-    case 'bottom-left':   x = m;                    y = ph - drawH - m; break;
-    case 'bottom-center': x = (pw - drawW) / 2;     y = ph - drawH - m; break;
-    default:              x = (pw - drawW) / 2;     y = (ph - drawH) / 2; break; // center
+    case 'top-left':      x = m;                y = m; break;
+    case 'top-center':    x = (pw - drawW) / 2; y = m; break;
+    case 'top-right':     x = pw - drawW - m;   y = m; break;
+    case 'bottom-left':   x = m;                y = ph - drawH - m; break;
+    case 'bottom-center': x = (pw - drawW) / 2; y = ph - drawH - m; break;
+    default:              x = (pw - drawW) / 2; y = (ph - drawH) / 2; break;
   }
   return { x, y, w: drawW, h: drawH };
 }
@@ -1321,6 +1805,36 @@ document.getElementById('themeBtn').addEventListener('click', () => {
   applyTheme(state.theme === 'dark' ? 'light' : 'dark');
 });
 
+/* ═══════════════════════════════════════════════
+   FIX 3: HAMBURGER → X ANIMATION
+   Proper toggle with CSS transition-based animation.
+   No flicker, works on all screen sizes.
+═══════════════════════════════════════════════ */
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const mobileDrawer  = document.getElementById('mobileDrawer');
+
+function setMenuOpen(open) {
+  mobileMenuBtn.classList.toggle('is-open', open);
+  mobileDrawer.classList.toggle('open', open);
+  mobileMenuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  mobileDrawer.setAttribute('aria-hidden', open ? 'false' : 'true');
+}
+
+mobileMenuBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  setMenuOpen(!mobileMenuBtn.classList.contains('is-open'));
+});
+
+// Close drawer when tapping outside
+document.addEventListener('click', (e) => {
+  if (mobileDrawer.classList.contains('open') &&
+      !mobileDrawer.contains(e.target) &&
+      e.target !== mobileMenuBtn &&
+      !mobileMenuBtn.contains(e.target)) {
+    setMenuOpen(false);
+  }
+});
+
 /* ─── NAVIGATION ─────────────────────────── */
 function switchPanel(panel) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
@@ -1328,15 +1842,11 @@ function switchPanel(panel) {
   const target = document.getElementById('panel-' + panel);
   if (target) target.classList.add('active');
   if (panel === 'files') renderFileList();
-  document.getElementById('mobileDrawer').classList.remove('open');
+  setMenuOpen(false);
 }
 
 document.querySelectorAll('[data-panel]').forEach(btn => {
   btn.addEventListener('click', () => switchPanel(btn.dataset.panel));
-});
-
-document.getElementById('mobileMenuBtn').addEventListener('click', () => {
-  document.getElementById('mobileDrawer').classList.toggle('open');
 });
 
 /* ─── DROP ZONES ─────────────────────────── */
@@ -1359,10 +1869,8 @@ function setupDropZone(zoneId, inputId, multiple, callback) {
 
 /* ─── PDF ADVANCED TOGGLE ────────────────── */
 document.getElementById('advancedToggle').addEventListener('click', () => {
-  const toggle = document.getElementById('advancedToggle');
-  const section = document.getElementById('advancedSection');
-  toggle.classList.toggle('open');
-  section.classList.toggle('open');
+  document.getElementById('advancedToggle').classList.toggle('open');
+  document.getElementById('advancedSection').classList.toggle('open');
 });
 
 /* PDF Scale options */
@@ -1383,29 +1891,43 @@ document.querySelectorAll('.align-opt').forEach(btn => {
   });
 });
 
-/* Page numbering toggle */
 document.getElementById('pageNumToggle').addEventListener('click', () => {
   state.pageNumOn = !state.pageNumOn;
   document.getElementById('pageNumToggle').classList.toggle('on', state.pageNumOn);
 });
 
-/* Watermark toggle */
 document.getElementById('watermarkToggle').addEventListener('click', () => {
   state.watermarkOn = !state.watermarkOn;
   document.getElementById('watermarkToggle').classList.toggle('on', state.watermarkOn);
 });
 
-/* ─── PDF CONVERTER ──────────────────────── */
+/* ═══════════════════════════════════════════════
+   FIX 2: PDF CONVERTER — With EXIF Orientation Fix
+   Images are now corrected for EXIF rotation before
+   being added to the PDF. Mobile photos will display
+   correctly regardless of camera orientation.
+═══════════════════════════════════════════════ */
 setupDropZone('pdfDropZone', 'pdfFileInput', true, async files => {
   for (const f of files) {
-    const dataUrl = await readFileAsDataURL(f);
-    state.pdfImages.push({ dataUrl, name: f.name });
+    try {
+      // Use EXIF-corrected loading for JPEG files
+      if (f.type === 'image/jpeg' || f.type === 'image/jpg') {
+        const { dataUrl } = await loadImageWithOrientation(f);
+        state.pdfImages.push({ dataUrl, name: f.name });
+      } else {
+        const dataUrl = await readFileAsDataURL(f);
+        state.pdfImages.push({ dataUrl, name: f.name });
+      }
+    } catch(e) {
+      const dataUrl = await readFileAsDataURL(f);
+      state.pdfImages.push({ dataUrl, name: f.name });
+    }
   }
   renderPdfGrid();
-  // Reset PDF state when images change
   state._pdfDataUrl = null;
   document.getElementById('pdfBtnRow').style.display = 'none';
   document.getElementById('pdfConvertBtn').style.display = 'flex';
+  document.getElementById('pdfConvertBtn').disabled = false;
 });
 
 function renderPdfGrid() {
@@ -1441,7 +1963,6 @@ function renderPdfGrid() {
     grid.appendChild(div);
   });
 
-  // Drag-to-reorder
   let dragSrc = null;
   grid.querySelectorAll('.img-thumb').forEach(el => {
     el.addEventListener('dragstart', e => { dragSrc = el; el.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
@@ -1503,27 +2024,28 @@ async function generatePDF() {
     const actualPh = pdf.internal.pageSize.getHeight();
     const { x, y, w, h } = calcImagePos(actualPw, actualPh, imgW, imgH, scale, align, margin);
 
-    // Add image
-    pdf.addImage(state.pdfImages[i].dataUrl, 'JPEG', x, y, w, h, undefined, 'FAST');
+    // Draw image to canvas for quality control, then add to PDF
+    const tmpCanvas = document.createElement('canvas');
+    tmpCanvas.width = imgW;
+    tmpCanvas.height = imgH;
+    const tmpCtx = tmpCanvas.getContext('2d');
+    tmpCtx.drawImage(img, 0, 0);
+    const imageData = tmpCanvas.toDataURL('image/jpeg', quality);
 
-    // Page numbering
+    pdf.addImage(imageData, 'JPEG', x, y, w, h, undefined, 'FAST');
+
     if (pageNumOn) {
       pdf.setFontSize(9);
       pdf.setTextColor(150);
       pdf.text(`${i + 1} / ${total}`, actualPw / 2, actualPh - 4, { align: 'center' });
     }
 
-    // Watermark
     if (watermark) {
       pdf.saveGraphicsState();
       pdf.setFontSize(32);
       pdf.setTextColor(180, 180, 180);
-      const pageDoc = pdf;
-      pageDoc.setGState(new pageDoc.GState({ opacity: 0.15 }));
-      // Diagonal watermark using rotation
-      pdf.text('ImageYantra', actualPw / 2, actualPh / 2, {
-        align: 'center', angle: 45
-      });
+      pdf.setGState(new pdf.GState({ opacity: 0.15 }));
+      pdf.text('ImageYantra', actualPw / 2, actualPh / 2, { align: 'center', angle: 45 });
       pdf.restoreGraphicsState();
     }
 
@@ -1549,7 +2071,6 @@ function hideProgress() {
   }, 1200);
 }
 
-/* Generate PDF button */
 document.getElementById('pdfConvertBtn').addEventListener('click', async () => {
   if (!state.pdfImages.length) return;
   const btn = document.getElementById('pdfConvertBtn');
@@ -1564,7 +2085,6 @@ document.getElementById('pdfConvertBtn').addEventListener('click', async () => {
     updateProgress(100, 'Ready!');
     hideProgress();
 
-    // Show Preview + Download buttons
     btn.style.display = 'none';
     const btnRow = document.getElementById('pdfBtnRow');
     btnRow.style.display = 'flex';
@@ -1575,20 +2095,17 @@ document.getElementById('pdfConvertBtn').addEventListener('click', async () => {
   } catch(err) {
     toast('❌ Error generating PDF', 'error');
     console.error(err);
+    btn.disabled = false;
+    btn.innerHTML = '📄 Generate PDF';
   }
-
-  btn.disabled = false;
-  btn.innerHTML = '📄 Generate PDF';
 });
 
-/* Preview button */
 document.getElementById('pdfPreviewBtn').addEventListener('click', () => {
   if (!state._pdfDataUrl) return;
   document.getElementById('pdfPreviewFrame').src = state._pdfDataUrl;
   document.getElementById('pdfModal').classList.add('open');
 });
 
-/* Download button */
 document.getElementById('pdfDownloadBtn').addEventListener('click', () => {
   if (!state._pdfDataUrl) return;
   const name = 'ImageYantra_' + Date.now() + '.pdf';
@@ -1596,7 +2113,6 @@ document.getElementById('pdfDownloadBtn').addEventListener('click', () => {
   downloadDataURL(state._pdfDataUrl, name);
 });
 
-/* Modal controls */
 document.getElementById('modalClose').addEventListener('click', closeModal);
 document.getElementById('modalClose2').addEventListener('click', closeModal);
 document.getElementById('pdfModal').addEventListener('click', e => {
@@ -1614,7 +2130,6 @@ function closeModal() {
   document.getElementById('pdfPreviewFrame').src = '';
 }
 
-// Reset convert button when settings change so user re-generates
 function resetPdfBtn() {
   state._pdfDataUrl = null;
   document.getElementById('pdfBtnRow').style.display = 'none';
@@ -1638,8 +2153,11 @@ aspectToggle.addEventListener('click', () => {
 });
 
 setupDropZone('resizeDropZone', 'resizeFileInput', false, async ([file]) => {
-  const dataUrl = await readFileAsDataURL(file);
-  const img = await loadImage(dataUrl);
+  const { img, dataUrl } = await loadImageWithOrientation(file).catch(async () => {
+    const dataUrl = await readFileAsDataURL(file);
+    const img = await loadImage(dataUrl);
+    return { img, dataUrl };
+  });
   state.resizeImg = { dataUrl, w: img.naturalWidth, h: img.naturalHeight, name: file.name };
   document.getElementById('resizePreview').innerHTML = `<img src="${dataUrl}" alt="Preview">`;
   document.getElementById('origDims').textContent = `Original: ${img.naturalWidth} × ${img.naturalHeight} px`;
@@ -1684,7 +2202,10 @@ document.getElementById('resizeApplyBtn').addEventListener('click', async () => 
 
 /* ─── COMPRESSOR ─────────────────────────── */
 setupDropZone('compressDropZone', 'compressFileInput', false, async ([file]) => {
-  const dataUrl = await readFileAsDataURL(file);
+  const { dataUrl } = await loadImageWithOrientation(file).catch(async () => {
+    const dataUrl = await readFileAsDataURL(file);
+    return { dataUrl };
+  });
   state.compressImg = { dataUrl, name: file.name, originalSize: file.size };
   document.getElementById('compressControlsCard').style.display = 'block';
   document.getElementById('compressSizeDisplay').style.display = 'block';
@@ -1738,7 +2259,6 @@ document.getElementById('qualitySlider').addEventListener('input', e => {
   applyCompression();
 });
 
-/* Target size binary search */
 document.getElementById('targetSizeBtn').addEventListener('click', () => {
   if (!state.compressImg) return;
   const val = +document.getElementById('targetSizeInput').value;
@@ -1755,24 +2275,15 @@ document.getElementById('targetSizeBtn').addEventListener('click', () => {
     ctx.drawImage(img, 0, 0);
 
     let lo = 0.01, hi = 1.0, bestQ = 0.5, bestDataUrl = '';
-    // Binary search ~12 iterations
     for (let iter = 0; iter < 14; iter++) {
       const mid = (lo + hi) / 2;
       const dataUrl = canvas.toDataURL('image/jpeg', mid);
       const size = dataURLSize(dataUrl);
-      if (size <= targetBytes) {
-        bestQ = mid; bestDataUrl = dataUrl;
-        lo = mid;
-      } else {
-        hi = mid;
-      }
+      if (size <= targetBytes) { bestQ = mid; bestDataUrl = dataUrl; lo = mid; }
+      else { hi = mid; }
     }
 
-    if (!bestDataUrl) {
-      // Even lowest quality exceeds target
-      bestDataUrl = canvas.toDataURL('image/jpeg', 0.01);
-      bestQ = 0.01;
-    }
+    if (!bestDataUrl) { bestDataUrl = canvas.toDataURL('image/jpeg', 0.01); bestQ = 0.01; }
 
     const actualSize = dataURLSize(bestDataUrl);
     const qPct = Math.round(bestQ * 100);
@@ -1804,7 +2315,10 @@ document.getElementById('compressSaveBtn').addEventListener('click', () => {
 
 /* ─── RESOLUTION ─────────────────────────── */
 setupDropZone('resolutionDropZone', 'resolutionFileInput', false, async ([file]) => {
-  const dataUrl = await readFileAsDataURL(file);
+  const { dataUrl } = await loadImageWithOrientation(file).catch(async () => {
+    const dataUrl = await readFileAsDataURL(file);
+    return { dataUrl };
+  });
   state.resolutionImg = { dataUrl, name: file.name };
   document.getElementById('resolutionOptionsCard').style.display = 'block';
   document.getElementById('resolutionSaveBtn').disabled = false;
@@ -1861,6 +2375,575 @@ document.getElementById('resolutionSaveBtn').addEventListener('click', () => {
   downloadDataURL(state._resolutionDataUrl, name);
 });
 
+/* ═══════════════════════════════════════════════
+   NEW TOOL: FORMAT CONVERTER
+═══════════════════════════════════════════════ */
+setupDropZone('convertDropZone', 'convertFileInput', false, async ([file]) => {
+  const { dataUrl, img } = await loadImageWithOrientation(file).catch(async () => {
+    const dataUrl = await readFileAsDataURL(file);
+    const img = await loadImage(dataUrl);
+    return { dataUrl, img };
+  });
+  state.convertImg = { dataUrl, name: file.name };
+  document.getElementById('convertControlsCard').style.display = 'block';
+  document.getElementById('convertPreviewImg').src = dataUrl;
+  document.getElementById('convertPreviewImg').style.display = 'block';
+  document.getElementById('convertPlaceholder').style.display = 'none';
+  document.getElementById('convertInfo').textContent = `Loaded: ${file.name} (${fmtSize(file.size)})`;
+});
+
+document.querySelectorAll('.fmt-btn[data-fmt]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.fmt-btn[data-fmt]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.convertFmt = btn.dataset.fmt;
+    state.convertExt = btn.dataset.ext;
+    // Hide quality slider for BMP (lossless)
+    document.getElementById('convertQualityField').style.display =
+      (state.convertFmt === 'image/bmp') ? 'none' : 'block';
+  });
+});
+
+document.getElementById('convertQualitySlider').addEventListener('input', e => {
+  state.convertQuality = +e.target.value / 100;
+  document.getElementById('convertQualityVal').textContent = e.target.value;
+});
+
+document.getElementById('convertSaveBtn').addEventListener('click', async () => {
+  if (!state.convertImg) { toast('Select an image first', 'error'); return; }
+  const btn = document.getElementById('convertSaveBtn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Converting…';
+
+  const img = await loadImage(state.convertImg.dataUrl);
+  canvas.width = img.naturalWidth;
+  canvas.height = img.naturalHeight;
+
+  // For PNG — need white background if source had transparency
+  if (state.convertFmt === 'image/jpeg' || state.convertFmt === 'image/bmp') {
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  } else {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+  ctx.drawImage(img, 0, 0);
+
+  const dataUrl = canvas.toDataURL(state.convertFmt, state.convertQuality);
+  const baseName = state.convertImg.name.replace(/\.[^.]+$/, '');
+  const name = `${baseName}_converted.${state.convertExt}`;
+
+  document.getElementById('convertPreviewImg').src = dataUrl;
+  document.getElementById('convertInfo').textContent = `Output: ${fmtSize(dataURLSize(dataUrl))} · .${state.convertExt.toUpperCase()}`;
+  state._convertDataUrl = dataUrl;
+
+  saveFile(name, dataUrl, 'image');
+  downloadDataURL(dataUrl, name);
+
+  btn.disabled = false; btn.innerHTML = '🔄 Convert & Download';
+  toast(`✅ Converted to ${state.convertExt.toUpperCase()}`, 'success');
+});
+
+/* ═══════════════════════════════════════════════
+   NEW TOOL: CROP IMAGE — Interactive Canvas Crop
+═══════════════════════════════════════════════ */
+const cropCanvasEl = document.getElementById('cropCanvas');
+const cropCtx = cropCanvasEl.getContext('2d');
+let cropImg = null;
+let cropDisplayScale = 1;
+let cropIsDragging = false;
+let cropIsResizing = false;
+let cropDragStartX, cropDragStartY, cropInitRect;
+let cropResizeHandle = null;
+const HANDLE_SIZE = 10;
+
+function setupCropCanvas(img) {
+  const maxW = Math.min(img.naturalWidth, 600);
+  cropDisplayScale = maxW / img.naturalWidth;
+  cropCanvasEl.width = img.naturalWidth * cropDisplayScale;
+  cropCanvasEl.height = img.naturalHeight * cropDisplayScale;
+  cropImg = img;
+
+  // Init crop rect to full image (in image pixel coordinates)
+  state.cropRect = { x: 0, y: 0, w: img.naturalWidth, h: img.naturalHeight };
+  syncCropInputs();
+  drawCrop();
+}
+
+function applyAspectRatio() {
+  if (state.cropRatio === 'free') return;
+  const [rw, rh] = state.cropRatio.split(':').map(Number);
+  const ratio = rw / rh;
+  const imgW = cropImg.naturalWidth, imgH = cropImg.naturalHeight;
+  let w = state.cropRect.w;
+  let h = Math.round(w / ratio);
+  if (h > imgH) { h = imgH; w = Math.round(h * ratio); }
+  if (w > imgW) { w = imgW; h = Math.round(w / ratio); }
+  state.cropRect.w = w;
+  state.cropRect.h = h;
+  syncCropInputs();
+  drawCrop();
+}
+
+function syncCropInputs() {
+  document.getElementById('cropX').value = Math.round(state.cropRect.x);
+  document.getElementById('cropY').value = Math.round(state.cropRect.y);
+  document.getElementById('cropW').value = Math.round(state.cropRect.w);
+  document.getElementById('cropH').value = Math.round(state.cropRect.h);
+  document.getElementById('cropInfo').textContent =
+    `Crop: ${Math.round(state.cropRect.w)} × ${Math.round(state.cropRect.h)} px at (${Math.round(state.cropRect.x)}, ${Math.round(state.cropRect.y)})`;
+}
+
+function drawCrop() {
+  if (!cropImg) return;
+  const cw = cropCanvasEl.width, ch = cropCanvasEl.height;
+  cropCtx.clearRect(0, 0, cw, ch);
+  cropCtx.drawImage(cropImg, 0, 0, cw, ch);
+
+  // Dimmed overlay
+  const sx = state.cropRect.x * cropDisplayScale;
+  const sy = state.cropRect.y * cropDisplayScale;
+  const sw = state.cropRect.w * cropDisplayScale;
+  const sh = state.cropRect.h * cropDisplayScale;
+
+  cropCtx.fillStyle = 'rgba(0,0,0,0.45)';
+  cropCtx.fillRect(0, 0, cw, ch);
+
+  // Clear crop area to show original
+  cropCtx.clearRect(sx, sy, sw, sh);
+  cropCtx.drawImage(cropImg, sx / cropDisplayScale, sy / cropDisplayScale,
+    sw / cropDisplayScale, sh / cropDisplayScale, sx, sy, sw, sh);
+
+  // Border
+  cropCtx.strokeStyle = '#7c6dfa';
+  cropCtx.lineWidth = 2;
+  cropCtx.strokeRect(sx, sy, sw, sh);
+
+  // Rule of thirds
+  cropCtx.strokeStyle = 'rgba(124,109,250,0.35)';
+  cropCtx.lineWidth = 1;
+  for (let i = 1; i < 3; i++) {
+    cropCtx.beginPath();
+    cropCtx.moveTo(sx + sw * i / 3, sy);
+    cropCtx.lineTo(sx + sw * i / 3, sy + sh);
+    cropCtx.stroke();
+    cropCtx.beginPath();
+    cropCtx.moveTo(sx, sy + sh * i / 3);
+    cropCtx.lineTo(sx + sw, sy + sh * i / 3);
+    cropCtx.stroke();
+  }
+
+  // Corner handles
+  const handles = getCropHandlePositions(sx, sy, sw, sh);
+  handles.forEach(h => {
+    cropCtx.fillStyle = '#7c6dfa';
+    cropCtx.fillRect(h.x - HANDLE_SIZE/2, h.y - HANDLE_SIZE/2, HANDLE_SIZE, HANDLE_SIZE);
+  });
+}
+
+function getCropHandlePositions(sx, sy, sw, sh) {
+  return [
+    { id: 'tl', x: sx,       y: sy       },
+    { id: 'tc', x: sx+sw/2,  y: sy       },
+    { id: 'tr', x: sx+sw,    y: sy       },
+    { id: 'ml', x: sx,       y: sy+sh/2  },
+    { id: 'mr', x: sx+sw,    y: sy+sh/2  },
+    { id: 'bl', x: sx,       y: sy+sh    },
+    { id: 'bc', x: sx+sw/2,  y: sy+sh    },
+    { id: 'br', x: sx+sw,    y: sy+sh    },
+  ];
+}
+
+function getHandleAt(mx, my) {
+  const sx = state.cropRect.x * cropDisplayScale;
+  const sy = state.cropRect.y * cropDisplayScale;
+  const sw = state.cropRect.w * cropDisplayScale;
+  const sh = state.cropRect.h * cropDisplayScale;
+  const handles = getCropHandlePositions(sx, sy, sw, sh);
+  for (const h of handles) {
+    if (Math.abs(mx - h.x) <= HANDLE_SIZE && Math.abs(my - h.y) <= HANDLE_SIZE) return h.id;
+  }
+  return null;
+}
+
+function isInsideCrop(mx, my) {
+  const sx = state.cropRect.x * cropDisplayScale;
+  const sy = state.cropRect.y * cropDisplayScale;
+  const sw = state.cropRect.w * cropDisplayScale;
+  const sh = state.cropRect.h * cropDisplayScale;
+  return mx >= sx && mx <= sx + sw && my >= sy && my <= sy + sh;
+}
+
+cropCanvasEl.addEventListener('mousedown', e => {
+  const rect = cropCanvasEl.getBoundingClientRect();
+  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+  cropDragStartX = mx; cropDragStartY = my;
+  cropInitRect = { ...state.cropRect };
+  const handle = getHandleAt(mx, my);
+  if (handle) { cropIsResizing = true; cropResizeHandle = handle; }
+  else if (isInsideCrop(mx, my)) { cropIsDragging = true; }
+  else {
+    // Start new crop region
+    cropIsDragging = false;
+    cropIsResizing = false;
+    state.cropRect = {
+      x: mx / cropDisplayScale,
+      y: my / cropDisplayScale,
+      w: 1, h: 1
+    };
+    cropInitRect = { ...state.cropRect };
+    cropIsResizing = true; cropResizeHandle = 'br';
+  }
+});
+
+cropCanvasEl.addEventListener('mousemove', e => {
+  const rect = cropCanvasEl.getBoundingClientRect();
+  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+  const dx = (mx - cropDragStartX) / cropDisplayScale;
+  const dy = (my - cropDragStartY) / cropDisplayScale;
+  const imgW = cropImg ? cropImg.naturalWidth : 999999;
+  const imgH = cropImg ? cropImg.naturalHeight : 999999;
+
+  if (cropIsDragging) {
+    state.cropRect.x = Math.max(0, Math.min(imgW - cropInitRect.w, cropInitRect.x + dx));
+    state.cropRect.y = Math.max(0, Math.min(imgH - cropInitRect.h, cropInitRect.y + dy));
+    syncCropInputs(); drawCrop();
+  } else if (cropIsResizing && cropResizeHandle) {
+    let { x, y, w, h } = cropInitRect;
+    const id = cropResizeHandle;
+    if (id.includes('r')) { w = Math.max(10, Math.min(imgW - x, w + dx)); }
+    if (id.includes('l')) { const nx = Math.max(0, Math.min(x + w - 10, x + dx)); w = w - (nx - x); x = nx; }
+    if (id.includes('b')) { h = Math.max(10, Math.min(imgH - y, h + dy)); }
+    if (id.includes('t')) { const ny = Math.max(0, Math.min(y + h - 10, y + dy)); h = h - (ny - y); y = ny; }
+    state.cropRect = { x, y, w, h };
+    if (state.cropRatio !== 'free') applyAspectRatio();
+    syncCropInputs(); drawCrop();
+  }
+
+  // Cursor
+  const handle = getHandleAt(mx, my);
+  if (handle) {
+    const cursors = { tl:'nwse-resize', tr:'nesw-resize', bl:'nesw-resize', br:'nwse-resize', tc:'ns-resize', bc:'ns-resize', ml:'ew-resize', mr:'ew-resize' };
+    cropCanvasEl.style.cursor = cursors[handle] || 'crosshair';
+  } else if (isInsideCrop(mx, my)) {
+    cropCanvasEl.style.cursor = 'move';
+  } else {
+    cropCanvasEl.style.cursor = 'crosshair';
+  }
+});
+
+cropCanvasEl.addEventListener('mouseup', () => { cropIsDragging = false; cropIsResizing = false; cropResizeHandle = null; });
+cropCanvasEl.addEventListener('mouseleave', () => { cropIsDragging = false; cropIsResizing = false; });
+
+// Touch support for crop
+cropCanvasEl.addEventListener('touchstart', e => {
+  e.preventDefault();
+  const touch = e.touches[0];
+  const rect = cropCanvasEl.getBoundingClientRect();
+  const mx = touch.clientX - rect.left, my = touch.clientY - rect.top;
+  cropDragStartX = mx; cropDragStartY = my;
+  cropInitRect = { ...state.cropRect };
+  const handle = getHandleAt(mx, my);
+  if (handle) { cropIsResizing = true; cropResizeHandle = handle; }
+  else if (isInsideCrop(mx, my)) { cropIsDragging = true; }
+}, { passive: false });
+
+cropCanvasEl.addEventListener('touchmove', e => {
+  e.preventDefault();
+  const touch = e.touches[0];
+  const rect = cropCanvasEl.getBoundingClientRect();
+  const mx = touch.clientX - rect.left, my = touch.clientY - rect.top;
+  const dx = (mx - cropDragStartX) / cropDisplayScale;
+  const dy = (my - cropDragStartY) / cropDisplayScale;
+  const imgW = cropImg ? cropImg.naturalWidth : 999999;
+  const imgH = cropImg ? cropImg.naturalHeight : 999999;
+
+  if (cropIsDragging) {
+    state.cropRect.x = Math.max(0, Math.min(imgW - cropInitRect.w, cropInitRect.x + dx));
+    state.cropRect.y = Math.max(0, Math.min(imgH - cropInitRect.h, cropInitRect.y + dy));
+    syncCropInputs(); drawCrop();
+  } else if (cropIsResizing && cropResizeHandle) {
+    let { x, y, w, h } = cropInitRect;
+    const id = cropResizeHandle;
+    if (id.includes('r')) { w = Math.max(10, Math.min(imgW - x, w + dx)); }
+    if (id.includes('l')) { const nx = Math.max(0, Math.min(x + w - 10, x + dx)); w = w - (nx - x); x = nx; }
+    if (id.includes('b')) { h = Math.max(10, Math.min(imgH - y, h + dy)); }
+    if (id.includes('t')) { const ny = Math.max(0, Math.min(y + h - 10, y + dy)); h = h - (ny - y); y = ny; }
+    state.cropRect = { x, y, w, h };
+    syncCropInputs(); drawCrop();
+  }
+}, { passive: false });
+
+cropCanvasEl.addEventListener('touchend', () => { cropIsDragging = false; cropIsResizing = false; cropResizeHandle = null; });
+
+setupDropZone('cropDropZone', 'cropFileInput', false, async ([file]) => {
+  const { img, dataUrl } = await loadImageWithOrientation(file).catch(async () => {
+    const dataUrl = await readFileAsDataURL(file);
+    const img = await loadImage(dataUrl);
+    return { img, dataUrl };
+  });
+  document.getElementById('cropPlaceholder').style.display = 'none';
+  cropCanvasEl.style.display = 'block';
+  document.getElementById('cropControlsCard').style.display = 'block';
+  state.cropImg = { dataUrl, name: file.name };
+  setupCropCanvas(img);
+});
+
+document.querySelectorAll('.fmt-btn[data-ratio]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.fmt-btn[data-ratio]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.cropRatio = btn.dataset.ratio;
+    if (cropImg && state.cropRatio !== 'free') applyAspectRatio();
+  });
+});
+
+// Manual input sync
+['cropX','cropY','cropW','cropH'].forEach(id => {
+  document.getElementById(id).addEventListener('change', () => {
+    if (!cropImg) return;
+    state.cropRect.x = +document.getElementById('cropX').value;
+    state.cropRect.y = +document.getElementById('cropY').value;
+    state.cropRect.w = +document.getElementById('cropW').value;
+    state.cropRect.h = +document.getElementById('cropH').value;
+    drawCrop();
+  });
+});
+
+document.getElementById('cropSaveBtn').addEventListener('click', () => {
+  if (!state.cropImg || !cropImg) { toast('Select an image first', 'error'); return; }
+  const { x, y, w, h } = state.cropRect;
+  if (w < 1 || h < 1) { toast('Invalid crop area', 'error'); return; }
+
+  const outCanvas = document.createElement('canvas');
+  outCanvas.width = Math.round(w);
+  outCanvas.height = Math.round(h);
+  const outCtx = outCanvas.getContext('2d');
+  outCtx.drawImage(cropImg, Math.round(x), Math.round(y), Math.round(w), Math.round(h), 0, 0, Math.round(w), Math.round(h));
+  const dataUrl = outCanvas.toDataURL('image/jpeg', 0.92);
+  const name = `cropped_${Math.round(w)}x${Math.round(h)}_${Date.now()}.jpg`;
+  saveFile(name, dataUrl, 'image');
+  downloadDataURL(dataUrl, name);
+  toast('✅ Cropped image downloaded', 'success');
+});
+
+/* ═══════════════════════════════════════════════
+   NEW TOOL: WATERMARK
+═══════════════════════════════════════════════ */
+const wmCanvas = document.getElementById('wmCanvas');
+const wmCtx = wmCanvas.getContext('2d');
+let wmImg = null;
+
+setupDropZone('wmDropZone', 'wmFileInput', false, async ([file]) => {
+  const { img, dataUrl } = await loadImageWithOrientation(file).catch(async () => {
+    const dataUrl = await readFileAsDataURL(file);
+    const img = await loadImage(dataUrl);
+    return { img, dataUrl };
+  });
+  state.wmImg = { dataUrl, name: file.name };
+  wmImg = img;
+  document.getElementById('wmControlsCard').style.display = 'block';
+  document.getElementById('wmPlaceholder').style.display = 'none';
+  wmCanvas.style.display = 'block';
+  renderWatermark();
+});
+
+function renderWatermark() {
+  if (!wmImg) return;
+  const text     = document.getElementById('wmText').value || '© ImageYantra';
+  const fontSize = +document.getElementById('wmFontSize').value || 36;
+  const color    = document.getElementById('wmColor').value;
+  const opacity  = +document.getElementById('wmOpacity').value / 100;
+  const rotation = state.wmRotation * (Math.PI / 180);
+  const pos      = state.wmPos;
+
+  const maxW = Math.min(wmImg.naturalWidth, 600);
+  const scale = maxW / wmImg.naturalWidth;
+  wmCanvas.width = wmImg.naturalWidth * scale;
+  wmCanvas.height = wmImg.naturalHeight * scale;
+
+  wmCtx.drawImage(wmImg, 0, 0, wmCanvas.width, wmCanvas.height);
+
+  const scaledFontSize = fontSize * scale;
+  wmCtx.font = `bold ${scaledFontSize}px ${getComputedStyle(document.body).getPropertyValue('--font-head') || 'Syne, sans-serif'}`;
+  wmCtx.globalAlpha = opacity;
+  wmCtx.fillStyle = color;
+
+  const tm = wmCtx.measureText(text);
+  const tw = tm.width;
+  const th = scaledFontSize;
+
+  let cx, cy;
+  const pad = 20 * scale;
+  switch (pos) {
+    case 'top-left':     cx = pad + tw/2;                          cy = pad + th; break;
+    case 'top-center':   cx = wmCanvas.width / 2;                  cy = pad + th; break;
+    case 'top-right':    cx = wmCanvas.width - pad - tw/2;         cy = pad + th; break;
+    case 'bottom-left':  cx = pad + tw/2;                          cy = wmCanvas.height - pad; break;
+    case 'bottom-right': cx = wmCanvas.width - pad - tw/2;         cy = wmCanvas.height - pad; break;
+    default:             cx = wmCanvas.width / 2;                  cy = wmCanvas.height / 2; break;
+  }
+
+  wmCtx.save();
+  wmCtx.translate(cx, cy);
+  wmCtx.rotate(rotation);
+  wmCtx.textAlign = 'center';
+  wmCtx.textBaseline = 'middle';
+  wmCtx.fillText(text, 0, 0);
+  wmCtx.restore();
+  wmCtx.globalAlpha = 1;
+
+  state._wmDataUrl = wmCanvas.toDataURL('image/jpeg', 0.92);
+}
+
+['wmText','wmFontSize'].forEach(id => {
+  document.getElementById(id).addEventListener('input', renderWatermark);
+});
+document.getElementById('wmColor').addEventListener('input', e => {
+  document.getElementById('wmColorHex').value = e.target.value;
+  renderWatermark();
+});
+document.getElementById('wmColorHex').addEventListener('input', e => {
+  const v = e.target.value;
+  if (/^#[0-9A-Fa-f]{6}$/.test(v)) {
+    document.getElementById('wmColor').value = v;
+    renderWatermark();
+  }
+});
+document.getElementById('wmOpacity').addEventListener('input', e => {
+  document.getElementById('wmOpacityVal').textContent = e.target.value;
+  renderWatermark();
+});
+document.getElementById('wmRotation').addEventListener('input', e => {
+  state.wmRotation = +e.target.value;
+  document.getElementById('wmRotVal').textContent = e.target.value;
+  renderWatermark();
+});
+
+document.querySelectorAll('[data-wmpos]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-wmpos]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.wmPos = btn.dataset.wmpos;
+    renderWatermark();
+  });
+});
+
+document.getElementById('wmSaveBtn').addEventListener('click', () => {
+  if (!state._wmDataUrl) return;
+  const name = `watermarked_${Date.now()}.jpg`;
+  saveFile(name, state._wmDataUrl, 'image');
+  downloadDataURL(state._wmDataUrl, name);
+  toast('✅ Watermarked image saved', 'success');
+});
+
+/* ═══════════════════════════════════════════════
+   NEW TOOL: ROTATE / FLIP
+═══════════════════════════════════════════════ */
+const rotateCanvas = document.getElementById('rotateCanvas');
+const rotCtx = rotateCanvas.getContext('2d');
+let rotImg = null;
+let rotCurrentAngle = 0;
+let rotFlipH = false, rotFlipV = false;
+
+setupDropZone('rotateDropZone', 'rotateFileInput', false, async ([file]) => {
+  const { img, dataUrl } = await loadImageWithOrientation(file).catch(async () => {
+    const dataUrl = await readFileAsDataURL(file);
+    const img = await loadImage(dataUrl);
+    return { img, dataUrl };
+  });
+  state.rotateImg = { dataUrl, name: file.name };
+  rotImg = img;
+  rotCurrentAngle = 0; rotFlipH = false; rotFlipV = false;
+  document.getElementById('rotAngle').value = 0;
+  document.getElementById('rotAngleVal').textContent = '0';
+  document.getElementById('rotateControlsCard').style.display = 'block';
+  document.getElementById('rotateSaveBtn').disabled = false;
+  document.getElementById('rotatePlaceholder').style.display = 'none';
+  rotateCanvas.style.display = 'block';
+  renderRotate();
+});
+
+function renderRotate() {
+  if (!rotImg) return;
+  const angle = rotCurrentAngle * (Math.PI / 180);
+  const ow = rotImg.naturalWidth, oh = rotImg.naturalHeight;
+
+  // Bounding box after rotation
+  const absCos = Math.abs(Math.cos(angle));
+  const absSin = Math.abs(Math.sin(angle));
+  const bw = Math.round(ow * absCos + oh * absSin);
+  const bh = Math.round(ow * absSin + oh * absCos);
+
+  rotateCanvas.width = bw;
+  rotateCanvas.height = bh;
+
+  rotCtx.save();
+  rotCtx.translate(bw / 2, bh / 2);
+  rotCtx.rotate(angle);
+  rotCtx.scale(rotFlipH ? -1 : 1, rotFlipV ? -1 : 1);
+  rotCtx.drawImage(rotImg, -ow / 2, -oh / 2);
+  rotCtx.restore();
+
+  state._rotateDataUrl = rotateCanvas.toDataURL('image/jpeg', 0.92);
+  document.getElementById('rotateInfo').textContent = `Output: ${bw} × ${bh} px`;
+}
+
+document.getElementById('rotLeft').addEventListener('click', () => {
+  rotCurrentAngle = (rotCurrentAngle - 90 + 360) % 360;
+  document.getElementById('rotAngle').value = 0;
+  document.getElementById('rotAngleVal').textContent = '0';
+  renderRotate();
+});
+document.getElementById('rotRight').addEventListener('click', () => {
+  rotCurrentAngle = (rotCurrentAngle + 90) % 360;
+  document.getElementById('rotAngle').value = 0;
+  document.getElementById('rotAngleVal').textContent = '0';
+  renderRotate();
+});
+document.getElementById('rot180').addEventListener('click', () => {
+  rotCurrentAngle = (rotCurrentAngle + 180) % 360;
+  renderRotate();
+});
+document.getElementById('flipH').addEventListener('click', () => {
+  rotFlipH = !rotFlipH;
+  document.getElementById('flipH').classList.toggle('active', rotFlipH);
+  renderRotate();
+});
+document.getElementById('flipV').addEventListener('click', () => {
+  rotFlipV = !rotFlipV;
+  document.getElementById('flipV').classList.toggle('active', rotFlipV);
+  renderRotate();
+});
+document.getElementById('rotAngle').addEventListener('input', e => {
+  const customAngle = +e.target.value;
+  document.getElementById('rotAngleVal').textContent = customAngle;
+  // Apply custom angle on top of 90-degree snaps by temporarily overriding
+  rotateCanvas.width = 1; // flush
+  const baseAngle = rotCurrentAngle;
+  const totalAngle = (baseAngle + customAngle) * (Math.PI / 180);
+  const ow = rotImg.naturalWidth, oh = rotImg.naturalHeight;
+  const absCos = Math.abs(Math.cos(totalAngle));
+  const absSin = Math.abs(Math.sin(totalAngle));
+  const bw = Math.round(ow * absCos + oh * absSin);
+  const bh = Math.round(ow * absSin + oh * absCos);
+  rotateCanvas.width = bw; rotateCanvas.height = bh;
+  rotCtx.save();
+  rotCtx.translate(bw/2, bh/2);
+  rotCtx.rotate(totalAngle);
+  rotCtx.scale(rotFlipH ? -1 : 1, rotFlipV ? -1 : 1);
+  rotCtx.drawImage(rotImg, -ow/2, -oh/2);
+  rotCtx.restore();
+  state._rotateDataUrl = rotateCanvas.toDataURL('image/jpeg', 0.92);
+  document.getElementById('rotateInfo').textContent = `Output: ${bw} × ${bh} px`;
+});
+
+document.getElementById('rotateSaveBtn').addEventListener('click', () => {
+  if (!state._rotateDataUrl) return;
+  const name = `rotated_${Date.now()}.jpg`;
+  saveFile(name, state._rotateDataUrl, 'image');
+  downloadDataURL(state._rotateDataUrl, name);
+  toast('✅ Rotated image saved', 'success');
+});
+
 /* ─── FILE MANAGER ───────────────────────── */
 function renderFileList() {
   const list = document.getElementById('fileList');
@@ -1915,19 +2998,12 @@ const clearBtn = document.getElementById('clearFilesBtn');
 let clearConfirmPending = false;
 
 clearBtn.addEventListener('click', () => {
-  if (!state.savedFiles.length) {
-    toast('No files to clear', '');
-    return;
-  }
-
+  if (!state.savedFiles.length) { toast('No files to clear', ''); return; }
   if (!clearConfirmPending) {
-    // First click — ask for confirmation inline
     clearConfirmPending = true;
     clearBtn.textContent = '⚠️ Confirm Clear?';
     clearBtn.style.color = 'var(--red)';
     clearBtn.style.borderColor = 'var(--red)';
-
-    // Auto-reset after 3 seconds if user doesn't confirm
     setTimeout(() => {
       if (clearConfirmPending) {
         clearConfirmPending = false;
@@ -1936,14 +3012,11 @@ clearBtn.addEventListener('click', () => {
         clearBtn.style.borderColor = '';
       }
     }, 3000);
-
   } else {
-    // Second click — actually clear
     clearConfirmPending = false;
     clearBtn.textContent = '🗑 Clear All';
     clearBtn.style.color = '';
     clearBtn.style.borderColor = '';
-
     state.savedFiles = [];
     try { localStorage.removeItem('imageyantra_files'); } catch(e) {}
     renderFileList();
