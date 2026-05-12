@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="google-adsense-account" content="ca-pub-2178808063904703">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Change Resolution — ImageYantra</title>
+  <meta name="description" content="Change image resolution online free. Upscale to 4K or downscale to HD. No upload required.">
+  <link rel="canonical" href="https://imageyantra.in/tools/resolution/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Change Resolution — ImageYantra">
+  <meta property="og:description" content="Change image resolution online free. Upscale to 4K or downscale to HD. No upload required.">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2178808063904703" crossorigin="anonymous"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Change Resolution",
+    "url": "https://imageyantra.in/tools/resolution/",
+    "description": "Change image resolution online free. Upscale to 4K or downscale to HD. No upload required.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Web",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+</head>
+<body>
+<canvas id="workCanvas" aria-hidden="true"></canvas>
+
+<script src="/js/utils.js"></script>
+<script src="/js/nav.js"></script>
+
+<div class="tool-page">
+
+  <div class="ad-banner-top" aria-label="Advertisement">
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2178808063904703" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </div>
+
+  <header class="tool-page-header">
+    <div class="container">
+      <div class="tool-page-icon" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+      <div>
+        <h1 class="tool-page-title">Change <em>Resolution</em></h1>
+        <p class="tool-page-desc">Upscale or downscale images to 720p, 1080p, 4K, or custom pixel dimensions.</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="tool-page-body">
+    <div class="tool-body-inner">
+      <main class="tool-main" id="main-content">
+        
+        <div class="tool-grid">
+      <div class="tool-controls">
+        <div class="drop-zone" id="resDropZone">
+          <input type="file" id="resFileInput" accept="image/*">
+          <div class="drop-icon">
+            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+              <line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+          </div>
+          <div class="drop-title">Select Image</div>
+          <div class="drop-sub">JPG, PNG, WEBP — any format</div>
+          <div class="drop-hint">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg>
+            Tap or drag &amp; drop
+          </div>
+        </div>
+
+        <div class="card" id="resControls" style="display:none">
+          <div class="card-title">Preset Resolutions</div>
+          <div class="res-grid" id="resPresets">
+            <button class="res-btn" data-w="1280" data-h="720">HD<span>1280×720</span></button>
+            <button class="res-btn" data-w="1920" data-h="1080">Full HD<span>1920×1080</span></button>
+            <button class="res-btn" data-w="2560" data-h="1440">2K<span>2560×1440</span></button>
+            <button class="res-btn" data-w="3840" data-h="2160">4K<span>3840×2160</span></button>
+            <button class="res-btn" data-w="800" data-h="600">SVGA<span>800×600</span></button>
+            <button class="res-btn" data-w="1024" data-h="768">XGA<span>1024×768</span></button>
+          </div>
+
+          <div class="divider"></div>
+          <div class="card-title">Custom Size</div>
+          <div class="toggle-row" style="margin-bottom:10px;">
+            <div>
+              <div class="toggle-label">Lock Aspect Ratio</div>
+              <div class="toggle-sub">Proportional scaling</div>
+            </div>
+            <div class="toggle on" id="resAspectToggle"><div class="toggle-knob"></div></div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label>Width (px)</label>
+              <input type="number" id="resCustomW" placeholder="e.g. 1920" min="1">
+            </div>
+            <div class="field">
+              <label>Height (px)</label>
+              <input type="number" id="resCustomH" placeholder="e.g. 1080" min="1">
+            </div>
+          </div>
+
+          <div class="divider"></div>
+          <div class="card-title">Scaling Algorithm</div>
+          <div class="field">
+            <select id="resAlgo">
+              <option value="bilinear">Bilinear (smooth, default)</option>
+              <option value="nearest">Nearest Neighbor (sharp/pixel-art)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Output Format</label>
+            <select id="resFormat">
+              <option value="jpeg">JPEG</option>
+              <option value="png">PNG</option>
+              <option value="webp">WebP</option>
+            </select>
+          </div>
+
+          <div class="progress-wrap" id="resProgress">
+            <div class="progress-bar-bg"><div class="progress-bar-fill" id="resProgressFill"></div></div>
+            <div class="progress-label">Processing…</div>
+          </div>
+
+          <button class="btn btn-primary" style="width:100%" id="resApplyBtn" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Apply &amp; Download
+          </button>
+        </div>
+      </div>
+
+      <div class="tool-preview-area">
+        <div class="card" style="min-height:280px;">
+          <div class="card-title">Preview</div>
+          <div class="preview-box" style="min-height:240px;">
+            <img id="resPreviewImg" style="max-width:100%;max-height:300px;object-fit:contain;display:none;" src="" alt="Preview">
+            <div class="preview-placeholder" id="resPlaceholder">
+              <div class="ico">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="3" width="20" height="14" rx="2"/>
+                  <line x1="8" y1="21" x2="16" y2="21"/>
+                  <line x1="12" y1="17" x2="12" y2="21"/>
+                </svg>
+              </div>
+              Resolution preview here
+            </div>
+          </div>
+          <div class="info-text" id="resDimInfo"></div>
+        </div>
+
+        <div id="resStatsRow" style="display:none">
+          <div class="stats-row">
+            <div class="stat-badge amber">
+              <div class="val" id="resOrigDim">—</div>
+              <div class="lbl">Original</div>
+            </div>
+            <div class="stat-badge arrow">→</div>
+            <div class="stat-badge green">
+              <div class="val" id="resNewDim">—</div>
+              <div class="lbl">Output</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+      </main>
+
+      <aside class="tool-sidebar" aria-label="Sidebar">
+        <div class="card ad-sidebar" aria-label="Advertisement">
+          <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2178808063904703" data-ad-slot="auto" data-ad-format="rectangle"></ins>
+        </div>
+        <div class="card">
+          <div class="card-title">Tips</div>
+          <div class="tips-card"><div class="tip-item"><span class="tip-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span><div class="tip-text">1920×1080 is Full HD. 3840×2160 is 4K Ultra HD.</div></div><div class="tip-item"><span class="tip-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span><div class="tip-text">Upscaling adds pixels but won't restore lost detail. Best used for minor increases.</div></div></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    Nav.init();
+    try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+    try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+  });
+</script>
+<script>
+const canvas = document.getElementById('workCanvas');
+const ctx = canvas.getContext('2d');
+let resImg = null;
+let resOrigW = 0, resOrigH = 0;
+let resAspectLocked = true;
+
+const resAspectToggle = document.getElementById('resAspectToggle');
+resAspectToggle.addEventListener('click', () => {
+  resAspectLocked = !resAspectLocked;
+  resAspectToggle.classList.toggle('on', resAspectLocked);
+  resAspectToggle.classList.toggle('off', !resAspectLocked);
+});
+
+setupDropZone('resDropZone', 'resFileInput', false, async ([file]) => {
+  const dataUrl = await readFileAsDataURL(file);
+  const img = await loadImage(dataUrl);
+  resImg = { dataUrl, name: file.name };
+  resOrigW = img.naturalWidth;
+  resOrigH = img.naturalHeight;
+  document.getElementById('resControls').style.display = 'block';
+  document.getElementById('resPreviewImg').src = dataUrl;
+  document.getElementById('resPreviewImg').style.display = 'block';
+  document.getElementById('resPlaceholder').style.display = 'none';
+  document.getElementById('resApplyBtn').disabled = false;
+  document.getElementById('resStatsRow').style.display = 'block';
+  document.getElementById('resOrigDim').textContent = resOrigW + '×' + resOrigH;
+  document.getElementById('resNewDim').textContent = resOrigW + '×' + resOrigH;
+  document.getElementById('resDimInfo').textContent = 'Original: ' + resOrigW + ' × ' + resOrigH + ' px';
+});
+
+// Preset buttons
+document.querySelectorAll('.res-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const w = parseInt(btn.dataset.w);
+    const h = parseInt(btn.dataset.h);
+    document.getElementById('resCustomW').value = w;
+    document.getElementById('resCustomH').value = h;
+    document.getElementById('resNewDim').textContent = w + '×' + h;
+    document.querySelectorAll('.res-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+document.getElementById('resCustomW').addEventListener('input', e => {
+  if (resAspectLocked && resOrigW && resOrigH) {
+    const w = parseInt(e.target.value) || 0;
+    document.getElementById('resCustomH').value = Math.round(w * resOrigH / resOrigW) || '';
+  }
+  const w = parseInt(document.getElementById('resCustomW').value) || '?';
+  const h = parseInt(document.getElementById('resCustomH').value) || '?';
+  document.getElementById('resNewDim').textContent = w + '×' + h;
+  document.querySelectorAll('.res-btn').forEach(b => b.classList.remove('active'));
+});
+document.getElementById('resCustomH').addEventListener('input', e => {
+  if (resAspectLocked && resOrigW && resOrigH) {
+    const h = parseInt(e.target.value) || 0;
+    document.getElementById('resCustomW').value = Math.round(h * resOrigW / resOrigH) || '';
+  }
+  const w = parseInt(document.getElementById('resCustomW').value) || '?';
+  const h = parseInt(document.getElementById('resCustomH').value) || '?';
+  document.getElementById('resNewDim').textContent = w + '×' + h;
+  document.querySelectorAll('.res-btn').forEach(b => b.classList.remove('active'));
+});
+
+document.getElementById('resApplyBtn').addEventListener('click', async () => {
+  if (!resImg) return;
+  let w = parseInt(document.getElementById('resCustomW').value);
+  let h = parseInt(document.getElementById('resCustomH').value);
+  // fallback to original if no custom
+  if (!w && !h) { w = resOrigW; h = resOrigH; }
+  else if (!w) w = Math.round(h * resOrigW / resOrigH);
+  else if (!h) h = Math.round(w * resOrigH / resOrigW);
+  const fmt = document.getElementById('resFormat').value;
+  const algo = document.getElementById('resAlgo').value;
+  document.getElementById('resProgress').style.display = 'block';
+  document.getElementById('resProgressFill').style.width = '60%';
+  await new Promise(r => setTimeout(r, 30));
+  const img = await loadImage(resImg.dataUrl);
+  ctx.imageSmoothingEnabled = algo !== 'nearest';
+  ctx.imageSmoothingQuality = 'high';
+  canvas.width = w; canvas.height = h;
+  ctx.drawImage(img, 0, 0, w, h);
+  const mime = fmt === 'png' ? 'image/png' : fmt === 'webp' ? 'image/webp' : 'image/jpeg';
+  const dataUrl = canvas.toDataURL(mime, 0.92);
+  const ext = fmt === 'jpeg' ? 'jpg' : fmt;
+  const baseName = resImg.name.replace(/\.[^.]+$/, '');
+  const filename = 'imageyantra-resolution-' + baseName + '.' + ext;
+  document.getElementById('resProgressFill').style.width = '100%';
+  setTimeout(() => { document.getElementById('resProgress').style.display = 'none'; }, 400);
+  document.getElementById('resPreviewImg').src = dataUrl;
+  document.getElementById('resNewDim').textContent = w + '×' + h;
+  document.getElementById('resDimInfo').textContent = w + ' × ' + h + ' px';
+  saveFile(filename, dataUrl, 'image');
+  downloadDataURL(dataUrl, filename);
+});
+</script>
+
+<section class="tool-blog-section" aria-label="Guide: Change Resolution" style="background:var(--col-surface);border-top:1px solid var(--col-border);padding:64px 0">
+  <div class="container" style="max-width:780px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <span style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--col-accent);background:color-mix(in srgb,var(--col-accent) 12%,transparent);padding:3px 10px;border-radius:20px">Guide</span>
+    </div>
+    <h2 style="font-family:var(--ff-head);font-size:clamp(22px,3.5vw,34px);font-weight:800;color:var(--col-text);letter-spacing:-.4px;margin-bottom:16px">Understanding Image Resolution — 720p, 1080p, 4K Explained</h2>
+    <p style="font-size:16px;color:var(--col-text2);line-height:1.7;margin-bottom:24px">Resolution is simply the number of pixels in your image. More pixels = more detail, larger file. Less pixels = faster loading, smaller file. This tool lets you change resolution to any standard or custom dimension instantly in your browser.</p>
+
+    <h3 style="font-family:var(--ff-head);font-size:20px;font-weight:700;color:var(--col-text);margin:28px 0 10px">Resolution Standards Reference</h3>
+    <div style="overflow-x:auto;margin-bottom:24px"><table style="width:100%;border-collapse:collapse;font-size:14px"><thead><tr style="background:var(--col-border)"><th style="text-align:left;padding:10px 14px;font-weight:600">Name</th><th style="text-align:left;padding:10px 14px;font-weight:600">Pixels</th><th style="text-align:left;padding:10px 14px;font-weight:600">Common Use</th></tr></thead><tbody><tr style="border-bottom:1px solid var(--col-border)"><td style="padding:10px 14px;color:var(--col-text2)">HD (720p)</td><td style="padding:10px 14px;color:var(--col-text2)">1280 × 720</td><td style="padding:10px 14px;color:var(--col-text2)">Basic web, email</td></tr><tr style="border-bottom:1px solid var(--col-border)"><td style="padding:10px 14px;color:var(--col-text2)">Full HD (1080p)</td><td style="padding:10px 14px;color:var(--col-text2)">1920 × 1080</td><td style="padding:10px 14px;color:var(--col-text2)">Websites, social media</td></tr><tr style="border-bottom:1px solid var(--col-border)"><td style="padding:10px 14px;color:var(--col-text2)">2K (QHD)</td><td style="padding:10px 14px;color:var(--col-text2)">2560 × 1440</td><td style="padding:10px 14px;color:var(--col-text2)">High-res displays</td></tr><tr><td style="padding:10px 14px;color:var(--col-text2)">4K (UHD)</td><td style="padding:10px 14px;color:var(--col-text2)">3840 × 2160</td><td style="padding:10px 14px;color:var(--col-text2)">4K TV, large print</td></tr></tbody></table></div>
+
+    <h3 style="font-family:var(--ff-head);font-size:20px;font-weight:700;color:var(--col-text);margin:28px 0 10px">Upscaling vs Downscaling</h3>
+    <p style="font-size:15px;color:var(--col-text2);line-height:1.7;margin-bottom:24px"><strong>Downscaling</strong> always looks clean — you're removing pixels and the result is sharp. <strong>Upscaling</strong> invents new pixels using interpolation — results look smooth but don't add real detail that wasn't in the original. For critical print work, always start with the highest resolution source available.</p>
+
+    <a href="/blog/change-resolution-guide/" style="display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--col-accent);text-decoration:none">
+      Read full Resolution guide →
+    </a>
+  </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://imageyantra.in/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://imageyantra.in/tools/compress/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://imageyantra.in/tools/resize/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://imageyantra.in/tools/crop/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://imageyantra.in/tools/rotate-flip/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://imageyantra.in/tools/resolution/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://imageyantra.in/tools/image-to-pdf/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://imageyantra.in/tools/merge-pdf/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://imageyantra.in/tools/arrange-pdf/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://imageyantra.in/tools/manage-pages/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://imageyantra.in/blog/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://imageyantra.in/blog/compress-image-guide/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://imageyantra.in/blog/image-to-pdf-guide/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://imageyantra.in/blog/image-size-guide/</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://imageyantra.in/about/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://imageyantra.in/contact/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://imageyantra.in/privacy-policy/</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://imageyantra.in/terms-of-use/</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
+</urlset>

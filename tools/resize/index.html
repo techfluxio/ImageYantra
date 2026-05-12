@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="google-adsense-account" content="ca-pub-2178808063904703">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resize Image — ImageYantra</title>
+  <meta name="description" content="Resize images online free. Set exact pixel dimensions, lock aspect ratio. Supports JPG, PNG, WEBP.">
+  <link rel="canonical" href="https://imageyantra.in/tools/resize/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Resize Image — ImageYantra">
+  <meta property="og:description" content="Resize images online free. Set exact pixel dimensions, lock aspect ratio. Supports JPG, PNG, WEBP.">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2178808063904703" crossorigin="anonymous"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Resize Image",
+    "url": "https://imageyantra.in/tools/resize/",
+    "description": "Resize images online free. Set exact pixel dimensions, lock aspect ratio. Supports JPG, PNG, WEBP.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Web",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+</head>
+<body>
+<canvas id="workCanvas" aria-hidden="true"></canvas>
+
+<script src="/js/utils.js"></script>
+<script src="/js/nav.js"></script>
+
+<div class="tool-page">
+
+  <div class="ad-banner-top" aria-label="Advertisement">
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2178808063904703" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </div>
+
+  <header class="tool-page-header">
+    <div class="container">
+      <div class="tool-page-icon" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div>
+      <div>
+        <h1 class="tool-page-title">Resize <em>Image</em></h1>
+        <p class="tool-page-desc">Set exact pixel width and height with optional aspect-ratio lock. Resize JPG, PNG, WEBP images instantly.</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="tool-page-body">
+    <div class="tool-body-inner">
+      <main class="tool-main" id="main-content">
+        
+        <div class="tool-grid">
+      <div class="tool-controls">
+        <div class="drop-zone" id="resizeDropZone">
+          <input type="file" id="resizeFileInput" accept="image/*">
+          <div class="drop-icon">
+            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+          </div>
+          <div class="drop-title">Select Image</div>
+          <div class="drop-sub">JPG, PNG, WEBP, GIF — any format</div>
+          <div class="drop-hint">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg>
+            Tap or drag &amp; drop
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Dimensions</div>
+          <div class="row">
+            <div class="field">
+              <label>Width (px)</label>
+              <input type="number" id="resizeW" placeholder="e.g. 1920" min="1">
+            </div>
+            <div class="field">
+              <label>Height (px)</label>
+              <input type="number" id="resizeH" placeholder="e.g. 1080" min="1">
+            </div>
+          </div>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:var(--col-text2);margin:-4px 0 12px;user-select:none;">
+            <input type="checkbox" id="aspectLockCheck" style="width:15px;height:15px;accent-color:var(--col-accent);cursor:pointer;">
+            Lock Aspect Ratio <span style="opacity:.6">(keep proportions)</span>
+          </label>
+          <div id="origDims" style="font-size:11px;color:var(--text2);margin-top:-6px;margin-bottom:12px;"></div>
+
+          <div class="field">
+            <label>Output Format</label>
+            <select id="resizeFormat">
+              <option value="jpeg">JPEG (smaller file)</option>
+              <option value="png">PNG (lossless)</option>
+              <option value="webp">WebP (modern)</option>
+            </select>
+          </div>
+
+          <button class="btn btn-primary" style="width:100%" id="resizeApplyBtn" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Resize &amp; Download
+          </button>
+        </div>
+      </div>
+
+      <div class="tool-preview-area">
+        <div class="card" style="min-height:280px;">
+          <div class="card-title">Preview</div>
+          <div class="preview-box" id="resizePreview" style="min-height:220px;">
+            <div class="preview-placeholder">
+              <div class="ico">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+              </div>
+              Preview will appear here
+            </div>
+          </div>
+          <div class="info-text" id="resizeDimInfo"></div>
+        </div>
+      </div>
+    </div>
+  
+      </main>
+
+      <aside class="tool-sidebar" aria-label="Sidebar">
+        <div class="card ad-sidebar" aria-label="Advertisement">
+          <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2178808063904703" data-ad-slot="auto" data-ad-format="rectangle"></ins>
+        </div>
+        <div class="card">
+          <div class="card-title">Tips</div>
+          <div class="tips-card"><div class="tip-item"><span class="tip-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></span><div class="tip-text">Lock aspect ratio to prevent distortion when resizing.</div></div><div class="tip-item"><span class="tip-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span><div class="tip-text">Enter only width or height with lock on — the other dimension fills automatically.</div></div></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    Nav.init();
+    try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+    try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+  });
+</script>
+<script>
+const canvas = document.getElementById('workCanvas');
+const ctx = canvas.getContext('2d');
+let resizeImg = null;
+let origW = 0, origH = 0;
+
+function isAspectLocked() {
+  return document.getElementById('aspectLockCheck').checked;
+}
+
+// Load image via drop zone
+setupDropZone('resizeDropZone', 'resizeFileInput', false, async ([file]) => {
+  const dataUrl = await readFileAsDataURL(file);
+  const img = await loadImage(dataUrl);
+  resizeImg = { dataUrl, name: file.name };
+  origW = img.naturalWidth;
+  origH = img.naturalHeight;
+  document.getElementById('resizeW').value = origW;
+  document.getElementById('resizeH').value = origH;
+  document.getElementById('origDims').textContent = 'Original: ' + origW + ' × ' + origH + ' px';
+  document.getElementById('resizeApplyBtn').disabled = false;
+  // Show preview
+  const prevBox = document.getElementById('resizePreview');
+  prevBox.innerHTML = '<img src="' + dataUrl + '" style="max-width:100%;max-height:300px;object-fit:contain;border-radius:6px;" alt="Preview">';
+  document.getElementById('resizeDimInfo').textContent = origW + ' × ' + origH + ' px';
+});
+
+// Aspect ratio sync
+document.getElementById('resizeW').addEventListener('input', e => {
+  if (isAspectLocked() && origW && origH) {
+    const w = parseInt(e.target.value) || 0;
+    document.getElementById('resizeH').value = Math.round(w * origH / origW) || '';
+  }
+});
+document.getElementById('resizeH').addEventListener('input', e => {
+  if (isAspectLocked() && origW && origH) {
+    const h = parseInt(e.target.value) || 0;
+    document.getElementById('resizeW').value = Math.round(h * origW / origH) || '';
+  }
+});
+
+// Resize & Download
+document.getElementById('resizeApplyBtn').addEventListener('click', async () => {
+  if (!resizeImg) return;
+  const w = parseInt(document.getElementById('resizeW').value);
+  const h = parseInt(document.getElementById('resizeH').value);
+  const fmt = document.getElementById('resizeFormat').value;
+  if (!w || !h || w < 1 || h < 1) { toast('Enter valid width and height', 'error'); return; }
+  const img = await loadImage(resizeImg.dataUrl);
+  canvas.width = w; canvas.height = h;
+  ctx.drawImage(img, 0, 0, w, h);
+  const mime = fmt === 'png' ? 'image/png' : fmt === 'webp' ? 'image/webp' : 'image/jpeg';
+  const dataUrl = canvas.toDataURL(mime, 0.92);
+  const ext = fmt === 'jpeg' ? 'jpg' : fmt;
+  const baseName = resizeImg.name.replace(/\.[^.]+$/, '');
+  const filename = 'imageyantra-resized-' + baseName + '.' + ext;
+  saveFile(filename, dataUrl, 'image');
+  downloadDataURL(dataUrl, filename);
+  document.getElementById('resizeDimInfo').textContent = w + ' × ' + h + ' px — resized!';
+  // Update preview
+  document.getElementById('resizePreview').innerHTML = '<img src="' + dataUrl + '" style="max-width:100%;max-height:300px;object-fit:contain;border-radius:6px;" alt="Resized preview">';
+});
+</script>
+
+<section class="tool-blog-section" aria-label="Guide: Resize Image" style="background:var(--col-surface);border-top:1px solid var(--col-border);padding:64px 0">
+  <div class="container" style="max-width:780px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <span style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--col-accent);background:color-mix(in srgb,var(--col-accent) 12%,transparent);padding:3px 10px;border-radius:20px">Guide</span>
+    </div>
+    <h2 style="font-family:var(--ff-head);font-size:clamp(22px,3.5vw,34px);font-weight:800;color:var(--col-text);letter-spacing:-.4px;margin-bottom:16px">Everything You Need to Know About Resizing Images</h2>
+    <p style="font-size:16px;color:var(--col-text2);line-height:1.7;margin-bottom:24px">Resizing an image changes its pixel dimensions without cropping any content. It's the most fundamental image operation — used daily by web developers, social media managers, photographers, and designers. Here's what you need to know.</p>
+
+    <h3 style="font-family:var(--ff-head);font-size:20px;font-weight:700;color:var(--col-text);margin:28px 0 10px">Why Resize Images?</h3>
+    <p style="font-size:15px;color:var(--col-text2);line-height:1.7;margin-bottom:16px">Oversized images are the most common cause of slow websites and failed email attachments. A 5 MB photo from a smartphone can be resized to under 200 KB at 1920px wide — 25× smaller, with no visible quality difference on screen. Common reasons to resize: web performance, social media size requirements (Instagram: 1080×1080, YouTube: 1280×720), email attachments, print preparation, and e-commerce product image standards.</p>
+
+    <h3 style="font-family:var(--ff-head);font-size:20px;font-weight:700;color:var(--col-text);margin:28px 0 10px">Aspect Ratio: Resize Without Distortion</h3>
+    <p style="font-size:15px;color:var(--col-text2);line-height:1.7;margin-bottom:16px">The aspect ratio is the width-to-height relationship. A 1920×1080 image is 16:9. Change only one dimension and use the <strong>Lock Aspect Ratio</strong> checkbox to let the tool calculate the other automatically. Leave it unchecked if you need to stretch or squish to exact dimensions.</p>
+
+    <h3 style="font-family:var(--ff-head);font-size:20px;font-weight:700;color:var(--col-text);margin:28px 0 10px">How to Use This Tool</h3>
+    <ol style="font-size:15px;color:var(--col-text2);line-height:1.85;padding-left:20px;margin-bottom:16px">
+      <li>Upload your image by clicking the drop zone or dragging and dropping</li>
+      <li>Enter your desired width and/or height in pixels</li>
+      <li>Tick <strong>Lock Aspect Ratio</strong> to maintain proportions (optional)</li>
+      <li>Select output format: JPEG for photos, PNG for transparency, WebP for web</li>
+      <li>Click <strong>Resize &amp; Download</strong></li>
+    </ol>
+
+    <h3 style="font-family:var(--ff-head);font-size:20px;font-weight:700;color:var(--col-text);margin:28px 0 10px">Standard Image Sizes Reference</h3>
+    <div style="overflow-x:auto;margin-bottom:24px"><table style="width:100%;border-collapse:collapse;font-size:14px"><thead><tr style="background:var(--col-border)"><th style="text-align:left;padding:10px 14px;font-weight:600">Platform</th><th style="text-align:left;padding:10px 14px;font-weight:600">Recommended Size</th></tr></thead><tbody><tr style="border-bottom:1px solid var(--col-border)"><td style="padding:10px 14px;color:var(--col-text2)">Instagram Post</td><td style="padding:10px 14px;color:var(--col-text2)">1080 × 1080 px</td></tr><tr style="border-bottom:1px solid var(--col-border)"><td style="padding:10px 14px;color:var(--col-text2)">YouTube Thumbnail</td><td style="padding:10px 14px;color:var(--col-text2)">1280 × 720 px</td></tr><tr style="border-bottom:1px solid var(--col-border)"><td style="padding:10px 14px;color:var(--col-text2)">Website Hero</td><td style="padding:10px 14px;color:var(--col-text2)">1920 × 800 px</td></tr><tr style="border-bottom:1px solid var(--col-border)"><td style="padding:10px 14px;color:var(--col-text2)">Twitter / X Post</td><td style="padding:10px 14px;color:var(--col-text2)">1200 × 675 px</td></tr><tr><td style="padding:10px 14px;color:var(--col-text2)">Passport Photo</td><td style="padding:10px 14px;color:var(--col-text2)">413 × 531 px</td></tr></tbody></table></div>
+
+    <a href="/blog/resize-image-guide/" style="display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--col-accent);text-decoration:none">
+      Read full Resize Image guide →
+    </a>
+  </div>
+</section>
+</body>
+</html>
