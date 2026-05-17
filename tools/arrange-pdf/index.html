@@ -19,6 +19,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2178808063904703" crossorigin="anonymous"></script>
+<<<<<<< HEAD
   <style>
     .arrange-toolbar {
       display: flex;
@@ -118,10 +119,32 @@
 </head>
 <body>
 <canvas id="workCanvas" aria-hidden="true" style="display:none"></canvas>
+=======
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Arrange PDF Pages",
+    "url": "https://imageyantra.in/tools/arrange-pdf/",
+    "description": "Arrange PDF pages online free. Drag to reorder pages. Download the reorganized PDF instantly.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Web",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+</head>
+<body>
+<canvas id="workCanvas" aria-hidden="true"></canvas>
+
+>>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
 <script src="/js/utils.js"></script>
 <script src="/js/nav.js"></script>
 
 <div class="tool-page">
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
   <div class="ad-banner-top" aria-label="Advertisement">
     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2178808063904703" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
   </div>
@@ -131,7 +154,11 @@
       <div class="tool-page-icon" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
       <div>
         <h1 class="tool-page-title">Arrange <em>PDF</em> Pages</h1>
+<<<<<<< HEAD
         <p class="tool-page-desc">Drag and drop to reorder pages within any PDF document. Download instantly.</p>
+=======
+        <p class="tool-page-desc">Drag and drop to reorder pages within any PDF document.</p>
+>>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
       </div>
     </div>
   </header>
@@ -139,6 +166,7 @@
   <div class="tool-page-body">
     <div class="tool-body-inner">
       <main class="tool-main" id="main-content">
+<<<<<<< HEAD
 
         <!-- Upload -->
         <div class="drop-zone" id="arrangeDropZone" style="margin-bottom:20px;">
@@ -187,6 +215,55 @@
           <div class="page-grid" id="pageGrid"></div>
         </div>
 
+=======
+        
+        <div class="drop-zone" id="arrangeDropZone" style="margin-bottom:20px;">
+      <input type="file" id="arrangeFileInput" accept="application/pdf">
+      <div class="drop-icon">
+        <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
+          <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+        </svg>
+      </div>
+      <div class="drop-title">Drop a PDF File</div>
+      <div class="drop-sub">Thumbnails will be generated for each page</div>
+      <div class="drop-hint">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg>
+        Tap or drag &amp; drop
+      </div>
+    </div>
+
+    <div id="arrangePanel" style="display:none">
+      <div class="card" style="margin-bottom:16px;">
+        <div class="arrange-toolbar">
+          <span id="arrangePageCount" style="font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--text);margin-right:4px;"></span>
+          <button class="btn btn-secondary btn-sm" id="arrangeReverseBtn">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+            Reverse All
+          </button>
+          <button class="btn btn-secondary btn-sm" id="arrangeResetBtn">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4"/></svg>
+            Reset Order
+          </button>
+          <div style="flex:1"></div>
+          <div class="progress-wrap" id="arrangeProgress" style="margin:0;flex:0 0 160px;">
+            <div class="progress-bar-bg"><div class="progress-bar-fill" id="arrangeProgressFill"></div></div>
+            <div class="progress-label" id="arrangeProgressLabel">Processing…</div>
+          </div>
+          <button class="btn-primary btn-sm" id="arrangeDownloadBtn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download PDF
+          </button>
+        </div>
+        <p style="font-size:12px;color:var(--text2);">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:middle;margin-right:4px;color:var(--accent);"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Drag page thumbnails to reorder. The numbers show the new position.
+        </p>
+      </div>
+      <div class="page-grid" id="pageGrid"></div>
+    </div>
+  
+>>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
       </main>
 
       <aside class="tool-sidebar" aria-label="Sidebar">
@@ -195,10 +272,14 @@
         </div>
         <div class="card">
           <div class="card-title">Tips</div>
+<<<<<<< HEAD
           <div class="tips-card">
             <div class="tip-item"><span class="tip-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/></svg></span><div class="tip-text">Drag thumbnails to reorder pages. Changes appear instantly.</div></div>
             <div class="tip-item"><span class="tip-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span><div class="tip-text">Works with any PDF regardless of size or page count.</div></div>
           </div>
+=======
+          <div class="tips-card"><div class="tip-item"><span class="tip-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/></svg></span><div class="tip-text">Drag page thumbnails to reorder them. Changes appear instantly.</div></div><div class="tip-item"><span class="tip-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span><div class="tip-text">Works with any PDF regardless of size or number of pages.</div></div></div>
+>>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
         </div>
       </aside>
     </div>
@@ -213,6 +294,7 @@
   });
 </script>
 <script>
+<<<<<<< HEAD
 if (typeof pdfjsLib !== 'undefined') {
   pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 }
@@ -230,6 +312,12 @@ function freshBytes() {
 }
 
 const arrZone = document.getElementById('arrangeDropZone');
+=======
+/* ── Arrange PDF Pages logic ── */
+let arrFileBytes = null, arrFileName = '', arrPageOrder = [];
+
+const arrZone  = document.getElementById('arrangeDropZone');
+>>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
 const arrInput = document.getElementById('arrangeFileInput');
 arrZone.setAttribute('role','button'); arrZone.setAttribute('tabindex','0');
 arrZone.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' '){e.preventDefault();arrInput.click();} });
@@ -240,6 +328,7 @@ arrZone.addEventListener('drop', e => {
   const files = [...e.dataTransfer.files].filter(f => f.type==='application/pdf');
   if (files.length) loadPdf(files[0]); else toast('Please drop a PDF file','error');
 });
+<<<<<<< HEAD
 arrInput.addEventListener('change', e => { if (e.target.files.length) loadPdf(e.target.files[0]); e.target.value=''; });
 
 // Change PDF button — show drop zone again
@@ -248,10 +337,16 @@ document.getElementById('changeFileBtn').addEventListener('click', () => {
   document.getElementById('arrangePanel').style.display = 'none';
   arrRawBuffer = null; arrFileName = ''; arrPageOrder = []; arrPdfJsDoc = null;
   document.getElementById('pageGrid').innerHTML = '';
+=======
+arrInput.addEventListener('change', e => {
+  if (e.target.files.length) loadPdf(e.target.files[0]);
+  e.target.value = '';
+>>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
 });
 
 async function loadPdf(file) {
   arrFileName = file.name;
+<<<<<<< HEAD
   // Store the raw ArrayBuffer — never pass it directly to any API
   // (PDF.js can detach/transfer it, making subsequent reads fail).
   arrRawBuffer = await new Promise((res, rej) => {
@@ -264,12 +359,20 @@ async function loadPdf(file) {
     const { PDFDocument } = PDFLib;
     // Always use a fresh Uint8Array view — never the same object twice
     const doc = await PDFDocument.load(freshBytes(), { ignoreEncryption: true });
+=======
+  const buf = await new Promise((res,rej) => { const r=new FileReader(); r.onload=e=>res(e.target.result); r.onerror=rej; r.readAsArrayBuffer(file); });
+  arrFileBytes = new Uint8Array(buf);
+  try {
+    const { PDFDocument } = PDFLib;
+    const doc = await PDFDocument.load(arrFileBytes, { ignoreEncryption: true });
+>>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
     const count = doc.getPageCount();
     arrPageOrder = Array.from({ length: count }, (_, i) => i);
     document.getElementById('arrangeDropZone').style.display = 'none';
     document.getElementById('arrangePanel').style.display = 'block';
     document.getElementById('arrangePageCount').textContent = count + ' page' + (count !== 1 ? 's' : '');
     renderPageGrid(doc);
+<<<<<<< HEAD
     // Load PDF.js for thumbnails — pass a *copy* of the buffer so PDF.js
     // can transfer it to its worker without affecting arrRawBuffer.
     if (typeof pdfjsLib !== 'undefined') {
@@ -279,17 +382,38 @@ async function loadPdf(file) {
         renderPageGrid(doc);
       }).catch(() => {});
     }
+=======
+    loadPdfJsDoc(arrFileBytes).then(d => { arrPdfJsDoc = d; if (d) renderPageGrid(doc); });
+>>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
     toast('PDF loaded: ' + count + ' pages', 'success');
   } catch(err) {
     toast('Could not read PDF: ' + (err.message || 'unknown error'), 'error');
   }
 }
 
+<<<<<<< HEAD
 async function renderThumb(pdfJsDoc, origIdx, previewEl) {
+=======
+/* ── PDF.js worker for thumbnails ── */
+if (typeof pdfjsLib !== 'undefined') {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+let arrPdfJsDoc = null;
+
+async function loadPdfJsDoc(bytes) {
+  if (typeof pdfjsLib === 'undefined') return null;
+  try {
+    return await pdfjsLib.getDocument({ data: bytes }).promise;
+  } catch(e) { return null; }
+}
+
+async function renderThumbOnCard(pdfJsDoc, origIdx, previewEl) {
+>>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
   if (!pdfJsDoc) return;
   try {
     const page = await pdfJsDoc.getPage(origIdx + 1);
     const viewport = page.getViewport({ scale: 1.2 });
+<<<<<<< HEAD
     const cv = document.createElement('canvas');
     cv.width = viewport.width; cv.height = viewport.height;
     cv.style.cssText = 'width:100%;height:auto;display:block;';
@@ -299,6 +423,18 @@ async function renderThumb(pdfJsDoc, origIdx, previewEl) {
     previewEl.style.padding = '0';
     previewEl.appendChild(cv);
   } catch(e) {}
+=======
+    const canvas = document.createElement('canvas');
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+    canvas.style.cssText = 'width:100%;height:auto;display:block;border-radius:4px;';
+    await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+    previewEl.innerHTML = '';
+    previewEl.style.background = '#fff';
+    previewEl.style.padding = '0';
+    previewEl.appendChild(canvas);
+  } catch(e) { /* keep placeholder */ }
+>>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
 }
 
 function renderPageGrid(doc) {
@@ -306,6 +442,7 @@ function renderPageGrid(doc) {
   grid.innerHTML = '';
   arrPageOrder.forEach((origIdx, pos) => {
     const card = document.createElement('div');
+<<<<<<< HEAD
     card.className = 'page-thumb-card'; card.draggable = true; card.dataset.pos = pos;
     const page = doc.getPage(origIdx);
     const { width, height } = page.getSize();
@@ -319,12 +456,29 @@ function renderPageGrid(doc) {
       </div>
       <div class="page-thumb-label">Page ${pos + 1} <span style="opacity:.45;font-size:10px;">(orig ${origIdx + 1})</span></div>`;
 
+=======
+    card.className = 'page-thumb-card';
+    card.draggable = true;
+    card.dataset.pos = pos;
+    const page = doc.getPage(origIdx);
+    const { width, height } = page.getSize();
+    const aspect = height > 0 ? (height / width) : 1.414;
+    const previewId = 'arr-preview-' + pos + '-' + origIdx;
+    card.innerHTML = `
+      <div class="page-thumb-preview" id="${previewId}" style="padding-bottom:${Math.min(aspect*100,160)}%;position:relative;background:var(--col-border);border-radius:4px;overflow:hidden;">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--col-text2);font-size:11px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+      </div>
+      <div class="page-thumb-label">Page ${pos + 1} <span style="opacity:.5;font-size:10px;">(orig ${origIdx + 1})</span></div>`;
+>>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
     card.addEventListener('dragstart', e => { e.dataTransfer.setData('text/plain', pos); card.classList.add('dragging'); });
     card.addEventListener('dragend', () => card.classList.remove('dragging'));
     card.addEventListener('dragover', e => { e.preventDefault(); card.classList.add('drag-over-card'); });
     card.addEventListener('dragleave', () => card.classList.remove('drag-over-card'));
     card.addEventListener('drop', e => {
       e.preventDefault(); card.classList.remove('drag-over-card');
+<<<<<<< HEAD
       const from = parseInt(e.dataTransfer.getData('text/plain')), to = parseInt(card.dataset.pos);
       if (from !== to) { const item = arrPageOrder.splice(from,1)[0]; arrPageOrder.splice(to,0,item); renderPageGrid(doc); }
     });
@@ -333,22 +487,47 @@ function renderPageGrid(doc) {
     if (arrPdfJsDoc) {
       const el = document.getElementById(previewId);
       if (el) renderThumb(arrPdfJsDoc, origIdx, el);
+=======
+      const from = parseInt(e.dataTransfer.getData('text/plain'));
+      const to   = parseInt(card.dataset.pos);
+      if (from !== to) {
+        const item = arrPageOrder.splice(from, 1)[0];
+        arrPageOrder.splice(to, 0, item);
+        renderPageGrid(doc);
+      }
+    });
+    grid.appendChild(card);
+    // Render real page content asynchronously
+    if (arrPdfJsDoc) {
+      const previewEl = document.getElementById(previewId);
+      if (previewEl) renderThumbOnCard(arrPdfJsDoc, origIdx, previewEl);
+>>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
     }
   });
 }
 
 document.getElementById('arrangeReverseBtn').addEventListener('click', () => {
   arrPageOrder.reverse();
+<<<<<<< HEAD
   PDFLib.PDFDocument.load(freshBytes(), { ignoreEncryption: true }).then(doc => renderPageGrid(doc));
 });
 document.getElementById('arrangeResetBtn').addEventListener('click', () => {
   PDFLib.PDFDocument.load(freshBytes(), { ignoreEncryption: true }).then(doc => {
+=======
+  const { PDFDocument } = PDFLib;
+  PDFDocument.load(arrFileBytes, { ignoreEncryption: true }).then(doc => renderPageGrid(doc));
+});
+document.getElementById('arrangeResetBtn').addEventListener('click', () => {
+  const { PDFDocument } = PDFLib;
+  PDFDocument.load(arrFileBytes, { ignoreEncryption: true }).then(doc => {
+>>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
     arrPageOrder = Array.from({ length: doc.getPageCount() }, (_, i) => i);
     renderPageGrid(doc);
   });
 });
 
 document.getElementById('arrangeDownloadBtn').addEventListener('click', async () => {
+<<<<<<< HEAD
   if (!arrRawBuffer) { toast('Load a PDF first','error'); return; }
   const btn = document.getElementById('arrangeDownloadBtn');
   const lbl = btn.querySelector('.arr-dl-label');
@@ -408,10 +587,40 @@ document.getElementById('arrangeDownloadBtn').addEventListener('click', async ()
 
     toast('Arranged PDF downloaded!', 'success');
     setTimeout(() => { prog.style.display = 'none'; }, 1400);
+=======
+  if (!arrFileBytes) { toast('Load a PDF first','error'); return; }
+  const btn = document.getElementById('arrangeDownloadBtn');
+  btn.disabled = true;
+  const prog = document.getElementById('arrangeProgress');
+  const fill = document.getElementById('arrangeProgressFill');
+  const label = document.getElementById('arrangeProgressLabel');
+  prog.style.display = 'flex';
+  fill.style.width = '10%'; label.textContent = 'Processing…';
+  try {
+    const { PDFDocument } = PDFLib;
+    const src = await PDFDocument.load(arrFileBytes, { ignoreEncryption: true });
+    const out = await PDFDocument.create();
+    fill.style.width = '40%';
+    const pages = await out.copyPages(src, arrPageOrder);
+    pages.forEach(p => out.addPage(p));
+    fill.style.width = '85%'; label.textContent = 'Saving…';
+    await new Promise(r => setTimeout(r, 0));
+    const outBytes = await out.save();
+    fill.style.width = '100%'; label.textContent = 'Done!';
+    const blob = new Blob([outBytes], { type: 'application/pdf' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url; a.download = 'imageyantra-arranged-' + arrFileName;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast('Arranged PDF downloaded!', 'success');
+    setTimeout(() => { prog.style.display = 'none'; }, 1200);
+>>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
   } catch(err) {
     toast('Error: ' + (err.message || 'Could not process PDF'), 'error');
     prog.style.display = 'none';
   }
+<<<<<<< HEAD
 
   btn.disabled = false;
   btn.classList.remove('loading');
@@ -420,3 +629,11 @@ document.getElementById('arrangeDownloadBtn').addEventListener('click', async ()
 </script>
 </body>
 </html>
+=======
+  btn.disabled = false;
+});
+</script>
+
+</body>
+</html>
+>>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1

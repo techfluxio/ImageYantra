@@ -20,6 +20,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap"
     rel="stylesheet">
+<<<<<<< HEAD
   <!-- Cropper.js -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
   <link rel="stylesheet" href="/css/main.css">
@@ -462,10 +463,37 @@
 
 <body>
   <canvas id="workCanvas" aria-hidden="true" style="display:none"></canvas>
+=======
+  <link rel="stylesheet" href="/css/main.css">
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2178808063904703"
+    crossorigin="anonymous"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Crop Image",
+    "url": "https://imageyantra.in/tools/crop/",
+    "description": "Crop images online free. Drag to select any region or use preset aspect ratios. No upload required.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Web",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+</head>
+
+<body>
+  <canvas id="workCanvas" aria-hidden="true"></canvas>
+
+>>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
   <script src="/js/utils.js"></script>
   <script src="/js/nav.js"></script>
 
   <div class="tool-page">
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
     <div class="ad-banner-top" aria-label="Advertisement">
       <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2178808063904703" data-ad-slot="auto"
         data-ad-format="auto" data-full-width-responsive="true"></ins>
@@ -473,6 +501,7 @@
 
     <header class="tool-page-header">
       <div class="container">
+<<<<<<< HEAD
         <div class="tool-page-icon" aria-hidden="true">
           <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
@@ -484,6 +513,18 @@
           <h1 class="tool-page-title">Crop <em>Image</em></h1>
           <p class="tool-page-desc">Drag to select any crop region. Use preset ratios for Instagram, YouTube, Passport
             and more.</p>
+=======
+        <div class="tool-page-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+            stroke-linejoin="round" class="lucide lucide-crop-icon lucide-crop">
+            <path d="M6 2v14a2 2 0 0 0 2 2h14" />
+            <path d="M18 22V8a2 2 0 0 0-2-2H2" />
+          </svg></div>
+        <div>
+          <h1 class="tool-page-title">Crop <em>Image</em></h1>
+          <p class="tool-page-desc">Drag to select any crop region. Supports preset aspect ratios: 1:1, 16:9, 4:3, 3:2.
+          </p>
+>>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
         </div>
       </div>
     </header>
@@ -492,6 +533,7 @@
       <div class="tool-body-inner">
         <main class="tool-main" id="main-content">
 
+<<<<<<< HEAD
           <!-- Upload step -->
           <div id="uploadStep">
             <div class="drop-zone" id="cropDropZone" aria-label="Drop image here or click to select">
@@ -616,6 +658,106 @@
               </button>
             </div>
           </div>
+=======
+          <div class="tool-grid">
+            <div class="tool-controls">
+              <div class="drop-zone" id="cropDropZone">
+                <input type="file" id="cropFileInput" accept="image/*">
+                <div class="drop-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-crop-icon lucide-crop">
+                    <path d="M6 2v14a2 2 0 0 0 2 2h14" />
+                    <path d="M18 22V8a2 2 0 0 0-2-2H2" />
+                  </svg>
+                </div>
+                <div class="drop-title">Select Image to Crop</div>
+                <div class="drop-sub">JPG, PNG, WEBP — any format</div>
+                <div class="drop-hint">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round">
+                    <polyline points="8 17 12 21 16 17" />
+                    <line x1="12" y1="12" x2="12" y2="21" />
+                    <path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29" />
+                  </svg>
+                  Tap or drag &amp; drop
+                </div>
+              </div>
+
+              <div class="card" id="cropControls" style="display:none">
+                <div class="card-title">Aspect Ratio</div>
+                <div class="ratio-btns">
+                  <button class="ratio-btn active" data-ratio="free">Free</button>
+                  <button class="ratio-btn" data-ratio="1:1">1:1</button>
+                  <button class="ratio-btn" data-ratio="4:3">4:3</button>
+                  <button class="ratio-btn" data-ratio="16:9">16:9</button>
+                  <button class="ratio-btn" data-ratio="3:2">3:2</button>
+                  <button class="ratio-btn" data-ratio="2:3">2:3</button>
+                  <button class="ratio-btn" data-ratio="9:16">9:16</button>
+                </div>
+                <div class="divider"></div>
+                <div class="card-title">Manual Crop Box (px)</div>
+                <div class="row">
+                  <div class="field"><label>X</label><input type="number" id="cropX" min="0" value="0"></div>
+                  <div class="field"><label>Y</label><input type="number" id="cropY" min="0" value="0"></div>
+                </div>
+                <div class="row">
+                  <div class="field"><label>Width</label><input type="number" id="cropW" min="1" value="100"></div>
+                  <div class="field"><label>Height</label><input type="number" id="cropH" min="1" value="100"></div>
+                </div>
+                <button class="btn btn-secondary" id="cropApplyManualBtn" style="margin-bottom:10px;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-crop-icon lucide-crop">
+                    <path d="M6 2v14a2 2 0 0 0 2 2h14" />
+                    <path d="M18 22V8a2 2 0 0 0-2-2H2" />
+                  </svg>
+                  Apply Manual Values
+                </button>
+                <div class="divider"></div>
+                <div class="field">
+                  <label>Output Format</label>
+                  <select id="cropFormat">
+                    <option value="jpeg">JPEG</option>
+                    <option value="png">PNG (lossless)</option>
+                    <option value="webp">WebP</option>
+                  </select>
+                </div>
+                <button class="btn btn-primary" style="width:100%" id="cropDownloadBtn" disabled>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-crop-icon lucide-crop">
+                    <path d="M6 2v14a2 2 0 0 0 2 2h14" />
+                    <path d="M18 22V8a2 2 0 0 0-2-2H2" />
+                  </svg>
+                  Crop &amp; Download
+                </button>
+              </div>
+            </div>
+
+            <div class="tool-preview-area">
+              <div class="card">
+                <div class="card-title">Draw Crop Area</div>
+                <div class="crop-canvas-outer" id="cropCanvasOuter">
+                  <div class="preview-placeholder" id="cropPlaceholder">
+                    <div class="ico">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-crop-icon lucide-crop">
+                        <path d="M6 2v14a2 2 0 0 0 2 2h14" />
+                        <path d="M18 22V8a2 2 0 0 0-2-2H2" />
+                      </svg>
+                    </div>
+                    Upload an image to start cropping
+                  </div>
+                  <!-- crop wrap inserted here dynamically -->
+                </div>
+                <div class="crop-dims" id="cropDims"></div>
+              </div>
+            </div>
+          </div>
+
+>>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
         </main>
 
         <aside class="tool-sidebar" aria-label="Sidebar">
@@ -626,12 +768,26 @@
           <div class="card">
             <div class="card-title">Tips</div>
             <div class="tips-card">
+<<<<<<< HEAD
               <div class="tip-item"><span class="tip-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round">
+=======
+              <div class="tip-item"><span class="tip-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg"
+                    width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-crop-icon lucide-crop">
+                    <path d="M6 2v14a2 2 0 0 0 2 2h14" />
+                    <path d="M18 22V8a2 2 0 0 0-2-2H2" />
+                  </svg></span>
+                <div class="tip-text">Drag the handles on the crop box to fine-tune your selection.</div>
+              </div>
+              <div class="tip-item"><span class="tip-icon" aria-hidden="true"><svg width="16" height="16"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+>>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
                     <circle cx="12" cy="12" r="10" />
                     <line x1="12" y1="8" x2="12" y2="12" />
                     <line x1="12" y1="16" x2="12.01" y2="16" />
                   </svg></span>
+<<<<<<< HEAD
                 <div class="tip-text">Drag the glowing purple handles to resize. Drag inside the box to reposition.
                 </div>
               </div>
@@ -647,6 +803,9 @@
                     <rect x="5" y="2" width="14" height="20" rx="2" />
                   </svg></span>
                 <div class="tip-text">Scroll the ratio row on mobile to reveal all presets.</div>
+=======
+                <div class="tip-text">Use the 1:1 ratio for profile pictures, 16:9 for YouTube thumbnails.</div>
+>>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
               </div>
             </div>
           </div>
@@ -655,9 +814,12 @@
     </div>
   </div>
 
+<<<<<<< HEAD
   <!-- Cropper.js library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
 
+=======
+>>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       Nav.init();
@@ -667,6 +829,7 @@
   </script>
 
   <script>
+<<<<<<< HEAD
     // ═══════════════════════════════════════════════════════
     //  ImageYantra Crop Tool — Powered by Cropper.js 1.6.2
     // ═══════════════════════════════════════════════════════
@@ -907,6 +1070,268 @@
         full Crop Image guide →</a>
     </div>
   </section>
+=======
+  const workCanvas = document.getElementById('workCanvas');
+  const workCtx = workCanvas.getContext('2d');
+  let cropImgData = null;
+  let cropOrigW = 0, cropOrigH = 0;
+  let cropX = 0, cropY = 0, cropW = 100, cropH = 100;
+  let isDragging = false, isResizing = false;
+  let dragStartX = 0, dragStartY = 0;
+  let resizeHandle = '';
+  let selectedRatio = 'free';
+  let displayScale = 1;
+
+  let cropCanvas = null, cropCtx = null, imgEl = null;
+
+  setupDropZone('cropDropZone', 'cropFileInput', false, async ([file]) => {
+    const dataUrl = await readFileAsDataURL(file);
+    const img = await loadImage(dataUrl);
+    cropImgData = { dataUrl, name: file.name };
+    cropOrigW = img.naturalWidth;
+    cropOrigH = img.naturalHeight;
+
+    // Initialize crop box to full image
+    cropX = 0; cropY = 0; cropW = cropOrigW; cropH = cropOrigH;
+    document.getElementById('cropX').value = 0;
+    document.getElementById('cropY').value = 0;
+    document.getElementById('cropW').value = cropOrigW;
+    document.getElementById('cropH').value = cropOrigH;
+
+    document.getElementById('cropControls').style.display = 'block';
+    document.getElementById('cropDownloadBtn').disabled = false;
+    document.getElementById('cropPlaceholder').style.display = 'none';
+
+    setupCropCanvas(dataUrl);
+  });
+
+  function setupCropCanvas(dataUrl) {
+    const outer = document.getElementById('cropCanvasOuter');
+    outer.innerHTML = '';
+
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'position:relative;display:inline-block;line-height:0;';
+
+    imgEl = document.createElement('img');
+    imgEl.src = dataUrl;
+    imgEl.style.cssText = 'max-width:100%;max-height:420px;display:block;border-radius:6px;user-select:none;';
+    imgEl.draggable = false;
+
+    cropCanvas = document.createElement('canvas');
+    cropCanvas.style.cssText = 'position:absolute;top:0;left:0;cursor:crosshair;';
+
+    imgEl.onload = () => {
+      const dw = imgEl.offsetWidth || imgEl.naturalWidth;
+      const dh = imgEl.offsetHeight || imgEl.naturalHeight;
+      cropCanvas.width = dw;
+      cropCanvas.height = dh;
+      displayScale = dw / cropOrigW;
+      cropCtx = cropCanvas.getContext('2d');
+      drawCropOverlay();
+    };
+
+    wrap.appendChild(imgEl);
+    wrap.appendChild(cropCanvas);
+    outer.appendChild(wrap);
+
+    cropCanvas.addEventListener('mousedown', onCropMouseDown);
+    cropCanvas.addEventListener('mousemove', onCropMouseMove);
+    cropCanvas.addEventListener('mouseup', onCropMouseUp);
+    cropCanvas.addEventListener('mouseleave', onCropMouseUp);
+
+    cropCanvas.addEventListener('touchstart', e => { e.preventDefault(); onCropMouseDown(e.touches[0]); }, { passive: false });
+    cropCanvas.addEventListener('touchmove', e => { e.preventDefault(); onCropMouseMove(e.touches[0]); }, { passive: false });
+    cropCanvas.addEventListener('touchend', onCropMouseUp);
+  }
+
+  function drawCropOverlay() {
+    if (!cropCtx) return;
+    const cw = cropCanvas.width, ch = cropCanvas.height;
+    cropCtx.clearRect(0, 0, cw, ch);
+
+    const s = displayScale;
+    const bx = cropX * s, by = cropY * s, bw = cropW * s, bh = cropH * s;
+
+    // Dim outside
+    cropCtx.fillStyle = 'rgba(0,0,0,0.45)';
+    cropCtx.fillRect(0, 0, cw, by);
+    cropCtx.fillRect(0, by, bx, bh);
+    cropCtx.fillRect(bx + bw, by, cw - bx - bw, bh);
+    cropCtx.fillRect(0, by + bh, cw, ch - by - bh);
+
+    // Border
+    cropCtx.strokeStyle = 'var(--accent, #a78bfa)';
+    cropCtx.lineWidth = 2;
+    cropCtx.strokeRect(bx, by, bw, bh);
+
+    // Grid lines
+    cropCtx.strokeStyle = 'rgba(255,255,255,0.3)';
+    cropCtx.lineWidth = 1;
+    for (let i = 1; i < 3; i++) {
+      cropCtx.beginPath(); cropCtx.moveTo(bx + bw * i / 3, by); cropCtx.lineTo(bx + bw * i / 3, by + bh); cropCtx.stroke();
+      cropCtx.beginPath(); cropCtx.moveTo(bx, by + bh * i / 3); cropCtx.lineTo(bx + bw, by + bh * i / 3); cropCtx.stroke();
+    }
+
+    // Handles
+    const hs = 9;
+    cropCtx.fillStyle = '#fff';
+    const handles = [[bx,by],[bx+bw/2,by],[bx+bw,by],[bx,by+bh/2],[bx+bw,by+bh/2],[bx,by+bh],[bx+bw/2,by+bh],[bx+bw,by+bh]];
+    handles.forEach(([hx, hy]) => { cropCtx.fillRect(hx - hs/2, hy - hs/2, hs, hs); });
+
+    document.getElementById('cropDims').textContent = Math.round(cropW) + ' × ' + Math.round(cropH) + ' px';
+  }
+
+  function getHandleAt(mx, my) {
+    const s = displayScale;
+    const bx = cropX*s, by = cropY*s, bw = cropW*s, bh = cropH*s;
+    const ht = 12;
+    const handles = { 'nw':[bx,by],'n':[bx+bw/2,by],'ne':[bx+bw,by],'w':[bx,by+bh/2],'e':[bx+bw,by+bh/2],'sw':[bx,by+bh],'s':[bx+bw/2,by+bh],'se':[bx+bw,by+bh] };
+    for (const [name, [hx,hy]] of Object.entries(handles)) {
+      if (Math.abs(mx-hx) < ht && Math.abs(my-hy) < ht) return name;
+    }
+    return '';
+  }
+
+  function getCanvasPos(e) {
+    const rect = cropCanvas.getBoundingClientRect();
+    return { x: (e.clientX - rect.left) * (cropCanvas.width / rect.width), y: (e.clientY - rect.top) * (cropCanvas.height / rect.height) };
+  }
+
+  function onCropMouseDown(e) {
+    const { x, y } = getCanvasPos(e);
+    resizeHandle = getHandleAt(x, y);
+    const s = displayScale;
+    const bx = cropX*s, by = cropY*s, bw = cropW*s, bh = cropH*s;
+    if (resizeHandle) { isResizing = true; }
+    else if (x >= bx && x <= bx+bw && y >= by && y <= by+bh) { isDragging = true; }
+    else {
+      // Start new crop
+      cropX = x/s; cropY = y/s; cropW = 0; cropH = 0;
+      isResizing = true; resizeHandle = 'se';
+    }
+    dragStartX = x; dragStartY = y;
+  }
+
+  function onCropMouseMove(e) {
+    if (!isDragging && !isResizing) {
+      const { x, y } = getCanvasPos(e);
+      const h = getHandleAt(x, y);
+      const cursors = { nw:'nw-resize',n:'n-resize',ne:'ne-resize',w:'w-resize',e:'e-resize',sw:'sw-resize',s:'s-resize',se:'se-resize' };
+      cropCanvas.style.cursor = h ? (cursors[h]||'crosshair') : (() => {
+        const s=displayScale, bx=cropX*s, by=cropY*s, bw=cropW*s, bh=cropH*s;
+        return (x>=bx&&x<=bx+bw&&y>=by&&y<=by+bh)?'move':'crosshair';
+      })();
+      return;
+    }
+    const { x, y } = getCanvasPos(e);
+    const dx = (x - dragStartX) / displayScale;
+    const dy = (y - dragStartY) / displayScale;
+    dragStartX = x; dragStartY = y;
+
+    if (isDragging) {
+      cropX = Math.max(0, Math.min(cropOrigW - cropW, cropX + dx));
+      cropY = Math.max(0, Math.min(cropOrigH - cropH, cropY + dy));
+    } else if (isResizing) {
+      let nx = cropX, ny = cropY, nw = cropW, nh = cropH;
+      if (resizeHandle.includes('e')) nw = Math.max(10, nw + dx);
+      if (resizeHandle.includes('s')) nh = Math.max(10, nh + dy);
+      if (resizeHandle.includes('w')) { nx += dx; nw = Math.max(10, nw - dx); }
+      if (resizeHandle.includes('n')) { ny += dy; nh = Math.max(10, nh - dy); }
+      if (selectedRatio !== 'free') {
+        const [rw, rh] = selectedRatio.split(':').map(Number);
+        if (resizeHandle.includes('e') || resizeHandle.includes('w')) nh = nw * rh / rw;
+        else nw = nh * rw / rh;
+      }
+      cropX = Math.max(0, nx); cropY = Math.max(0, ny);
+      cropW = Math.min(nw, cropOrigW - cropX); cropH = Math.min(nh, cropOrigH - cropY);
+    }
+    syncCropInputs();
+    drawCropOverlay();
+  }
+
+  function onCropMouseUp() { isDragging = false; isResizing = false; }
+
+  function syncCropInputs() {
+    document.getElementById('cropX').value = Math.round(cropX);
+    document.getElementById('cropY').value = Math.round(cropY);
+    document.getElementById('cropW').value = Math.round(cropW);
+    document.getElementById('cropH').value = Math.round(cropH);
+  }
+
+  // Ratio buttons
+  document.querySelectorAll('.ratio-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.ratio-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedRatio = btn.dataset.ratio;
+      if (selectedRatio !== 'free') {
+        const [rw, rh] = selectedRatio.split(':').map(Number);
+        cropH = cropW * rh / rw;
+        cropH = Math.min(cropH, cropOrigH - cropY);
+        syncCropInputs();
+        drawCropOverlay();
+      }
+    });
+  });
+
+  // Manual input
+  document.getElementById('cropApplyManualBtn').addEventListener('click', () => {
+    cropX = Math.max(0, parseInt(document.getElementById('cropX').value) || 0);
+    cropY = Math.max(0, parseInt(document.getElementById('cropY').value) || 0);
+    cropW = Math.max(1, parseInt(document.getElementById('cropW').value) || 100);
+    cropH = Math.max(1, parseInt(document.getElementById('cropH').value) || 100);
+    cropW = Math.min(cropW, cropOrigW - cropX);
+    cropH = Math.min(cropH, cropOrigH - cropY);
+    drawCropOverlay();
+  });
+
+  // Download
+  document.getElementById('cropDownloadBtn').addEventListener('click', () => {
+    if (!cropImgData) return;
+    const img = new Image();
+    img.onload = () => {
+      workCanvas.width = Math.round(cropW);
+      workCanvas.height = Math.round(cropH);
+      workCtx.drawImage(img, Math.round(cropX), Math.round(cropY), Math.round(cropW), Math.round(cropH), 0, 0, Math.round(cropW), Math.round(cropH));
+      const fmt = document.getElementById('cropFormat').value;
+      const mime = fmt === 'png' ? 'image/png' : fmt === 'webp' ? 'image/webp' : 'image/jpeg';
+      const dataUrl = workCanvas.toDataURL(mime, 0.92);
+      const ext = fmt === 'jpeg' ? 'jpg' : fmt;
+      const baseName = cropImgData.name.replace(/\.[^.]+$/, '');
+      const filename = 'imageyantra-cropped-' + baseName + '.' + ext;
+      saveFile(filename, dataUrl, 'image');
+      downloadDataURL(dataUrl, filename);
+    };
+    img.src = cropImgData.dataUrl;
+  });
+  </script>
+
+
+<section class="tool-blog-section" aria-label="Guide: Crop Image" style="background:var(--col-surface);border-top:1px solid var(--col-border);padding:64px 0">
+  <div class="container" style="max-width:780px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <span style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--col-accent);background:color-mix(in srgb,var(--col-accent) 12%,transparent);padding:3px 10px;border-radius:20px">Guide</span>
+    </div>
+    <h2 style="font-family:var(--ff-head);font-size:clamp(22px,3.5vw,34px);font-weight:800;color:var(--col-text);letter-spacing:-.4px;margin-bottom:16px">How to Crop Images Online — Tips &amp; Techniques</h2>
+    <p style="font-size:16px;color:var(--col-text2);line-height:1.7;margin-bottom:24px">Cropping removes the outer parts of an image to highlight a subject, remove distractions, or fit a specific frame. Unlike resizing, cropping always reduces the number of pixels — making it faster and lossless within what remains.</p>
+
+    <h3 style="font-family:var(--ff-head);font-size:20px;font-weight:700;color:var(--col-text);margin:28px 0 10px">Aspect Ratio Presets</h3>
+    <div style="overflow-x:auto;margin-bottom:24px"><table style="width:100%;border-collapse:collapse;font-size:14px"><thead><tr style="background:var(--col-border)"><th style="text-align:left;padding:10px 14px;font-weight:600">Ratio</th><th style="text-align:left;padding:10px 14px;font-weight:600">Best Used For</th></tr></thead><tbody><tr style="border-bottom:1px solid var(--col-border)"><td style="padding:10px 14px;color:var(--col-text2)">1:1 (Square)</td><td style="padding:10px 14px;color:var(--col-text2)">Instagram posts, profile photos</td></tr><tr style="border-bottom:1px solid var(--col-border)"><td style="padding:10px 14px;color:var(--col-text2)">16:9 (Widescreen)</td><td style="padding:10px 14px;color:var(--col-text2)">YouTube, presentations, banners</td></tr><tr style="border-bottom:1px solid var(--col-border)"><td style="padding:10px 14px;color:var(--col-text2)">4:3</td><td style="padding:10px 14px;color:var(--col-text2)">Prints, older monitor displays</td></tr><tr><td style="padding:10px 14px;color:var(--col-text2)">3:2</td><td style="padding:10px 14px;color:var(--col-text2)">DSLR native format, 4×6 prints</td></tr></tbody></table></div>
+
+    <h3 style="font-family:var(--ff-head);font-size:20px;font-weight:700;color:var(--col-text);margin:28px 0 10px">Pro Tips for Better Crops</h3>
+    <ul style="font-size:15px;color:var(--col-text2);line-height:1.85;padding-left:20px;margin-bottom:24px">
+      <li>Use the <strong>Rule of Thirds</strong> — place your subject at the intersection of the grid lines, not dead center</li>
+      <li>Leave <strong>breathing room</strong> above the subject's head in portrait crops</li>
+      <li>For product shots, crop tight — minimal background draws focus to the product</li>
+      <li>When cropping for social, always check the platform's required ratio first</li>
+    </ul>
+
+    <a href="/blog/crop-image-guide/" style="display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--col-accent);text-decoration:none">
+      Read full Crop Image guide →
+    </a>
+  </div>
+</section>
+>>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
 </body>
 
 </html>

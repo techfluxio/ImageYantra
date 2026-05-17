@@ -536,21 +536,30 @@
     .model-note {
       display: flex;
       align-items: flex-start;
-      gap: 8px;
+      gap: 10px;
       background: rgba(129, 51, 224, .06);
       border: 1px solid rgba(129, 51, 224, .18);
       border-radius: var(--r-sm);
-      padding: 10px 12px;
-      font-size: 12px;
+      padding: 12px;
+      font-size: 13px;
       color: var(--col-text2);
-      line-height: 1.55;
+      line-height: 1.6;
       margin-bottom: 14px;
     }
 
     .model-note svg {
       flex-shrink: 0;
+      width: 16px;
+      height: 16px;
       color: var(--col-accent);
-      margin-top: 1px;
+      margin-top: 2px;
+    }
+
+    .model-note span {
+      display: block;
+      flex: 1;
+      min-width: 0;
+      word-break: break-word;
     }
 
     /* ── Result actions ── */
