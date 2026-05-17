@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="google-adsense-account" content="ca-pub-2178808063904703">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Remove Background — ImageYantra</title>
+  <meta name="description"
+    content="Remove image background online free. AI-powered transparent PNG output. No upload required — 100% browser-based.">
+  <link rel="canonical" href="https://imageyantra.in/tools/remove-bg/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Remove Background — ImageYantra">
+  <meta property="og:description"
+    content="Remove image background instantly with AI. Get a transparent PNG. No upload required.">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2178808063904703"
+    crossorigin="anonymous"></script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebApplication","name":"Remove Background","url":"https://imageyantra.in/tools/remove-bg/","description":"Remove image background online free with AI. Instant transparent PNG.","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+  </script>
+
+  <style>
+    /* ═══════════════════════════════════════════════════
+       REMOVE BACKGROUND — AI-powered, no API key needed
+       Uses @imgly/background-removal WASM model locally.
+       Subject is always preserved; only background removed.
+    ═══════════════════════════════════════════════════ */
+
+    /* ── File info pill ── */
+    .img-info-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      background: var(--col-surface2);
+      border: 1px solid var(--col-border);
+      border-radius: var(--r-sm);
+      font-size: 13px;
+      color: var(--col-text2);
+      margin-bottom: 14px;
+    }
+
+    .img-info-pill img {
+      width: 34px;
+      height: 34px;
+      object-fit: cover;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+
+    .iip-name {
+      font-weight: 600;
+      color: var(--col-text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .iip-size {
+      flex-shrink: 0;
+      font-weight: 700;
+      color: var(--col-accent);
+    }
+
+    .iip-change {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--col-text3);
+      padding: 4px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      transition: color .15s;
+    }
+
+    .iip-change:hover {
+      color: var(--col-red);
+    }
+
+    /* ── AI Badge ── */
+    .ai-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, rgba(129, 51, 224, .13), rgba(163, 108, 242, .08));
+      border: 1px solid rgba(129, 51, 224, .28);
+      color: var(--col-accent);
+      padding: 5px 12px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+    }
+
+    /* ── Free badge ── */
+    .free-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      background: rgba(5, 150, 105, .1);
+      border: 1px solid rgba(5, 150, 105, .25);
+      color: var(--col-green);
+      padding: 5px 12px;
+      border-radius: 20px;
+    }
+
+    /* ── Before/after comparison slider ── */
+    .compare-wrap {
+      position: relative;
+      width: 100%;
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      border: 1px solid var(--col-border);
+      background: repeating-conic-gradient(#e0ddf0 0% 25%, #f4f3fb 0% 50%) 0 0 / 20px 20px;
+      user-select: none;
+      touch-action: none;
+      display: none;
+      min-height: 200px;
+    }
+
+    .compare-wrap.show {
+      display: block;
+    }
+
+    .compare-after-img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 520px;
+      object-fit: contain;
+    }
+
+    .compare-before {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    .compare-before-inner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .compare-before-inner img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .compare-handle {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #fff;
+      box-shadow: 0 0 0 1px rgba(129, 51, 224, .4), 0 2px 12px rgba(0, 0, 0, .2);
+      cursor: ew-resize;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      left: 50%;
+    }
+
+    .compare-knob {
+      position: absolute;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--col-accent);
+      border: 3px solid #fff;
+      box-shadow: 0 2px 12px rgba(129, 51, 224, .45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      pointer-events: none;
+    }
+
+    .compare-labels {
+      position: absolute;
+      top: 10px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 12px;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .compare-label {
+      font-family: var(--ff-head);
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(0, 0, 0, .55);
+      color: #fff;
+      padding: 3px 9px;
+      border-radius: var(--r-full);
+      letter-spacing: .04em;
+      backdrop-filter: blur(4px);
+    }
+
+    /* ── Result preview ── */
+    .result-preview-wrap {
+      display: none;
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      border: 1px solid var(--col-border);
+      background: repeating-conic-gradient(#e0ddf0 0% 25%, #f4f3fb 0% 50%) 0 0 / 20px 20px;
+      text-align: center;
+    }
+
+    .result-preview-wrap.show {
+      display: block;
+    }
+
+    .result-preview-wrap img {
+      max-width: 100%;
+      max-height: 520px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto;
+    }
+
+    /* ── Loading overlay ── */
+    .proc-overlay {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 60px 20px;
+      border: 1px solid var(--col-border);
+      border-radius: var(--r-lg);
+      background: var(--col-surface);
+    }
+
+    .proc-overlay.show {
+      display: flex;
+    }
+
+    /* AI pulse animation */
+    .ai-loader {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ai-loader-ring {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      border-top-color: var(--col-accent);
+      animation: rbSpin .9s linear infinite;
+    }
+
+    .ai-loader-ring:nth-child(2) {
+      width: 60px;
+      height: 60px;
+      border-top-color: var(--col-accent-l);
+      animation-direction: reverse;
+      animation-duration: 1.3s;
+    }
+
+    .ai-loader-core {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--col-accent), var(--col-accent-l));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      box-shadow: 0 0 16px rgba(129, 51, 224, .5);
+    }
+
+    .ai-loader-core img {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+    }
+
+    @keyframes rbSpin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .proc-label {
+      font-family: var(--ff-head);
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--col-text);
+    }
+
+    .proc-sub {
+      font-size: 13px;
+      color: var(--col-text3);
+      text-align: center;
+      line-height: 1.6;
+      max-width: 280px;
+    }
+
+    /* ── Progress bar ── */
+    .c-progress {
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 4px;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .c-progress.show {
+      display: flex;
+    }
+
+    .c-progress-header {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .c-progress-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--col-text2);
+    }
+
+    .c-progress-pct {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--col-accent);
+      font-family: var(--ff-head);
+    }
+
+    .c-progress-track {
+      width: 100%;
+      height: 6px;
+      background: var(--col-surface2);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .c-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--col-accent), var(--col-accent-l));
+      border-radius: 99px;
+      width: 0%;
+      transition: width .3s ease;
+    }
+
+    /* ── Main CTA ── */
+    .remove-cta {
+      width: 100%;
+      padding: 14px 22px;
+      border-radius: var(--r-md);
+      background: linear-gradient(135deg, var(--col-accent) 0%, var(--col-accent-d) 100%);
+      color: #fff;
+      border: none;
+      font-family: var(--ff-head);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform .18s, box-shadow .18s, opacity .15s;
+      box-shadow: 0 4px 18px rgba(129, 51, 224, .35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .remove-cta::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 40%;
+      height: 200%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .18), transparent);
+      transform: skewX(-20deg);
+      transition: left .65s ease;
+    }
+
+    .remove-cta:not(:disabled):hover::before {
+      left: 130%;
+    }
+
+    .remove-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(129, 51, 224, .45);
+    }
+
+    .remove-cta:active {
+      transform: translateY(0);
+    }
+
+    .remove-cta:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .remove-cta .cta-spinner {
+      display: none;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255, 255, 255, .35);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: rbSpin .7s linear infinite;
+    }
+
+    .remove-cta.loading .cta-spinner {
+      display: block;
+    }
+
+    .remove-cta.loading .cta-icon {
+      display: none;
+    }
+
+    /* ── Download button ── */
+    .download-btn {
+      width: 100%;
+      padding: 14px 22px;
+      border-radius: var(--r-md);
+      background: var(--col-green);
+      color: #fff;
+      border: none;
+      font-family: var(--ff-head);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background .18s, transform .15s;
+      box-shadow: 0 4px 16px rgba(5, 150, 105, .3);
+    }
+
+    .download-btn:hover {
+      background: #047857;
+      transform: translateY(-1px);
+    }
+
+    /* ── View toggle ── */
+    .view-toggle {
+      display: inline-flex;
+      border: 1px solid var(--col-border2);
+      border-radius: var(--r-md);
+      overflow: hidden;
+      background: var(--col-surface2);
+    }
+
+    .view-toggle button {
+      padding: 7px 14px;
+      border: none;
+      background: none;
+      font-family: var(--ff-body);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--col-text3);
+      cursor: pointer;
+      transition: background .15s, color .15s;
+    }
+
+    .view-toggle button.active {
+      background: var(--col-accent);
+      color: #fff;
+    }
+
+    /* ── Background colour swatches ── */
+    .swatch-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .swatch {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform .15s, border-color .15s;
+      flex-shrink: 0;
+    }
+
+    .swatch:hover {
+      transform: scale(1.12);
+    }
+
+    .swatch.active {
+      border-color: var(--col-accent);
+      box-shadow: 0 0 0 2px rgba(129, 51, 224, .25);
+    }
+
+    .swatch.transparent-swatch {
+      background: repeating-conic-gradient(#ccc 0% 25%, #fff 0% 50%) 0 0 / 10px 10px;
+    }
+
+    /* ── First-run model note ── */
+    .model-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      background: rgba(129, 51, 224, .06);
+      border: 1px solid rgba(129, 51, 224, .18);
+      border-radius: var(--r-sm);
+      padding: 10px 12px;
+      font-size: 12px;
+      color: var(--col-text2);
+      line-height: 1.55;
+      margin-bottom: 14px;
+    }
+
+    .model-note svg {
+      flex-shrink: 0;
+      color: var(--col-accent);
+      margin-top: 1px;
+    }
+
+    /* ── Result actions ── */
+    #resultActions {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    #resultActions.show {
+      display: flex;
+    }
+
+    .try-another {
+      text-align: center;
+      font-size: 13px;
+      color: var(--col-text3);
+    }
+
+    .try-another a {
+      color: var(--col-accent);
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    /* ── Preview area: always fill available height ── */
+    .tool-preview-area {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tool-preview-area .card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tool-preview-area .card .preview-box,
+    .tool-preview-area .card .proc-overlay {
+      flex: 1;
+    }
+
+    /* ── Section label ── */
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--col-text3);
+      margin-bottom: 8px;
+    }
+
+    /* ── Divider ── */
+    .rb-divider {
+      height: 1px;
+      background: var(--col-border);
+      margin: 14px 0;
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 880px) {
+
+      /* Stack tool-grid: controls on top, preview below */
+      .tool-grid {
+        grid-template-columns: 1fr !important;
+        width: 100%;
+      }
+
+      /* Make the drop-zone taller and more tappable on mobile */
+      .drop-zone {
+        min-height: 200px;
+        padding: var(--sp-8, 32px) var(--sp-5, 20px);
+        width: 100% !important;
+        box-sizing: border-box;
+      }
+
+      /* Preview card should have a comfortable minimum height */
+      .tool-preview-area .card {
+        min-height: 280px !important;
+      }
+
+      /* Body inner: stack main then sidebar */
+      .tool-body-inner {
+        display: flex !important;
+        flex-direction: column;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .tool-main {
+        order: 1;
+        width: 100%;
+      }
+
+      /* Sidebar ad moves below the tool content */
+      .tool-sidebar {
+        order: 3;
+      }
+
+      /* Ensure tool-controls is full width */
+      .tool-controls {
+        width: 100%;
+        box-sizing: border-box;
+      }
+    }
+
+    @media (max-width: 640px) {
+
+      /* On small phones, let the drop-zone fill naturally */
+      .drop-zone {
+        min-height: 180px;
+      }
+
+      /* Give the preview placeholder comfortable space */
+      .preview-box {
+        min-height: 220px !important;
+      }
+
+      /* Prevent the sidebar ad from pushing tool content off screen */
+      .tool-sidebar .ad-sidebar {
+        min-height: 100px;
+      }
+
+      /* Ensure the tool-grid columns never overflow */
+      .tool-grid {
+        grid-template-columns: 1fr !important;
+        width: 100%;
+      }
+
+      /* Full-width cards */
+      .card {
+        width: 100%;
+        box-sizing: border-box;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .compare-knob {
+        width: 30px;
+        height: 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <script src="/js/utils.js"></script>
+  <script src="/js/nav.js"></script>
+
+  <div class="tool-page">
+
+    <div class="ad-banner-top" aria-label="Advertisement">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2178808063904703" data-ad-slot="auto"
+        data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+
+    <header class="tool-page-header">
+      <div class="container">
+        <div class="tool-page-icon" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <polyline points="21 15 16 10 5 21" />
+            <line x1="15" y1="9" x2="21" y2="3" stroke-dasharray="3 2" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="tool-page-title">Remove <em>Background</em></h1>
+          <p class="tool-page-desc">AI-powered background removal — no sign-up, no API key, no uploads. 100% free &amp;
+            private.</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="tool-page-body">
+      <div class="tool-body-inner">
+        <main class="tool-main" id="main-content">
+          <div class="tool-grid" style="align-items:stretch;">
+
+            <!-- ── Controls Column ── -->
+            <div class="tool-controls">
+
+              <input type="file" id="rbFileInput" accept="image/*" style="display:none">
+
+              <!-- Step 1: Upload -->
+              <div id="uploadStep">
+                <label for="rbFileInput" class="drop-zone" id="rbDropZone" tabindex="0" role="button"
+                  aria-label="Upload image" style="cursor:pointer;display:flex;width:100%;box-sizing:border-box;">
+                  <div class="drop-icon">
+                    <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="3" width="18" height="18" rx="2" />
+                      <circle cx="8.5" cy="8.5" r="1.5" />
+                      <polyline points="21 15 16 10 5 21" />
+                    </svg>
+                  </div>
+                  <div class="drop-title">Select Image</div>
+                  <div class="drop-sub">JPG, PNG, WEBP · Any size · 100% free</div>
+                  <div class="drop-hint" style="justify-content:center;">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round">
+                      <polyline points="8 17 12 21 16 17" />
+                      <line x1="12" y1="12" x2="12" y2="21" />
+                      <path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29" />
+                    </svg>
+                    Tap or drag &amp; drop
+                  </div>
+                </label>
+              </div>
+
+              <!-- Step 2: Config + run -->
+              <div id="configStep" style="display:none">
+
+                <!-- File pill -->
+                <div class="img-info-pill">
+                  <img id="rbPillThumb" src="" alt="">
+                  <span class="iip-name" id="rbPillName"></span>
+                  <span class="iip-size" id="rbPillSize"></span>
+                  <button class="iip-change" id="rbChangeBtn" title="Change image" aria-label="Change image">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round">
+                      <path d="M18 6 6 18M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                <div class="card">
+
+                  <!-- AI + Free badges -->
+                  <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:14px;">
+                    <div class="ai-badge" style="margin-bottom:0">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round">
+                        <path
+                          d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                      </svg>
+                      AI Background Removal
+                    </div>
+                    <div class="free-badge">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5" stroke-linecap="round">
+                        <path d="m9 12 2 2 4-4" />
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                      </svg>
+                      Powered Locally • Zero Uploads
+                    </div>
+                  </div>
+
+                  <!-- Model notice -->
+                  <div class="model-note" id="modelNote">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round">
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="12" y1="8" x2="12" y2="12" />
+                      <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    <span><strong>Note:</strong> Best results come from bright, high-quality photos with clear contrast
+                      between the subject and background.</span>
+                  </div>
+
+                  <!-- Background colour -->
+                  <div class="section-label">Replace background with</div>
+                  <div class="swatch-row" style="margin-bottom:14px;">
+                    <div class="swatch transparent-swatch active" data-color="transparent" title="Transparent (PNG)">
+                    </div>
+                    <div class="swatch" data-color="#ffffff" style="background:#fff;border-color:#ddd;" title="White">
+                    </div>
+                    <div class="swatch" data-color="#000000" style="background:#000;" title="Black"></div>
+                    <div class="swatch" data-color="#f4f3fb" style="background:#f4f3fb;border-color:#e0ddf0;"
+                      title="Light purple"></div>
+                    <div class="swatch" data-color="#8133e0" style="background:#8133e0;" title="Purple"></div>
+                    <div class="swatch" data-color="#1e293b" style="background:#1e293b;" title="Navy"></div>
+                    <div class="swatch" data-color="#f43f5e" style="background:#f43f5e;" title="Red"></div>
+                    <div class="swatch" data-color="#10b981" style="background:#10b981;" title="Green"></div>
+                    <input type="color" id="bgCustomColor" value="#ffffff" title="Custom colour"
+                      style="width:28px;height:28px;border-radius:8px;border:2px solid var(--col-border2);cursor:pointer;padding:1px;flex-shrink:0;">
+                  </div>
+
+                  <div class="rb-divider"></div>
+
+                  <!-- Remove button -->
+                  <button class="remove-cta" id="rbRemoveBtn">
+                    <svg class="cta-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="3" width="18" height="18" rx="2" />
+                      <circle cx="8.5" cy="8.5" r="1.5" />
+                      <polyline points="21 15 16 10 5 21" />
+                      <line x1="15" y1="9" x2="21" y2="3" stroke-dasharray="3 2" />
+                    </svg>
+                    <div class="cta-spinner"></div>
+                    Remove Background
+                  </button>
+
+                  <!-- Result actions -->
+                  <div id="resultActions">
+                    <div id="viewToggleRow" style="display:none;justify-content:center;margin-bottom:4px;">
+                      <div class="view-toggle">
+                        <button id="viewCompare" class="active">Before / After</button>
+                        <button id="viewResult">Result Only</button>
+                      </div>
+                    </div>
+                    <button class="download-btn" id="rbDownloadBtn">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                      </svg>
+                      Download Transparent PNG
+                    </button>
+                    <div class="try-another">
+                      <a id="rbNewImg">Upload new image</a>
+                    </div>
+                  </div>
+
+                </div><!-- /card -->
+              </div><!-- /configStep -->
+
+            </div><!-- /tool-controls -->
+
+            <!-- ── Preview Column ── -->
+            <div class="tool-preview-area">
+              <div class="card" style="min-height:300px;">
+                <div class="card-title">Preview</div>
+
+                <!-- Loading overlay -->
+                <div class="proc-overlay" id="procOverlay">
+                  <div class="ai-loader">
+                    <div class="ai-loader-ring"></div>
+                    <div class="ai-loader-ring"></div>
+                    <div class="ai-loader-core">
+                      <img src="/assets/images/white-logo.png" alt="ImageYantra Logo">
+                    </div>
+                  </div>
+                  <div class="proc-label" id="procLabel">Removing background…</div>
+                  <div class="proc-sub" id="procSub">AI is analysing your image</div>
+                  <div class="c-progress show" id="rbProgress">
+                    <div class="c-progress-header">
+                      <span class="c-progress-label" id="rbProgressLabel">Loading AI model</span>
+                      <span class="c-progress-pct" id="rbProgressPct">0%</span>
+                    </div>
+                    <div class="c-progress-track">
+                      <div class="c-progress-fill" id="rbProgressFill"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Placeholder -->
+                <div class="preview-box" id="rbPlaceholderBox" style="min-height:280px;">
+                  <div class="preview-placeholder">
+                    <div class="ico"
+                      style="color:#8133e0;width:64px;height:64px;border-radius:16px;background:var(--col-surface2);border:1px solid var(--col-border2);display:flex;align-items:center;justify-content:center;">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.5" stroke-linecap="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" />
+                        <circle cx="8.5" cy="8.5" r="1.5" />
+                        <polyline points="21 15 16 10 5 21" />
+                      </svg>
+                    </div>
+                    <span style="color:#888;font-size:13px;font-weight:500;">Upload an image to begin</span>
+                  </div>
+                </div>
+
+                <!-- Before/After comparison slider -->
+                <div class="compare-wrap" id="compareWrap">
+                  <img class="compare-after-img" id="compareAfterImg" src="" alt="Background removed">
+                  <div class="compare-before" id="compareBefore" style="width:50%">
+                    <div class="compare-before-inner">
+                      <img id="compareBeforeImg" src="" alt="Original">
+                    </div>
+                  </div>
+                  <div class="compare-labels">
+                    <span class="compare-label">Before</span>
+                    <span class="compare-label">After</span>
+                  </div>
+                  <div class="compare-handle" id="compareHandle">
+                    <div class="compare-knob">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M9 4l-5 5 5 5M15 4l5 5-5 5" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Result only view -->
+                <div class="result-preview-wrap" id="resultOnlyWrap">
+                  <img id="resultOnlyImg" src="" alt="Background removed result">
+                </div>
+
+              </div>
+            </div><!-- /tool-preview-area -->
+
+          </div><!-- /tool-grid -->
+        </main>
+
+        <aside class="tool-sidebar" aria-label="Sidebar">
+          <div class="card ad-sidebar" aria-label="Advertisement">
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2178808063904703" data-ad-slot="auto"
+              data-ad-format="rectangle"></ins>
+          </div>
+          <div class="card">
+            <div class="card-title">How It Works</div>
+            <div class="tips-card">
+              <div class="tip-item">
+                <span class="tip-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round">
+                    <path
+                      d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                  </svg>
+                </span>
+                <div class="tip-text">Powered by <strong>RMBG-1.4 AI model</strong> — detects people, products, animals,
+                  and objects automatically.</div>
+              </div>
+              <div class="tip-item">
+                <span class="tip-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    <path d="m9 12 2 2 4-4" />
+                  </svg>
+                </span>
+                <div class="tip-text">Your image <strong>never leaves your device</strong>. No upload, no account, no
+                  API key needed.</div>
+              </div>
+              <div class="tip-item">
+                <span class="tip-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <circle cx="8.5" cy="8.5" r="1.5" />
+                    <polyline points="21 15 16 10 5 21" />
+                  </svg>
+                </span>
+                <div class="tip-text">Output is a <strong>transparent PNG</strong> — paste onto any background in Canva,
+                  Photoshop, or PowerPoint.</div>
+              </div>
+              <div class="tip-item">
+                <span class="tip-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                  </svg>
+                </span>
+                <div class="tip-text">First run downloads the model (~30 MB, cached). Every run after that is instant.
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      Nav.init();
+      try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) { }
+      try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) { }
+    });
+  </script>
+
+  <script type="module">
+    // ═══════════════════════════════════════════════════════════
+    //  REMOVE BACKGROUND — @imgly/background-removal (WASM/ONNX)
+    //  Runs 100% locally in the browser. No API key. No upload.
+    //  Subject always preserved; only background is made transparent.
+    // ═══════════════════════════════════════════════════════════
+
+    // ── State ──
+    let rbOrigFile = null;
+    let rbOrigDataUrl = null;
+    let rbFileName = '';
+    let rbResultBlob = null;
+    let rbBgColor = 'transparent';
+    let rbCurrentView = 'compare';
+    let modelLoaded = false;
+
+    // ── DOM refs ──
+    const rbInput = document.getElementById('rbFileInput');
+    const rbZone = document.getElementById('rbDropZone');
+    const uploadStep = document.getElementById('uploadStep');
+    const configStep = document.getElementById('configStep');
+    const procOverlay = document.getElementById('procOverlay');
+    const compareWrap = document.getElementById('compareWrap');
+    const resultOnlyWrap = document.getElementById('resultOnlyWrap');
+    const placeholderBox = document.getElementById('rbPlaceholderBox');
+    const resultActions = document.getElementById('resultActions');
+    const viewToggleRow = document.getElementById('viewToggleRow');
+
+    // ── File input ──
+    rbInput.addEventListener('change', e => {
+      if (e.target.files && e.target.files.length) loadFile(e.target.files[0]);
+      e.target.value = '';
+    });
+
+    // ── Drag & drop ──
+    rbZone.addEventListener('dragover', e => { e.preventDefault(); rbZone.classList.add('drag-over'); });
+    rbZone.addEventListener('dragleave', e => { if (!rbZone.contains(e.relatedTarget)) rbZone.classList.remove('drag-over'); });
+    rbZone.addEventListener('drop', e => {
+      e.preventDefault(); rbZone.classList.remove('drag-over');
+      const files = [...e.dataTransfer.files].filter(f => f.type.startsWith('image/'));
+      if (files.length) loadFile(files[0]);
+    });
+
+    function loadFile(file) {
+      rbOrigFile = file;
+      rbFileName = file.name;
+      rbResultBlob = null;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        rbOrigDataUrl = ev.target.result;
+        document.getElementById('rbPillThumb').src = rbOrigDataUrl;
+        document.getElementById('rbPillName').textContent = file.name;
+        document.getElementById('rbPillSize').textContent = fmtSize(file.size);
+        uploadStep.style.display = 'none';
+        configStep.style.display = 'block';
+        compareWrap.classList.remove('show');
+        resultOnlyWrap.classList.remove('show');
+        procOverlay.classList.remove('show');
+        placeholderBox.style.display = '';
+        resultActions.classList.remove('show');
+        viewToggleRow.style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // ── Background swatches ──
+    document.querySelectorAll('.swatch').forEach(sw => {
+      sw.addEventListener('click', () => {
+        document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+        sw.classList.add('active');
+        rbBgColor = sw.dataset.color;
+        if (rbResultBlob) refreshDisplay();
+      });
+    });
+    document.getElementById('bgCustomColor').addEventListener('input', e => {
+      document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+      rbBgColor = e.target.value;
+      if (rbResultBlob) refreshDisplay();
+    });
+
+    // ── View toggle ──
+    document.getElementById('viewCompare').addEventListener('click', () => switchView('compare'));
+    document.getElementById('viewResult').addEventListener('click', () => switchView('result'));
+    function switchView(mode) {
+      rbCurrentView = mode;
+      document.getElementById('viewCompare').classList.toggle('active', mode === 'compare');
+      document.getElementById('viewResult').classList.toggle('active', mode === 'result');
+      compareWrap.classList.toggle('show', mode === 'compare');
+      resultOnlyWrap.classList.toggle('show', mode === 'result');
+    }
+
+    // ── Reset ──
+    document.getElementById('rbChangeBtn').addEventListener('click', resetToUpload);
+    document.getElementById('rbNewImg').addEventListener('click', resetToUpload);
+    function resetToUpload() {
+      rbOrigFile = null; rbOrigDataUrl = null; rbResultBlob = null;
+      uploadStep.style.display = 'block';
+      configStep.style.display = 'none';
+      procOverlay.classList.remove('show');
+      compareWrap.classList.remove('show');
+      resultOnlyWrap.classList.remove('show');
+      placeholderBox.style.display = '';
+      resultActions.classList.remove('show');
+      viewToggleRow.style.display = 'none';
+    }
+
+    // ── Progress helpers ──
+    function setProgress(pct, label) {
+      document.getElementById('rbProgressFill').style.width = Math.round(pct) + '%';
+      document.getElementById('rbProgressPct').textContent = Math.round(pct) + '%';
+      if (label) document.getElementById('rbProgressLabel').textContent = label;
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  CORE: AI background removal via @imgly/background-removal
+    //  CDN: jsdelivr delivers the WASM + ONNX model files.
+    //  Model: RMBG-1.4 (ISNet-based salient-object segmentation)
+    //  The model runs entirely in WebAssembly — no server involved.
+    // ══════════════════════════════════════════════════════════
+    // Correct CDN: staticimgly.com (the library's own CDN, not jsdelivr/unpkg)
+    // The module file is index.mjs, not background-removal.js
+    async function loadImglyLib() {
+      if (window._imglyBR) return window._imglyBR;
+
+      const mod = await import(
+        'https://cdn.jsdelivr.net/npm/@imgly/background-removal/+esm'
+      );
+
+      window._imglyBR = mod;
+
+      return mod;
+    }
+    document.getElementById('rbRemoveBtn').addEventListener('click', async () => {
+      if (!rbOrigFile) return;
+
+      const btn = document.getElementById('rbRemoveBtn');
+      btn.disabled = true;
+      btn.classList.add('loading');
+
+      placeholderBox.style.display = 'none';
+      compareWrap.classList.remove('show');
+      resultOnlyWrap.classList.remove('show');
+      resultActions.classList.remove('show');
+      viewToggleRow.style.display = 'none';
+      procOverlay.classList.add('show');
+
+      document.getElementById('procLabel').textContent = 'Removing background…';
+      document.getElementById('procSub').textContent = modelLoaded
+        ? 'AI is analysing your image…'
+        : 'Downloading AI model (~30 MB, cached for future use)…';
+      setProgress(5, modelLoaded ? 'Processing image' : 'Loading AI model');
+
+      try {
+        const imglyMod = await loadImglyLib();
+        const { removeBackground } = imglyMod;
+        console.log('AI model loaded successfully');
+        modelLoaded = true;
+
+        // Hide first-run note once model is ready
+        const note = document.getElementById('modelNote');
+        if (note) note.style.display = 'none';
+
+        document.getElementById('procSub').textContent = 'AI is removing the background…';
+        setProgress(30, 'Processing with AI');
+
+        // Config: pass CDN path so WASM/model files are fetched correctly
+        // const resolvedCDN = imglyMod._cdnBase || IMGLY_CDN;
+        const config = {
+          // publicPath: resolvedCDN,
+          progress: (key, current, total) => {
+            if (total > 0) {
+              // Map download progress to 30–85%
+              const pct = 30 + (current / total) * 55;
+              setProgress(Math.min(85, pct), 'Removing background…');
+            }
+          },
+        };
+
+        // removeBackground accepts File, Blob, or URL
+        const resultBlob = await removeBackground(rbOrigFile, config);
+
+        setProgress(95, 'Compositing…');
+        rbResultBlob = resultBlob;
+
+        await new Promise(r => setTimeout(r, 150));
+        setProgress(100, 'Done!');
+        await new Promise(r => setTimeout(r, 200));
+
+        procOverlay.classList.remove('show');
+        placeholderBox.style.display = 'none';
+        refreshDisplay();
+        resultActions.classList.add('show');
+        viewToggleRow.style.display = 'flex';
+        switchView('compare');
+
+      } catch (err) {
+        console.error('[RemoveBG]', err);
+        procOverlay.classList.remove('show');
+        placeholderBox.style.display = '';
+        // Show toast if available, else alert
+        const msg = err?.message || 'Background removal failed. Please try again.';
+        if (typeof toast === 'function') {
+          toast(msg.length > 80 ? 'Processing failed — please try a different image.' : msg, 'error');
+        } else {
+          alert(msg);
+        }
+      }
+
+      btn.disabled = false;
+      btn.classList.remove('loading');
+    });
+
+    // ── Refresh the preview after result is ready or bg colour changes ──
+    function refreshDisplay() {
+      if (!rbResultBlob) return;
+      const url = URL.createObjectURL(rbResultBlob);
+
+      // After panel: transparent result on checkered bg
+      document.getElementById('compareAfterImg').src = url;
+      // Before panel: original on white bg
+      document.getElementById('compareBeforeImg').src = rbOrigDataUrl;
+
+      // Result-only panel
+      if (rbBgColor === 'transparent') {
+        document.getElementById('resultOnlyImg').src = url;
+      } else {
+        // Composite onto chosen colour for the "result only" view
+        compositeOnColor(rbResultBlob, rbBgColor).then(compositeUrl => {
+          document.getElementById('resultOnlyImg').src = compositeUrl;
+        });
+      }
+
+      compareWrap.classList.add('show');
+      resultOnlyWrap.classList.remove('show');
+
+      // Reset slider
+      document.getElementById('compareHandle').style.left = '50%';
+      document.getElementById('compareBefore').style.width = '50%';
+    }
+
+    // ── Composite transparent PNG onto a solid colour ──
+    function compositeOnColor(blob, color) {
+      return new Promise(resolve => {
+        const objUrl = URL.createObjectURL(blob);
+        const img = new Image();
+        img.onload = () => {
+          const cv = document.createElement('canvas');
+          cv.width = img.naturalWidth;
+          cv.height = img.naturalHeight;
+          const cx = cv.getContext('2d');
+          cx.fillStyle = color;
+          cx.fillRect(0, 0, cv.width, cv.height);
+          cx.drawImage(img, 0, 0);
+          URL.revokeObjectURL(objUrl);
+          resolve(cv.toDataURL('image/png'));
+        };
+        img.src = objUrl;
+      });
+    }
+
+    // ── Download ──
+    document.getElementById('rbDownloadBtn').addEventListener('click', async () => {
+      if (!rbResultBlob) return;
+      const base = rbFileName.replace(/\.[^.]+$/, '');
+
+      if (rbBgColor === 'transparent') {
+        // Download raw transparent PNG
+        const url = URL.createObjectURL(rbResultBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'imageyantra-nobg-' + base + '.png';
+        document.body.appendChild(a); a.click();
+        setTimeout(() => { URL.revokeObjectURL(url); document.body.removeChild(a); }, 5000);
+      } else {
+        // Composite and download
+        const compositeUrl = await compositeOnColor(rbResultBlob, rbBgColor);
+        const a = document.createElement('a');
+        a.href = compositeUrl;
+        a.download = 'imageyantra-nobg-' + base + '.png';
+        document.body.appendChild(a); a.click();
+        setTimeout(() => document.body.removeChild(a), 1000);
+      }
+
+      if (typeof toast === 'function') toast('Downloaded!', 'success');
+    });
+
+    // ── Before/After drag slider ──
+    (function () {
+      const handle = document.getElementById('compareHandle');
+      const before = document.getElementById('compareBefore');
+      const wrap = document.getElementById('compareWrap');
+      let dragging = false;
+
+      function moveSlider(clientX) {
+        const rect = wrap.getBoundingClientRect();
+        let pct = (clientX - rect.left) / rect.width;
+        pct = Math.max(0.02, Math.min(0.98, pct));
+        handle.style.left = (pct * 100) + '%';
+        before.style.width = (pct * 100) + '%';
+      }
+
+      handle.addEventListener('mousedown', e => { dragging = true; e.preventDefault(); });
+      handle.addEventListener('touchstart', e => { dragging = true; e.preventDefault(); }, { passive: false });
+      document.addEventListener('mousemove', e => { if (dragging) moveSlider(e.clientX); });
+      document.addEventListener('touchmove', e => { if (dragging) moveSlider(e.touches[0].clientX); }, { passive: true });
+      document.addEventListener('mouseup', () => dragging = false);
+      document.addEventListener('touchend', () => dragging = false);
+      wrap.addEventListener('click', e => { if (!handle.contains(e.target)) moveSlider(e.clientX); });
+    })();
+
+    // ── Utilities ──
+    function fmtSize(b) {
+      if (b < 1024) return b + ' B';
+      if (b < 1048576) return (b / 1024).toFixed(1) + ' KB';
+      return (b / 1048576).toFixed(2) + ' MB';
+    }
+  </script>
+
+  <!-- Guide section -->
+  <section class="tool-blog-section" aria-label="Guide: Remove Background"
+    style="background:var(--col-surface);border-top:1px solid var(--col-border);padding:64px 0">
+    <div class="container" style="max-width:780px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <span
+          style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--col-accent);background:color-mix(in srgb,var(--col-accent) 12%,transparent);padding:3px 10px;border-radius:20px">Guide</span>
+      </div>
+      <h2
+        style="font-family:var(--ff-head);font-size:clamp(22px,3.5vw,34px);font-weight:800;color:var(--col-text);letter-spacing:-.4px;margin-bottom:16px">
+        How to Remove Image Backgrounds with AI</h2>
+      <p style="font-size:16px;color:var(--col-text2);line-height:1.7;margin-bottom:24px">
+        This tool uses the RMBG-1.4 AI model running entirely in your browser via WebAssembly. It detects the foreground
+        subject — people, products, animals — and removes only the background, leaving the subject perfectly intact with
+        clean, smooth edges. No account, no API key, no upload required.</p>
+      <h3 style="font-family:var(--ff-head);font-size:20px;font-weight:700;color:var(--col-text);margin:28px 0 10px">
+        Common Use Cases</h3>
+      <ul style="font-size:15px;color:var(--col-text2);line-height:1.85;padding-left:20px;margin-bottom:16px">
+        <li>Product photography — isolate items against transparent or white backgrounds for e-commerce</li>
+        <li>Profile photos — remove busy backgrounds for professional headshots</li>
+        <li>Graphic design — extract subjects for compositing in Canva, Photoshop, or Figma</li>
+        <li>ID photos and documents requiring plain-background portraits</li>
+        <li>Social media stickers and custom PNG cutouts</li>
+      </ul>
+      <h3 style="font-family:var(--ff-head);font-size:20px;font-weight:700;color:var(--col-text);margin:28px 0 10px">
+        Privacy &amp; How It Works</h3>
+      <p style="font-size:15px;color:var(--col-text2);line-height:1.7;margin-bottom:24px">
+        Unlike cloud-based tools, ImageYantra's background removal runs entirely on your device using WebAssembly. The
+        AI model is downloaded once, cached in your browser, then processes every image locally — no image data is ever
+        sent to any server.</p>
+    </div>
+  </section>
+</body>
+
+</html>

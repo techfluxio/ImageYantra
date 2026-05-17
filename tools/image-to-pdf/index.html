@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="google-adsense-account" content="ca-pub-2178808063904703">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image to PDF — ImageYantra</title>
+  <meta name="description" content="Convert images to PDF free online. JPG, PNG, WEBP supported. Set page size and orientation. No upload.">
+  <link rel="canonical" href="https://imageyantra.in/tools/image-to-pdf/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Image to PDF — ImageYantra">
+  <meta property="og:description" content="Convert images to PDF free online. JPG, PNG, WEBP supported. Set page size and orientation. No upload.">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2178808063904703" crossorigin="anonymous"></script>
+  <style>
+    .generate-btn {
+      width: 100%;
+      padding: 15px 24px;
+      border-radius: var(--r-md);
+      background: var(--col-accent);
+      color: #fff;
+      border: none;
+      font-family: var(--ff-head);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      transition: background .18s, transform .15s, box-shadow .18s;
+      box-shadow: 0 4px 18px rgba(129,51,224,.35);
+    }
+    .generate-btn:hover { background: var(--col-accent-d); transform: translateY(-2px); box-shadow: 0 6px 24px rgba(129,51,224,.45); }
+    .generate-btn:active { transform: translateY(0); }
+    .generate-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+    .img-count-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--col-accent);
+      background: var(--col-glow);
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+    .pdf-img-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .pdf-img-item {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      aspect-ratio: 1;
+      background: var(--col-surface2);
+      border: 1px solid var(--col-border);
+    }
+    .pdf-img-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .pdf-img-item .page-num {
+      position: absolute;
+      bottom: 4px;
+      left: 4px;
+      background: rgba(0,0,0,.6);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+    .pdf-img-item .remove-btn {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: rgba(220,38,38,.85);
+      border: none;
+      color: #fff;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 12px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .15s;
+    }
+    .pdf-img-item .remove-btn:hover { background: #dc2626; }
+    .add-more-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1.5px dashed var(--col-border2);
+      background: none;
+      color: var(--col-text3);
+      font-family: var(--ff-head);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .add-more-btn:hover { border-color: var(--col-accent); color: var(--col-accent); }
+  </style>
+</head>
+<body>
+<canvas id="workCanvas" aria-hidden="true" style="display:none"></canvas>
+<script src="/js/utils.js"></script>
+<script src="/js/nav.js"></script>
+
+<div class="tool-page">
+  <div class="ad-banner-top" aria-label="Advertisement">
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2178808063904703" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </div>
+
+  <header class="tool-page-header">
+    <div class="container">
+      <div class="tool-page-icon" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+      <div>
+        <h1 class="tool-page-title">Image to <em>PDF</em></h1>
+        <p class="tool-page-desc">Upload images, set page size, and generate a PDF instantly. All processing in your browser.</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="tool-page-body">
+    <div class="tool-body-inner">
+      <main class="tool-main" id="main-content">
+
+        <!-- Upload step -->
+        <div id="uploadStep">
+          <div class="drop-zone" id="pdfDropZone">
+            <input type="file" id="pdfFileInput" accept="image/*" multiple>
+            <div class="drop-icon"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+            <div class="drop-title">Drop Images Here</div>
+            <div class="drop-sub">JPG, PNG, WEBP — multiple supported</div>
+            <div class="drop-hint"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg> Tap or drag &amp; drop</div>
+          </div>
+        </div>
+
+        <!-- Config step -->
+        <div id="configStep" style="display:none">
+          <div class="card" style="margin-bottom:16px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+              <div style="font-family:var(--ff-head);font-weight:700;font-size:15px;color:var(--col-text)">
+                Selected Images
+              </div>
+              <span class="img-count-badge" id="imgCountBadge">0 images</span>
+            </div>
+            <div class="pdf-img-grid" id="pdfImgGrid"></div>
+            <div style="margin-top:12px">
+              <button class="add-more-btn" id="addMoreBtn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add more images
+              </button>
+              <input type="file" id="addMoreInput" accept="image/*" multiple style="display:none">
+            </div>
+          </div>
+
+          <div class="card">
+            <div style="font-family:var(--ff-head);font-weight:700;font-size:14px;color:var(--col-text);margin-bottom:14px">PDF Settings</div>
+            <div class="field">
+              <label>Page Size</label>
+              <select id="pdfPageSize">
+                <option value="a4">A4 (210 × 297 mm)</option>
+                <option value="letter">Letter (8.5 × 11 in)</option>
+                <option value="a3">A3 (297 × 420 mm)</option>
+                <option value="a5">A5 (148 × 210 mm)</option>
+                <option value="fit">Fit to Image</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Orientation</label>
+              <select id="pdfOrientation">
+                <option value="portrait">Portrait</option>
+                <option value="landscape">Landscape</option>
+                <option value="auto">Auto (per image)</option>
+              </select>
+            </div>
+
+            <div class="progress-wrap" id="pdfProgress" style="display:none;margin-bottom:14px;">
+              <div class="progress-bar-bg"><div class="progress-bar-fill" id="pdfProgressFill"></div></div>
+              <div class="progress-label" id="pdfProgressLabel">Generating PDF…</div>
+            </div>
+
+            <button class="generate-btn" id="generateDownloadBtn" disabled>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Generate &amp; Download PDF
+            </button>
+          </div>
+        </div>
+
+      </main>
+
+      <aside class="tool-sidebar" aria-label="Sidebar">
+        <div class="card ad-sidebar" aria-label="Advertisement">
+          <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2178808063904703" data-ad-slot="auto" data-ad-format="rectangle"></ins>
+        </div>
+        <div class="card">
+          <div class="card-title">Tips</div>
+          <div class="tips-card">
+            <div class="tip-item"><span class="tip-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span><div class="tip-text">Upload multiple images — each becomes one PDF page.</div></div>
+            <div class="tip-item"><span class="tip-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span><div class="tip-text">Use "Fit to Image" to preserve original dimensions exactly.</div></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    Nav.init();
+    try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+    try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+  });
+</script>
+
+<script>
+let pdfImages = [];
+
+function showConfig() {
+  document.getElementById('uploadStep').style.display = 'none';
+  document.getElementById('configStep').style.display = 'block';
+}
+
+async function addImages(files) {
+  for (const file of files) {
+    const dataUrl = await readFileAsDataURL(file);
+    pdfImages.push({ dataUrl, name: file.name, size: file.size });
+  }
+  renderGrid();
+  updateBtn();
+  if (pdfImages.length > 0) showConfig();
+}
+
+setupDropZone('pdfDropZone', 'pdfFileInput', true, addImages);
+
+document.getElementById('addMoreBtn').addEventListener('click', () => document.getElementById('addMoreInput').click());
+document.getElementById('addMoreInput').addEventListener('change', e => {
+  if (e.target.files.length) addImages([...e.target.files]);
+  e.target.value = '';
+});
+
+function renderGrid() {
+  const grid = document.getElementById('pdfImgGrid');
+  const badge = document.getElementById('imgCountBadge');
+  badge.textContent = pdfImages.length + ' image' + (pdfImages.length !== 1 ? 's' : '');
+  grid.innerHTML = '';
+  pdfImages.forEach((img, i) => {
+    const item = document.createElement('div');
+    item.className = 'pdf-img-item';
+    item.innerHTML = `<img src="${img.dataUrl}" alt="Page ${i+1}">
+      <div class="page-num">${i+1}</div>
+      <button class="remove-btn" title="Remove" onclick="removeImg(${i})">×</button>`;
+    grid.appendChild(item);
+  });
+}
+
+window.removeImg = function(i) {
+  pdfImages.splice(i, 1);
+  renderGrid();
+  updateBtn();
+  if (pdfImages.length === 0) {
+    document.getElementById('uploadStep').style.display = 'block';
+    document.getElementById('configStep').style.display = 'none';
+  }
+};
+
+function updateBtn() {
+  document.getElementById('generateDownloadBtn').disabled = pdfImages.length === 0;
+}
+
+document.getElementById('generateDownloadBtn').addEventListener('click', async () => {
+  if (pdfImages.length === 0) { toast('Add at least one image', 'error'); return; }
+  const btn = document.getElementById('generateDownloadBtn');
+  const prog = document.getElementById('pdfProgress');
+  const fill = document.getElementById('pdfProgressFill');
+  const lbl = document.getElementById('pdfProgressLabel');
+  btn.disabled = true;
+  prog.style.display = 'block';
+  fill.style.width = '5%'; lbl.textContent = 'Starting…';
+
+  try {
+    const { jsPDF } = window.jspdf;
+    const pageSize = document.getElementById('pdfPageSize').value;
+    const orientation = document.getElementById('pdfOrientation').value;
+    let doc;
+
+    for (let idx = 0; idx < pdfImages.length; idx++) {
+      fill.style.width = Math.round((idx / pdfImages.length) * 88 + 5) + '%';
+      lbl.textContent = `Page ${idx + 1} of ${pdfImages.length}…`;
+      await new Promise(r => setTimeout(r, 0));
+
+      const img = await loadImage(pdfImages[idx].dataUrl);
+      const iw = img.naturalWidth, ih = img.naturalHeight;
+
+      let pgW, pgH;
+      if (pageSize === 'fit') { pgW = iw / 3.7795; pgH = ih / 3.7795; }
+      else {
+        const sizes = { a4:[210,297], letter:[216,279], a3:[297,420], a5:[148,210] };
+        [pgW, pgH] = sizes[pageSize] || [210, 297];
+      }
+      const isLand = orientation === 'landscape' || (orientation === 'auto' && iw > ih);
+      const docW = isLand ? Math.max(pgW, pgH) : Math.min(pgW, pgH);
+      const docH = isLand ? Math.min(pgW, pgH) : Math.max(pgW, pgH);
+
+      if (idx === 0) doc = new jsPDF({ unit: 'mm', format: [docW, docH] });
+      else doc.addPage([docW, docH]);
+
+      const m = 5;
+      const avW = docW - 2*m, avH = docH - 2*m;
+      const scale = Math.min(avW/iw, avH/ih);
+      const fw = iw*scale, fh = ih*scale;
+      const ox = m + (avW-fw)/2, oy = m + (avH-fh)/2;
+
+      const cv = document.getElementById('workCanvas');
+      const cx = cv.getContext('2d');
+      cv.width = iw; cv.height = ih; cx.drawImage(img, 0, 0);
+      const compressed = cv.toDataURL('image/jpeg', 0.85);
+      doc.addImage(compressed, 'JPEG', ox, oy, fw, fh);
+    }
+
+    fill.style.width = '100%'; lbl.textContent = 'Done!';
+    await new Promise(r => setTimeout(r, 300));
+    prog.style.display = 'none';
+
+    const filename = 'imageyantra-pdf-' + Date.now() + '.pdf';
+    doc.save(filename);
+    toast('PDF downloaded!', 'success');
+  } catch(err) {
+    toast('Error: ' + (err.message || 'Could not generate PDF'), 'error');
+    prog.style.display = 'none';
+  }
+  btn.disabled = false;
+});
+</script>
+
+<section class="tool-blog-section" aria-label="Guide: Image to PDF" style="background:var(--col-surface);border-top:1px solid var(--col-border);padding:64px 0">
+  <div class="container" style="max-width:780px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><span style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--col-accent);background:color-mix(in srgb,var(--col-accent) 12%,transparent);padding:3px 10px;border-radius:20px">Guide</span></div>
+    <h2 style="font-family:var(--ff-head);font-size:clamp(22px,3.5vw,34px);font-weight:800;color:var(--col-text);letter-spacing:-.4px;margin-bottom:16px">How to Convert Images to PDF — Complete Guide</h2>
+    <p style="font-size:16px;color:var(--col-text2);line-height:1.7;margin-bottom:24px">Converting images to PDF creates a document that's universally viewable, printable, and shareable. PDFs maintain image quality, page layout, and aspect ratio across all devices.</p>
+    <a href="/blog/image-to-pdf-guide/" style="display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--col-accent);text-decoration:none">Read full Image to PDF guide →</a>
+  </div>
+</section>
+</body>
+</html>

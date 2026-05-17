@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="google-adsense-account" content="ca-pub-2178808063904703">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Merge PDF — ImageYantra</title>
+  <meta name="description"
+    content="Merge PDF files online free. Combine multiple PDFs into one. Drag to reorder. No upload required.">
+  <link rel="canonical" href="https://imageyantra.in/tools/merge-pdf/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Merge PDF — ImageYantra">
+  <meta property="og:description"
+    content="Merge PDF files online free. Combine multiple PDFs into one. Drag to reorder. No upload required.">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2178808063904703"
+    crossorigin="anonymous"></script>
+  <style>
+    .merge-btn {
+      width: 100%;
+      padding: 15px 24px;
+      border-radius: var(--r-md);
+      background: var(--col-accent);
+      color: #fff;
+      border: none;
+      font-family: var(--ff-head);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      transition: background .18s, transform .15s, box-shadow .18s;
+      box-shadow: 0 4px 18px rgba(129, 51, 224, .35);
+    }
+
+    .merge-btn:hover {
+      background: var(--col-accent-d);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(129, 51, 224, .45);
+    }
+
+    .merge-btn:active {
+      transform: translateY(0);
+    }
+
+    .merge-btn:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+      transform: none;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="workCanvas" aria-hidden="true" style="display:none"></canvas>
+  <script src="/js/utils.js"></script>
+  <script src="/js/nav.js"></script>
+
+  <div class="tool-page">
+    <div class="ad-banner-top" aria-label="Advertisement">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2178808063904703" data-ad-slot="auto"
+        data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+
+    <header class="tool-page-header">
+      <div class="container">
+        <div class="tool-page-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+            stroke-linejoin="round" class="lucide lucide-merge-icon lucide-merge">
+            <path d="m8 6 4-4 4 4" />
+            <path d="M12 2v10.3a4 4 0 0 1-1.172 2.872L4 22" />
+            <path d="m20 22-5-5" />
+          </svg></div>
+        <div>
+          <h1 class="tool-page-title">Merge <em>PDF</em></h1>
+          <p class="tool-page-desc">Combine multiple PDF files into one. Drag to reorder before merging.</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="tool-page-body">
+      <div class="tool-body-inner">
+        <main class="tool-main" id="main-content">
+
+          <div class="drop-zone" id="mergeDropZone" style="margin-bottom:20px;">
+            <input type="file" id="mergeFileInput" accept="application/pdf" multiple>
+            <div class="drop-icon"><svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-merge-icon lucide-merge">
+                <path d="m8 6 4-4 4 4" />
+                <path d="M12 2v10.3a4 4 0 0 1-1.172 2.872L4 22" />
+                <path d="m20 22-5-5" />
+              </svg></div>
+            <div class="drop-title">Drop PDF Files Here</div>
+            <div class="drop-sub">Select or drop multiple PDFs — drag to reorder</div>
+            <div class="drop-hint"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="8 17 12 21 16 17" />
+                <line x1="12" y1="12" x2="12" y2="21" />
+                <path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29" />
+              </svg> Tap or drag &amp; drop PDFs</div>
+          </div>
+
+          <div id="mergeListWrap" style="display:none; margin-bottom:20px;">
+            <div class="file-list-header">
+              <div class="file-list-title">
+                Files to Merge
+                <span id="mergeTotalInfo"
+                  style="font-size:13px;font-weight:400;color:var(--col-text2);margin-left:8px;"></span>
+              </div>
+              <div style="display:flex;gap:8px;">
+                <button class="btn btn-secondary btn-sm" id="mergeClearBtn">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                  </svg> Clear All
+                </button>
+                <button class="btn btn-secondary btn-sm" id="mergeAddMoreBtn">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg> Add More
+                </button>
+                <input type="file" id="mergeAddMoreInput" accept="application/pdf" multiple style="display:none;">
+              </div>
+            </div>
+            <div id="mergeFileList"></div>
+          </div>
+
+          <div class="card" id="mergeActionCard" style="display:none;">
+            <div class="progress-wrap" id="mergeProgress" style="display:none;margin-bottom:14px;">
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="mergeProgressFill"></div>
+              </div>
+              <div class="progress-label" id="mergeProgressLabel">Merging…</div>
+            </div>
+            <button class="merge-btn" id="mergeMergeBtn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-download-icon lucide-download">
+                <path d="M12 15V3" />
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <path d="m7 10 5 5 5-5" />
+              </svg> Merge &amp; Download PDF
+            </button>
+          </div>
+
+        </main>
+
+        <aside class="tool-sidebar" aria-label="Sidebar">
+          <div class="card ad-sidebar" aria-label="Advertisement">
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2178808063904703" data-ad-slot="auto"
+              data-ad-format="rectangle"></ins>
+          </div>
+          <div class="card">
+            <div class="card-title">Tips</div>
+            <div class="tips-card">
+              <div class="tip-item"><span class="tip-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16"
+                    height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                    stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-merge-icon lucide-merge">
+                    <path d="m8 6 4-4 4 4" />
+                    <path d="M12 2v10.3a4 4 0 0 1-1.172 2.872L4 22" />
+                    <path d="m20 22-5-5" />
+                  </svg></span>
+                <div class="tip-text">Drag and drop files to reorder them before merging.</div>
+              </div>
+              <div class="tip-item"><span class="tip-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16"
+                    height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-shield-check-icon lucide-shield-check">
+                    <path
+                      d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+                    <path d="m9 12 2 2 4-4" />
+                  </svg></span>
+                <div class="tip-text">All processing happens locally — your PDFs are never sent to a server.</div>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      Nav.init();
+      try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) { }
+      try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) { }
+    });
+  </script>
+  <script>
+    let mergeFiles = [];
+
+    const mergeZone = document.getElementById('mergeDropZone');
+    const mergeInput = document.getElementById('mergeFileInput');
+    mergeZone.setAttribute('role', 'button'); mergeZone.setAttribute('tabindex', '0');
+    mergeZone.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); mergeInput.click(); } });
+    mergeZone.addEventListener('dragover', e => { e.preventDefault(); mergeZone.classList.add('drag-over'); });
+    mergeZone.addEventListener('dragleave', e => { if (!mergeZone.contains(e.relatedTarget)) mergeZone.classList.remove('drag-over'); });
+    mergeZone.addEventListener('drop', e => {
+      e.preventDefault(); mergeZone.classList.remove('drag-over');
+      const files = [...e.dataTransfer.files].filter(f => f.type === 'application/pdf');
+      if (files.length) addFiles(files); else toast('Please drop PDF files only', 'error');
+    });
+    mergeInput.addEventListener('change', e => { if (e.target.files.length) addFiles([...e.target.files]); e.target.value = ''; });
+
+    const mergeAddMoreInput = document.getElementById('mergeAddMoreInput');
+    document.getElementById('mergeAddMoreBtn').addEventListener('click', () => mergeAddMoreInput.click());
+    mergeAddMoreInput.addEventListener('change', e => {
+      const files = [...e.target.files].filter(f => f.type === 'application/pdf');
+      if (files.length) addFiles(files); e.target.value = '';
+    });
+    document.getElementById('mergeClearBtn').addEventListener('click', () => { mergeFiles = []; renderFileList(); updateUI(); });
+
+    async function addFiles(files) {
+      for (const f of files) {
+        const bytes = await new Promise((res, rej) => { const r = new FileReader(); r.onload = e => res(e.target.result); r.onerror = rej; r.readAsArrayBuffer(f); });
+        mergeFiles.push({ name: f.name, bytes: new Uint8Array(bytes), size: f.size });
+      }
+      renderFileList(); updateUI();
+    }
+
+    function renderFileList() {
+      const list = document.getElementById('mergeFileList');
+      list.innerHTML = '';
+      mergeFiles.forEach((f, i) => {
+        const row = document.createElement('div');
+        row.className = 'file-list-row'; row.draggable = true; row.dataset.index = i;
+        row.innerHTML = `
+      <span class="file-list-drag-handle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></span>
+      <span class="file-list-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+      <span class="file-list-name">${escHtml(f.name)}</span>
+      <span class="file-list-size">${fmtSize(f.size)}</span>
+      <button class="file-list-remove" aria-label="Remove" data-idx="${i}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
+        row.addEventListener('dragstart', e => { e.dataTransfer.setData('text/plain', i); row.classList.add('dragging'); });
+        row.addEventListener('dragend', () => row.classList.remove('dragging'));
+        row.addEventListener('dragover', e => { e.preventDefault(); row.classList.add('drag-over-row'); });
+        row.addEventListener('dragleave', () => row.classList.remove('drag-over-row'));
+        row.addEventListener('drop', e => {
+          e.preventDefault(); row.classList.remove('drag-over-row');
+          const from = parseInt(e.dataTransfer.getData('text/plain')), to = parseInt(row.dataset.index);
+          if (from !== to) { const item = mergeFiles.splice(from, 1)[0]; mergeFiles.splice(to, 0, item); renderFileList(); }
+        });
+        row.querySelector('.file-list-remove').addEventListener('click', () => { mergeFiles.splice(i, 1); renderFileList(); updateUI(); });
+        list.appendChild(row);
+      });
+      document.getElementById('mergeTotalInfo').textContent = mergeFiles.length ? mergeFiles.length + ' file' + (mergeFiles.length > 1 ? 's' : '') : '';
+    }
+
+    function escHtml(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+    function updateUI() {
+      const has = mergeFiles.length > 0;
+      document.getElementById('mergeDropZone').style.display = has ? 'none' : '';
+      document.getElementById('mergeListWrap').style.display = has ? 'block' : 'none';
+      document.getElementById('mergeActionCard').style.display = has ? 'block' : 'none';
+    }
+
+    document.getElementById('mergeMergeBtn').addEventListener('click', async () => {
+      if (mergeFiles.length < 2) { toast('Add at least 2 PDF files to merge', 'error'); return; }
+      const btn = document.getElementById('mergeMergeBtn');
+      btn.disabled = true;
+      const prog = document.getElementById('mergeProgress');
+      const fill = document.getElementById('mergeProgressFill');
+      const label = document.getElementById('mergeProgressLabel');
+      prog.style.display = 'block'; fill.style.width = '0%'; label.textContent = 'Merging…';
+      try {
+        const { PDFDocument } = PDFLib;
+        const merged = await PDFDocument.create();
+        for (let i = 0; i < mergeFiles.length; i++) {
+          fill.style.width = Math.round(i / mergeFiles.length * 85) + '%';
+          label.textContent = `Merging file ${i + 1} of ${mergeFiles.length}…`;
+          await new Promise(r => setTimeout(r, 0));
+          const src = await PDFDocument.load(mergeFiles[i].bytes, { ignoreEncryption: true });
+          const pages = await merged.copyPages(src, src.getPageIndices());
+          pages.forEach(p => merged.addPage(p));
+        }
+        fill.style.width = '95%'; label.textContent = 'Saving…';
+        await new Promise(r => setTimeout(r, 0));
+        const outBytes = await merged.save();
+        fill.style.width = '100%'; label.textContent = 'Done!';
+        const blob = new Blob([outBytes], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = 'imageyantra-merged.pdf';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        toast('Merged PDF downloaded!', 'success');
+        setTimeout(() => { prog.style.display = 'none'; }, 1200);
+      } catch (err) {
+        toast('Error: ' + (err.message || 'Could not merge PDFs'), 'error');
+        prog.style.display = 'none';
+      }
+      btn.disabled = false;
+    });
+  </script>
+
+  <section class="tool-blog-section" aria-label="Guide: Merge PDF"
+    style="background:var(--col-surface);border-top:1px solid var(--col-border);padding:64px 0">
+    <div class="container" style="max-width:780px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><span
+          style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--col-accent);background:color-mix(in srgb,var(--col-accent) 12%,transparent);padding:3px 10px;border-radius:20px">Guide</span>
+      </div>
+      <h2
+        style="font-family:var(--ff-head);font-size:clamp(22px,3.5vw,34px);font-weight:800;color:var(--col-text);letter-spacing:-.4px;margin-bottom:16px">
+        How to Merge PDF Files — Combine Documents Instantly</h2>
+      <p style="font-size:16px;color:var(--col-text2);line-height:1.7;margin-bottom:24px">Merging PDFs combines two or
+        more separate files into one document. Ideal for application packages, scanned documents, invoices, and reports.
+      </p>
+      <a href="/blog/merge-pdf-guide/"
+        style="display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--col-accent);text-decoration:none">Read
+        full Merge PDF guide →</a>
+    </div>
+  </section>
+</body>
+
+</html>

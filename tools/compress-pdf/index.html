@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="google-adsense-account" content="ca-pub-2178808063904703">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compress PDF — ImageYantra</title>
+  <meta name="description"
+    content="Compress PDF files online free. Target any file size in KB or MB. Smart iterative compression engine. No upload required — runs in your browser.">
+  <link rel="canonical" href="https://imageyantra.in/tools/compress-pdf/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Compress PDF — ImageYantra">
+  <meta property="og:description"
+    content="Compress PDF files online free. Target any file size in KB or MB. Smart iterative compression. No upload required.">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2178808063904703"
+    crossorigin="anonymous"></script>
+  <style>
+    /* ── Preset buttons ── */
+    .preset-btns {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .preset-btn {
+      flex: 1;
+      padding: 10px 6px;
+      border-radius: var(--r-sm);
+      background: var(--col-surface2);
+      border: 2px solid var(--col-border2);
+      color: var(--col-text2);
+      font-family: var(--ff-head);
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+      transition: all .15s;
+      line-height: 1.3;
+    }
+
+    .preset-btn:hover {
+      border-color: var(--col-accent);
+      color: var(--col-accent);
+      background: var(--col-glow);
+    }
+
+    .preset-btn.active {
+      background: var(--col-accent);
+      border-color: var(--col-accent);
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(129, 51, 224, .3);
+    }
+
+    .preset-btn .pb-label {
+      display: block;
+      font-size: 10px;
+      font-weight: 600;
+      opacity: .7;
+      margin-top: 2px;
+    }
+
+    /* ── Target size row ── */
+    .target-row {
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    .target-row input[type="number"] {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .target-row select {
+      width: 76px;
+      flex-shrink: 0;
+    }
+
+    /* ── File info pill ── */
+    .img-info-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      background: var(--col-surface2);
+      border: 1px solid var(--col-border);
+      border-radius: var(--r-sm);
+      font-size: 13px;
+      color: var(--col-text2);
+      margin-bottom: 14px;
+    }
+
+    .iip-name {
+      font-weight: 600;
+      color: var(--col-text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .iip-size {
+      flex-shrink: 0;
+      font-weight: 700;
+      color: var(--col-accent);
+    }
+
+    .iip-change {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--col-text3);
+      padding: 4px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      transition: color .15s;
+    }
+
+    .iip-change:hover {
+      color: var(--col-red);
+    }
+
+    /* ── Advanced accordion ── */
+    .adv-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      width: 100%;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 10px 0;
+      font-family: var(--ff-head);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--col-text2);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      transition: color .15s;
+    }
+
+    .adv-toggle:hover {
+      color: var(--col-accent);
+    }
+
+    .adv-toggle .adv-arrow {
+      margin-left: auto;
+      transition: transform .2s ease;
+      color: var(--col-text3);
+    }
+
+    .adv-toggle.open .adv-arrow {
+      transform: rotate(180deg);
+    }
+
+    .adv-body {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      padding-bottom: 4px;
+    }
+
+    .adv-body.open {
+      display: flex;
+    }
+
+    /* ── Main CTA ── */
+    .compress-cta {
+      width: 100%;
+      padding: 14px 22px;
+      border-radius: var(--r-md);
+      background: var(--col-accent);
+      color: #fff;
+      border: none;
+      font-family: var(--ff-head);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background .18s, transform .15s, box-shadow .18s;
+      box-shadow: 0 4px 18px rgba(129, 51, 224, .35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .compress-cta::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 40%;
+      height: 200%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
+      transform: skewX(-20deg);
+      transition: left 0.65s ease;
+    }
+
+    .compress-cta:not(:disabled):hover::before {
+      left: 130%;
+    }
+
+    .compress-cta:hover {
+      background: var(--col-accent-d);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(129, 51, 224, .45);
+    }
+
+    .compress-cta:active {
+      transform: translateY(0);
+    }
+
+    .compress-cta:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .compress-cta .cta-spinner {
+      display: none;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255, 255, 255, .35);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: ctaSpin .7s linear infinite;
+    }
+
+    .compress-cta.loading .cta-spinner {
+      display: block;
+    }
+
+    .compress-cta.loading .cta-icon {
+      display: none;
+    }
+
+    @keyframes ctaSpin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ── Progress ── */
+    .c-progress {
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 14px;
+      padding: 14px;
+      background: var(--col-surface2);
+      border-radius: var(--r-sm);
+      border: 1px solid var(--col-border);
+    }
+
+    .c-progress.show {
+      display: flex;
+    }
+
+    .c-progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .c-progress-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--col-text2);
+    }
+
+    .c-progress-pct {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--col-accent);
+      font-family: var(--ff-head);
+    }
+
+    .c-progress-track {
+      width: 100%;
+      height: 6px;
+      background: var(--col-border2);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .c-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--col-accent), var(--col-accent-l));
+      border-radius: 99px;
+      width: 0%;
+      transition: width .3s ease;
+    }
+
+    .c-progress-step {
+      font-size: 11px;
+      color: var(--col-text3);
+    }
+
+    /* ── Result section ── */
+    .result-section {
+      display: none;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 4px;
+    }
+
+    .result-section.show {
+      display: flex;
+    }
+
+    .result-stats {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr 1fr;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .result-stat {
+      background: var(--col-surface2);
+      border: 1px solid var(--col-border);
+      border-radius: var(--r-md);
+      padding: 12px 8px;
+      text-align: center;
+    }
+
+    .result-stat.highlight {
+      background: linear-gradient(135deg, rgba(129, 51, 224, .08), rgba(129, 51, 224, .04));
+      border-color: rgba(129, 51, 224, .25);
+    }
+
+    .result-stat.warn {
+      background: linear-gradient(135deg, rgba(217, 119, 6, .08), rgba(217, 119, 6, .04));
+      border-color: rgba(217, 119, 6, .25);
+    }
+
+    .result-stat .rs-val {
+      font-family: var(--ff-head);
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--col-text);
+      line-height: 1.1;
+      margin-bottom: 3px;
+    }
+
+    .result-stat.highlight .rs-val {
+      color: var(--col-accent);
+    }
+
+    .result-stat .rs-lbl {
+      font-size: 11px;
+      color: var(--col-text3);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    .result-stat-arrow {
+      color: var(--col-text3);
+      font-size: 18px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .result-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+      font-size: 12px;
+      color: var(--col-text3);
+      padding: 9px 12px;
+      background: var(--col-surface2);
+      border-radius: var(--r-sm);
+      line-height: 1.5;
+    }
+
+    .result-note svg {
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .result-note.success {
+      color: var(--col-green);
+      background: rgba(5, 150, 105, .06);
+      border: 1px solid rgba(5, 150, 105, .15);
+    }
+
+    .result-note.warn {
+      color: var(--col-amber);
+      background: rgba(217, 119, 6, .06);
+      border: 1px solid rgba(217, 119, 6, .15);
+    }
+
+    /* ── Download button ── */
+    .download-btn {
+      width: 100%;
+      padding: 14px 22px;
+      border-radius: var(--r-md);
+      background: var(--col-green);
+      color: #fff;
+      border: none;
+      font-family: var(--ff-head);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background .18s, transform .15s;
+      box-shadow: 0 4px 16px rgba(5, 150, 105, .3);
+    }
+
+    .download-btn:hover {
+      background: #047857;
+      transform: translateY(-1px);
+    }
+
+    .try-another {
+      text-align: center;
+      font-size: 13px;
+      color: var(--col-text3);
+    }
+
+    .try-another a {
+      color: var(--col-accent);
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .try-another a:hover {
+      text-decoration: underline;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--col-text3);
+      margin-bottom: 8px;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--col-border);
+      margin: 16px 0;
+    }
+
+    /* ── Retry badge ── */
+    .retry-badge {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--col-accent);
+      background: var(--col-glow);
+      border: 1px solid var(--col-border2);
+      border-radius: var(--r-full);
+      padding: 3px 10px;
+    }
+
+    .retry-badge.show {
+      display: inline-flex;
+    }
+
+    .retry-badge svg {
+      animation: ctaSpin .8s linear infinite;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="workCanvas" aria-hidden="true" style="display:none"></canvas>
+  <script src="/js/utils.js"></script>
+  <script src="/js/nav.js"></script>
+
+  <div class="tool-page">
+    <div class="ad-banner-top" aria-label="Advertisement">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2178808063904703" data-ad-slot="auto"
+        data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+
+    <header class="tool-page-header">
+      <div class="container">
+        <div class="tool-page-icon" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <polyline points="4 14 10 14 10 20" />
+            <polyline points="20 10 14 10 14 4" />
+            <line x1="10" y1="14" x2="3" y2="21" />
+            <line x1="21" y1="3" x2="14" y2="10" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="tool-page-title">Compress <em>PDF</em></h1>
+          <p class="tool-page-desc">Target any file size. Smart iterative compression tries until your PDF hits the goal
+            — all locally in your browser.</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="tool-page-body">
+      <div class="tool-body-inner">
+        <main class="tool-main" id="main-content">
+
+          <!-- ── Step 1: Upload ── -->
+          <div id="uploadStep">
+            <div class="drop-zone" id="cpdfDropZone" aria-label="Drop PDF here or click to select" role="button"
+              tabindex="0">
+              <input type="file" id="cpdfFileInput" accept="application/pdf" aria-label="Select PDF file">
+              <div class="drop-icon">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <polyline points="4 14 10 14 10 20" />
+                  <polyline points="20 10 14 10 14 4" />
+                  <line x1="10" y1="14" x2="3" y2="21" />
+                  <line x1="21" y1="3" x2="14" y2="10" />
+                </svg>
+              </div>
+              <div class="drop-title">Drop a PDF File</div>
+              <div class="drop-sub">Compresses images inside — works on all PDF types</div>
+              <div class="drop-hint">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round">
+                  <polyline points="8 17 12 21 16 17" />
+                  <line x1="12" y1="12" x2="12" y2="21" />
+                  <path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29" />
+                </svg>
+                Tap or drag &amp; drop
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Step 2: Configure ── -->
+          <div id="configStep" style="display:none">
+
+            <!-- File pill -->
+            <div class="img-info-pill">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--col-accent)" stroke-width="2"
+                stroke-linecap="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+              </svg>
+              <div class="iip-name" id="cpdfPillName"></div>
+              <div class="iip-size" id="cpdfPillSize"></div>
+              <button class="iip-change" id="cpdfChangeBtn" title="Change PDF" aria-label="Change PDF">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round">
+                  <polyline points="1 4 1 10 7 10" />
+                  <path d="M3.51 15a9 9 0 1 0 .49-4" />
+                </svg>
+              </button>
+            </div>
+
+            <div class="card">
+              <!-- Compression presets -->
+              <div class="section-label">Compression Preset</div>
+              <div class="preset-btns" role="group" aria-label="Compression preset">
+                <button class="preset-btn" data-preset="extreme" aria-pressed="false">
+                  Extreme
+                  <span class="pb-label">Smallest size</span>
+                </button>
+                <button class="preset-btn active" data-preset="recommended" aria-pressed="true">
+                  Recommended
+                  <span class="pb-label">Best balance</span>
+                </button>
+                <button class="preset-btn" data-preset="high-quality" aria-pressed="false">
+                  High Quality
+                  <span class="pb-label">Less reduction</span>
+                </button>
+              </div>
+
+              <div class="divider"></div>
+
+              <!-- Target size -->
+              <div class="section-label">Target File Size</div>
+              <div class="field" style="margin-bottom:0">
+                <div class="target-row">
+                  <input type="number" id="cpdfTargetVal" min="10" max="99999" value="500" placeholder="e.g. 500"
+                    aria-label="Target size value">
+                  <select id="cpdfTargetUnit" aria-label="Target size unit">
+                    <option value="KB" selected>KB</option>
+                    <option value="MB">MB</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="divider"></div>
+
+              <!-- Advanced settings accordion -->
+              <button class="adv-toggle" id="advToggle" aria-expanded="false" aria-controls="advBody">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round">
+                  <circle cx="12" cy="12" r="3" />
+                  <path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14" />
+                </svg>
+                Advanced Settings
+                <svg class="adv-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2.5" stroke-linecap="round">
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </button>
+              <div class="adv-body" id="advBody" aria-hidden="true">
+                <div class="field" style="margin-bottom:0">
+                  <div class="label-row">
+                    <label for="cpdfMaxScale">Max image scale</label>
+                    <span class="label-val" id="cpdfMaxScaleVal">100</span>%
+                  </div>
+                  <input type="range" id="cpdfMaxScale" min="25" max="100" value="100"
+                    aria-label="Max image scale percentage">
+                </div>
+                <div class="field" style="margin-bottom:0">
+                  <div class="label-row">
+                    <label for="cpdfMaxRetries">Max retry attempts</label>
+                    <span class="label-val" id="cpdfMaxRetriesVal">8</span>
+                  </div>
+                  <input type="range" id="cpdfMaxRetries" min="2" max="15" value="8"
+                    aria-label="Maximum number of retry attempts">
+                </div>
+                <div style="font-size:11px;color:var(--col-text3);line-height:1.5;">
+                  More retries = closer to your target size, but takes longer. The binary-search algorithm narrows
+                  quality each pass.
+                </div>
+              </div>
+
+              <div class="divider"></div>
+
+              <button class="compress-cta" id="cpdfCompressBtn" aria-label="Compress PDF">
+                <div class="cta-spinner"></div>
+                <svg class="cta-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="4 14 10 14 10 20" />
+                  <polyline points="20 10 14 10 14 4" />
+                  <line x1="10" y1="14" x2="3" y2="21" />
+                  <line x1="21" y1="3" x2="14" y2="10" />
+                </svg>
+                <span class="cta-label">Compress PDF</span>
+              </button>
+
+              <!-- Progress -->
+              <div class="c-progress" id="cpdfProgress" aria-live="polite" aria-label="Compression progress">
+                <div class="c-progress-header">
+                  <span class="c-progress-label" id="cpdfProgressLabel">Initialising…</span>
+                  <span class="c-progress-pct" id="cpdfProgressPct">0%</span>
+                </div>
+                <div class="c-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"
+                  id="cpdfProgressBar">
+                  <div class="c-progress-fill" id="cpdfProgressFill"></div>
+                </div>
+                <div class="c-progress-step" id="cpdfProgressStep"></div>
+              </div>
+            </div>
+
+            <!-- Result section -->
+            <div class="result-section" id="resultSection" aria-live="polite">
+              <div class="result-stats">
+                <div class="result-stat">
+                  <div class="rs-val" id="rsOrig">—</div>
+                  <div class="rs-lbl">Original</div>
+                </div>
+                <div class="result-stat-arrow">→</div>
+                <div class="result-stat highlight">
+                  <div class="rs-val" id="rsFinal">—</div>
+                  <div class="rs-lbl">Compressed</div>
+                </div>
+                <div class="result-stat">
+                  <div class="rs-val" id="rsSaved" style="color:var(--col-green)">—</div>
+                  <div class="rs-lbl">Saved</div>
+                </div>
+              </div>
+
+              <div class="result-note" id="resultNote" style="display:none"></div>
+
+              <button class="download-btn" id="cpdfDownloadBtn" aria-label="Download compressed PDF">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                Download Compressed PDF
+              </button>
+
+              <div class="try-another">
+                Not satisfied? <a id="recompressBtn" tabindex="0">Try different settings</a>
+              </div>
+            </div>
+
+          </div><!-- /configStep -->
+
+        </main>
+
+        <aside class="tool-sidebar" aria-label="Sidebar">
+          <div class="card ad-sidebar" aria-label="Advertisement">
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2178808063904703" data-ad-slot="auto"
+              data-ad-format="rectangle"></ins>
+          </div>
+          <div class="card">
+            <div class="card-title">Tips</div>
+            <div class="tips-card">
+              <div class="tip-item">
+                <span class="tip-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                  </svg></span>
+                <div class="tip-text">Images are the main source of size. Text-only PDFs won't shrink much regardless of
+                  settings.</div>
+              </div>
+              <div class="tip-item">
+                <span class="tip-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                  </svg></span>
+                <div class="tip-text">The engine uses binary search — it automatically narrows quality with each retry
+                  to hit your target.</div>
+              </div>
+              <div class="tip-item">
+                <span class="tip-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" class="lucide lucide-shield-check-icon lucide-shield-check">
+                    <path
+                      d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+                    <path d="m9 12 2 2 4-4" />
+                  </svg></span>
+                <div class="tip-text">Your file never leaves your device. All processing is 100% local in your browser.
+                </div>
+              </div>
+              <div class="tip-item">
+                <span class="tip-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round">
+                    <rect x="2" y="3" width="20" height="14" rx="2" />
+                    <line x1="8" y1="21" x2="16" y2="21" />
+                    <line x1="12" y1="17" x2="12" y2="21" />
+                  </svg></span>
+                <div class="tip-text">Scanned PDFs (image-only) compress best. Mixed PDFs compress well. Pure text PDFs
+                  compress least.</div>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      Nav.init();
+      try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) { }
+      try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) { }
+    });
+  </script>
+
+
+  <script>
+    // ═══════════════════════════════════════════════════════════════
+    //  COMPRESS PDF — Page-render engine
+    //
+    //  STRATEGY (the only approach that reliably hits a target size):
+    //
+    //  PASS (quality Q, renderDPI D):
+    //    For each page in the PDF:
+    //      1. Render page to canvas via PDF.js at D dpi
+    //      2. Encode canvas as JPEG at quality Q
+    //      3. Embed the JPEG as a full-page image in a new pdf-lib doc
+    //    Save the new PDF → measure its byte length
+    //
+    //  BINARY SEARCH:
+    //    Start with hi=preset_quality, lo=0.03
+    //    Each iteration: adjust Q toward target, re-run pass, measure
+    //    Stop when size is within ±8% of target OR retries exhausted
+    //
+    //  DPI ladder: 150 → 120 → 96 → 72 (extreme only drops to 72)
+    //  This handles ALL pdf types: scanned, image-heavy, text, mixed.
+    //  Text PDFs become image-PDFs after this — searchability is lost
+    //  for extreme/recommended; high-quality uses higher DPI.
+    // ═══════════════════════════════════════════════════════════════
+
+    if (typeof pdfjsLib !== 'undefined') {
+      pdfjsLib.GlobalWorkerOptions.workerSrc =
+        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+
+    // ── Presets ──
+    const PRESETS = {
+      'extreme': { qualityHi: 0.35, dpi: 96 },
+      'recommended': { qualityHi: 0.72, dpi: 120 },
+      'high-quality': { qualityHi: 0.90, dpi: 150 },
+    };
+
+    // ── State ──
+    let cpdfRawBuffer = null;
+    let cpdfFileName = '';
+    let cpdfOrigSize = 0;
+    let cpdfCompressedBytes = null;
+    let cpdfActivePreset = 'recommended';
+    let cpdfMaxRetries = 8;
+    let cpdfUserDpi = null; // null = use preset
+
+    // ── Drop zone ──
+    const cpdfZone = document.getElementById('cpdfDropZone');
+    const cpdfInput = document.getElementById('cpdfFileInput');
+
+    cpdfZone.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); cpdfInput.click(); } });
+    cpdfZone.addEventListener('dragover', e => { e.preventDefault(); cpdfZone.classList.add('drag-over'); });
+    cpdfZone.addEventListener('dragleave', e => { if (!cpdfZone.contains(e.relatedTarget)) cpdfZone.classList.remove('drag-over'); });
+    cpdfZone.addEventListener('drop', e => {
+      e.preventDefault(); cpdfZone.classList.remove('drag-over');
+      const files = [...e.dataTransfer.files].filter(f => f.type === 'application/pdf');
+      if (files.length) loadFile(files[0]); else toast('Please drop a PDF file', 'error');
+    });
+    cpdfInput.addEventListener('change', e => { if (e.target.files.length) loadFile(e.target.files[0]); e.target.value = ''; });
+
+    function loadFile(file) {
+      cpdfFileName = file.name;
+      cpdfOrigSize = file.size;
+      cpdfCompressedBytes = null;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        cpdfRawBuffer = ev.target.result;
+        document.getElementById('cpdfPillName').textContent = file.name;
+        document.getElementById('cpdfPillSize').textContent = fmtSize(file.size);
+        document.getElementById('uploadStep').style.display = 'none';
+        document.getElementById('configStep').style.display = 'block';
+        document.getElementById('resultSection').classList.remove('show');
+        setSmartDefaultTarget(file.size);
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    // Fresh copy every time so PDF.js worker never detaches the original
+    function freshBytes() { return new Uint8Array(cpdfRawBuffer.slice(0)); }
+
+    function setSmartDefaultTarget(bytes) {
+      const kb = Math.round(bytes * 0.4 / 1024);
+      if (kb >= 1024) {
+        document.getElementById('cpdfTargetVal').value = (kb / 1024).toFixed(1);
+        document.getElementById('cpdfTargetUnit').value = 'MB';
+      } else {
+        document.getElementById('cpdfTargetVal').value = Math.max(50, kb);
+        document.getElementById('cpdfTargetUnit').value = 'KB';
+      }
+    }
+
+    function getTargetBytes() {
+      const val = parseFloat(document.getElementById('cpdfTargetVal').value) || 500;
+      const unit = document.getElementById('cpdfTargetUnit').value;
+      return unit === 'MB' ? val * 1024 * 1024 : val * 1024;
+    }
+
+    // ── Preset buttons ──
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.preset-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
+        btn.classList.add('active'); btn.setAttribute('aria-pressed', 'true');
+        cpdfActivePreset = btn.dataset.preset;
+      });
+    });
+
+    // ── Advanced accordion ──
+    const advToggle = document.getElementById('advToggle');
+    const advBody = document.getElementById('advBody');
+    advToggle.addEventListener('click', () => {
+      const open = advBody.classList.toggle('open');
+      advToggle.classList.toggle('open', open);
+      advToggle.setAttribute('aria-expanded', open);
+      advBody.setAttribute('aria-hidden', !open);
+    });
+    document.getElementById('cpdfMaxScale').addEventListener('input', e => {
+      cpdfUserDpi = Math.round(PRESETS[cpdfActivePreset].dpi * (+e.target.value / 100));
+      document.getElementById('cpdfMaxScaleVal').textContent = e.target.value;
+    });
+    document.getElementById('cpdfMaxRetries').addEventListener('input', e => {
+      cpdfMaxRetries = +e.target.value;
+      document.getElementById('cpdfMaxRetriesVal').textContent = e.target.value;
+    });
+
+    // ── Reset ──
+    document.getElementById('cpdfChangeBtn').addEventListener('click', resetToUpload);
+    function resetToUpload() {
+      cpdfRawBuffer = null; cpdfCompressedBytes = null;
+      document.getElementById('uploadStep').style.display = 'block';
+      document.getElementById('configStep').style.display = 'none';
+      document.getElementById('resultSection').classList.remove('show');
+      document.getElementById('cpdfProgress').classList.remove('show');
+    }
+    document.getElementById('recompressBtn').addEventListener('click', () => {
+      document.getElementById('resultSection').classList.remove('show');
+      document.getElementById('cpdfProgress').classList.remove('show');
+    });
+
+    // ── Progress ──
+    function setProgress(pct, label, step) {
+      document.getElementById('cpdfProgressFill').style.width = pct + '%';
+      document.getElementById('cpdfProgressBar').setAttribute('aria-valuenow', Math.round(pct));
+      document.getElementById('cpdfProgressPct').textContent = Math.round(pct) + '%';
+      if (label !== undefined) document.getElementById('cpdfProgressLabel').textContent = label;
+      if (step !== undefined) document.getElementById('cpdfProgressStep').textContent = step;
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    //  ONE PASS: render every page with PDF.js at `dpi`, encode
+    //  each page as JPEG at `quality`, pack into new pdf-lib doc.
+    //  Returns Uint8Array of the resulting PDF.
+    // ─────────────────────────────────────────────────────────────
+    async function onePass(quality, dpi, onProgress) {
+      // Load PDF.js document
+      const pjsDoc = await pdfjsLib.getDocument({ data: freshBytes() }).promise;
+      const numPages = pjsDoc.numPages;
+
+      // Create fresh pdf-lib output doc
+      const outDoc = await PDFLib.PDFDocument.create();
+      const canvas = document.getElementById('workCanvas');
+      const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+      const scale = dpi / 96; // PDF.js default viewport is 96dpi
+
+      for (let pn = 1; pn <= numPages; pn++) {
+        const page = await pjsDoc.getPage(pn);
+        const viewport = page.getViewport({ scale });
+
+        canvas.width = Math.round(viewport.width);
+        canvas.height = Math.round(viewport.height);
+
+        // White background (important for transparent areas)
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Render page
+        await page.render({ canvasContext: ctx, viewport }).promise;
+
+        // Encode to JPEG
+        const dataUrl = canvas.toDataURL('image/jpeg', quality);
+        const base64 = dataUrl.split(',')[1];
+        const jpegBytes = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
+
+        // Embed in pdf-lib
+        const jpgImage = await outDoc.embedJpg(jpegBytes);
+        const { width: imgW, height: imgH } = jpgImage;
+
+        // Add page at the same point size as original PDF page
+        // PDF points = pixels * 72 / dpi
+        const ptW = (imgW * 72) / dpi;
+        const ptH = (imgH * 72) / dpi;
+        const outPage = outDoc.addPage([ptW, ptH]);
+        outPage.drawImage(jpgImage, { x: 0, y: 0, width: ptW, height: ptH });
+
+        if (onProgress) onProgress(pn / numPages);
+        await new Promise(r => setTimeout(r, 0)); // yield
+      }
+
+      try { outDoc.setProducer('ImageYantra'); outDoc.setCreator('ImageYantra'); } catch (e) { }
+      return await outDoc.save({ useObjectStreams: true });
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    //  MAIN: binary-search orchestrator
+    // ─────────────────────────────────────────────────────────────
+    document.getElementById('cpdfCompressBtn').addEventListener('click', async () => {
+      if (!cpdfRawBuffer) { toast('Please select a PDF first', 'error'); return; }
+      if (typeof pdfjsLib === 'undefined') { toast('PDF renderer not loaded yet — please wait a moment', 'error'); return; }
+
+      const targetBytes = getTargetBytes();
+      const preset = PRESETS[cpdfActivePreset];
+      const dpi = cpdfUserDpi || preset.dpi;
+      const maxRetries = cpdfMaxRetries;
+      const tolerance = 0.08; // ±8%
+
+      const btn = document.getElementById('cpdfCompressBtn');
+      const prog = document.getElementById('cpdfProgress');
+      btn.disabled = true;
+      btn.classList.add('loading');
+      btn.querySelector('.cta-label').textContent = 'Compressing…';
+      prog.classList.add('show');
+      document.getElementById('resultSection').classList.remove('show');
+      setProgress(2, 'Loading PDF…', `Target: ${fmtSize(targetBytes)}`);
+
+      try {
+        // Get page count for display
+        let numPages = 1;
+        try {
+          const tmp = await pdfjsLib.getDocument({ data: freshBytes() }).promise;
+          numPages = tmp.numPages;
+        } catch (e) { }
+
+        await new Promise(r => setTimeout(r, 20));
+
+        // ── Calibration pass: render at preset quality to find natural size ──
+        setProgress(5, 'Calibrating…', `Target: ${fmtSize(targetBytes)}`);
+        const calibResult = await onePass(preset.qualityHi, dpi, (pg) => {
+          setProgress(5 + pg * 10, 'Calibrating…',
+            `Page ${Math.round(pg * numPages)}/${numPages}`);
+        });
+        const calibSize = calibResult.length;
+
+        let bestBytes = calibResult;
+        let bestSize = calibSize;
+
+        // ── Decide search direction based on calibration ──
+        // target > calibSize → need higher quality / more DPI (search upward)
+        // target < calibSize → need lower quality (search downward)
+        let lo, hi, quality, activeDpi;
+
+        if (targetBytes >= calibSize) {
+          // Target is LARGER than natural output → raise quality up to 1.0
+          // Also scale DPI up proportionally so more pixels = more bytes
+          lo = preset.qualityHi;
+          hi = 1.0;
+          quality = hi;
+          const dpiScale = Math.min(2.5, Math.sqrt(targetBytes / Math.max(calibSize, 1)));
+          activeDpi = Math.min(220, Math.round(dpi * dpiScale));
+        } else {
+          // Target is SMALLER → lower quality, keep DPI
+          lo = 0.03;
+          hi = preset.qualityHi;
+          quality = hi;
+          activeDpi = dpi;
+        }
+
+        let attempt = 0;
+
+        while (attempt < maxRetries) {
+          attempt++;
+          const pBase = 15 + ((attempt - 1) / maxRetries) * 78;
+          const pSpan = 78 / maxRetries;
+
+          setProgress(pBase,
+            `Pass ${attempt}/${maxRetries} · q=${Math.round(quality * 100)}% · ${activeDpi}dpi`,
+            `Target: ${fmtSize(targetBytes)} · ${numPages} page${numPages !== 1 ? 's' : ''}`
+          );
+
+          const result = await onePass(quality, activeDpi, (pg) => {
+            setProgress(
+              pBase + pg * pSpan * 0.95,
+              `Pass ${attempt}/${maxRetries} · rendering…`,
+              `Page ${Math.round(pg * numPages)}/${numPages} · q=${Math.round(quality * 100)}% · ${activeDpi}dpi`
+            );
+          });
+
+          const curSize = result.length;
+
+          // Track best (closest to target)
+          if (Math.abs(curSize - targetBytes) < Math.abs(bestSize - targetBytes)) {
+            bestBytes = result;
+            bestSize = curSize;
+          }
+
+          setProgress(pBase + pSpan * 0.97,
+            `Pass ${attempt} done — ${fmtSize(curSize)}`,
+            curSize <= targetBytes ? '✓ Under target' : `${fmtSize(curSize - targetBytes)} over target`
+          );
+
+          // Within tolerance? Done.
+          const ratio = curSize / targetBytes;
+          if (ratio >= (1 - tolerance) && ratio <= (1 + tolerance)) break;
+
+          // Binary search: adjust quality
+          if (curSize > targetBytes) {
+            hi = quality;
+          } else {
+            if (ratio < 0.6) {
+              lo = quality;
+            } else {
+              break; // close enough under
+            }
+          }
+
+          const nextQ = (lo + hi) / 2;
+          if (Math.abs(nextQ - quality) < 0.008) break; // converged
+          quality = nextQ;
+
+          await new Promise(r => setTimeout(r, 5));
+        }
+
+        setProgress(99, 'Saving…', '');
+        await new Promise(r => setTimeout(r, 50));
+
+        cpdfCompressedBytes = bestBytes;
+        const finalSize = bestSize;
+        const origSize = cpdfOrigSize;
+        const savedPct = origSize > 0 ? Math.round(Math.max(0, origSize - finalSize) / origSize * 100) : 0;
+
+        setProgress(100, 'Done!', '');
+        setTimeout(() => prog.classList.remove('show'), 600);
+
+        // Display results
+        document.getElementById('rsOrig').textContent = fmtSize(origSize);
+        document.getElementById('rsFinal').textContent = fmtSize(finalSize);
+        document.getElementById('rsSaved').textContent = savedPct + '%';
+
+        const noteEl = document.getElementById('resultNote');
+        noteEl.style.display = 'flex';
+        const ratio = finalSize / targetBytes;
+
+        if (ratio >= (1 - tolerance) && ratio <= (1 + tolerance)) {
+          noteEl.className = 'result-note success';
+          noteEl.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Target achieved! Compressed to ${fmtSize(finalSize)} (target: ${fmtSize(targetBytes)}).`;
+        } else if (finalSize > targetBytes) {
+          noteEl.className = 'result-note warn';
+          noteEl.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Best achievable: ${fmtSize(finalSize)}. To get closer to ${fmtSize(targetBytes)}, switch to <strong>Extreme Compression</strong> or lower the render quality in Advanced settings.`;
+        } else {
+          noteEl.className = 'result-note success';
+          noteEl.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Compressed to ${fmtSize(finalSize)} — ${savedPct}% smaller than original.`;
+        }
+
+        document.getElementById('resultSection').classList.add('show');
+        if (savedPct > 0) toast(`Compressed ${savedPct}% smaller!`, 'success');
+        else toast('File size unchanged — already well compressed', 'error');
+
+      } catch (err) {
+        console.error('Compress error:', err);
+        toast('Error: ' + (err.message || 'Could not compress PDF'), 'error');
+        prog.classList.remove('show');
+      }
+
+      btn.disabled = false;
+      btn.classList.remove('loading');
+      btn.querySelector('.cta-label').textContent = 'Compress PDF';
+    });
+
+    // ── Download ──
+    function doDownload() {
+      if (!cpdfCompressedBytes) { toast('Compress a PDF first', 'error'); return; }
+      const base = cpdfFileName.replace(/\.pdf$/i, '');
+      const blob = new Blob([cpdfCompressedBytes], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'imageyantra-compressed-' + base + '.pdf';
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      const t = setTimeout(() => { URL.revokeObjectURL(url); try { document.body.removeChild(a); } catch (_) { } }, 60000);
+      window.addEventListener('focus', function f() {
+        clearTimeout(t); URL.revokeObjectURL(url);
+        try { document.body.removeChild(a); } catch (_) { }
+        window.removeEventListener('focus', f);
+      });
+      toast('Downloaded!', 'success');
+    }
+    document.getElementById('cpdfDownloadBtn').addEventListener('click', doDownload);
+  </script>
+
+  <section class="tool-blog-section" aria-label="Guide: Compress PDF"
+    style="background:var(--col-surface);border-top:1px solid var(--col-border);padding:64px 0">
+    <div class="container" style="max-width:780px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <span
+          style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--col-accent);background:color-mix(in srgb,var(--col-accent) 12%,transparent);padding:3px 10px;border-radius:20px">Guide</span>
+      </div>
+      <h2
+        style="font-family:var(--ff-head);font-size:clamp(22px,3.5vw,34px);font-weight:800;color:var(--col-text);letter-spacing:-.4px;margin-bottom:16px">
+        How to Compress PDF Files — Why It Matters</h2>
+      <p style="font-size:16px;color:var(--col-text2);line-height:1.7;margin-bottom:24px">PDFs hold text, fonts, and
+        embedded images. The images are almost always the largest component — re-compressing them at a lower quality
+        dramatically reduces file size without affecting text readability at all.</p>
+      <a href="/blog/compress-pdf-guide/"
+        style="display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--col-accent);text-decoration:none">Read
+        full Compress PDF guide →</a>
+    </div>
+  </section>
+</body>
+
+</html>
