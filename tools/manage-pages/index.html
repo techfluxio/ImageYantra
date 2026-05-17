@@ -126,7 +126,6 @@
 <script>
 /* ── Manage PDF Pages (Add / Remove) ── */
 // Each entry: { type:'page', origIdx:N } or { type:'blank' }
-<<<<<<< HEAD
 // mngRawBuffer = the original ArrayBuffer, kept pristine forever.
 // PDF.js transfers its data arg to a worker (detaching the buffer), so we
 // always pass a *copy* to PDF.js and a fresh Uint8Array view to PDFLib.
@@ -136,9 +135,6 @@ let mngFileName = '', mngPages = [], mngDoc = null, mngPdfJsDoc = null;
 function mngFreshBytes() {
   return new Uint8Array(mngRawBuffer);
 }
-=======
-let mngFileBytes = null, mngFileName = '', mngPages = [], mngDoc = null, mngPdfJsDoc = null;
->>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
 
 /* ── PDF.js setup ── */
 if (typeof pdfjsLib !== 'undefined') {
@@ -180,7 +176,6 @@ mngInput.addEventListener('change', e => {
 
 async function loadMngPdf(file) {
   mngFileName = file.name;
-<<<<<<< HEAD
   // Store the raw ArrayBuffer. Never pass it directly to any API —
   // PDF.js will transfer/detach it to its worker, breaking later reads.
   mngRawBuffer = await new Promise((res, rej) => {
@@ -193,30 +188,17 @@ async function loadMngPdf(file) {
     const { PDFDocument } = PDFLib;
     // Always use a fresh Uint8Array view — never the same object twice
     mngDoc = await PDFDocument.load(mngFreshBytes(), { ignoreEncryption: true });
-=======
-  const buf = await new Promise((res,rej) => { const r=new FileReader(); r.onload=e=>res(e.target.result); r.onerror=rej; r.readAsArrayBuffer(file); });
-  mngFileBytes = new Uint8Array(buf);
-  try {
-    const { PDFDocument } = PDFLib;
-    mngDoc = await PDFDocument.load(mngFileBytes, { ignoreEncryption: true });
->>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
     const count = mngDoc.getPageCount();
     mngPages = Array.from({ length: count }, (_, i) => ({ type: 'page', origIdx: i, marked: false }));
     document.getElementById('manageDropZone').style.display = 'none';
     document.getElementById('managePanel').style.display = 'block';
     renderManageList();
     toast('PDF loaded: ' + count + ' pages', 'success');
-<<<<<<< HEAD
     /* Load PDF.js for thumbnails — pass a detached buffer copy so the
        worker transfer doesn't affect mngRawBuffer */
     if (typeof pdfjsLib !== 'undefined') {
       const bufCopy = mngRawBuffer.slice(0);
       pdfjsLib.getDocument({ data: bufCopy }).promise.then(d => {
-=======
-    /* load pdf.js doc for thumbnails */
-    if (typeof pdfjsLib !== 'undefined') {
-      pdfjsLib.getDocument({ data: mngFileBytes }).promise.then(d => {
->>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
         mngPdfJsDoc = d;
         renderManageList();
       }).catch(() => {});
@@ -282,11 +264,7 @@ document.getElementById('manageClearSelBtn').addEventListener('click', () => {
 });
 
 document.getElementById('manageDownloadBtn').addEventListener('click', async () => {
-<<<<<<< HEAD
   if (!mngRawBuffer) { toast('Load a PDF first','error'); return; }
-=======
-  if (!mngFileBytes) { toast('Load a PDF first','error'); return; }
->>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
   const remaining = mngPages.filter(p => !(p.type==='page' && p.marked));
   if (remaining.length === 0) { toast('Cannot remove all pages — keep at least one','error'); return; }
   const btn = document.getElementById('manageDownloadBtn');
@@ -298,12 +276,8 @@ document.getElementById('manageDownloadBtn').addEventListener('click', async () 
   fill.style.width = '10%'; label.textContent = 'Processing…';
   try {
     const { PDFDocument } = PDFLib;
-<<<<<<< HEAD
     // Use a fresh Uint8Array view — mngRawBuffer is always intact
     const src = await PDFDocument.load(mngFreshBytes(), { ignoreEncryption: true });
-=======
-    const src = await PDFDocument.load(mngFileBytes, { ignoreEncryption: true });
->>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
     const out = await PDFDocument.create();
     fill.style.width = '40%';
     // Copy kept pages in order
@@ -315,7 +289,6 @@ document.getElementById('manageDownloadBtn').addEventListener('click', async () 
       else { out.addPage(copiedPages[copiedIdx++]); }
     }
     fill.style.width = '85%'; label.textContent = 'Saving…';
-<<<<<<< HEAD
     // Yield so progress bar paints before the CPU-heavy save()
     await new Promise(r => setTimeout(r, 30));
     const outBytes = await out.save();
@@ -346,19 +319,6 @@ document.getElementById('manageDownloadBtn').addEventListener('click', async () 
 
     toast('PDF downloaded!', 'success');
     setTimeout(() => { prog.style.display = 'none'; }, 1400);
-=======
-    await new Promise(r => setTimeout(r, 0));
-    const outBytes = await out.save();
-    fill.style.width = '100%'; label.textContent = 'Done!';
-    const blob = new Blob([outBytes], { type: 'application/pdf' });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement('a');
-    a.href = url; a.download = 'imageyantra-pages-' + mngFileName;
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-    toast('PDF downloaded!', 'success');
-    setTimeout(() => { prog.style.display = 'none'; }, 1200);
->>>>>>> 9d45cb1bbc6e0bb62366572f8a921b4c37a302f1
   } catch(err) {
     toast('Error: ' + (err.message||'Could not process PDF'), 'error');
     prog.style.display = 'none';
