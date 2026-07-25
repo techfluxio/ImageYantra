@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Disallow admin panel
+Disallow: /admin/
+
+# Disallow internal API paths
+Disallow: /api/
+
+Sitemap: https://imageyantra.in/sitemap.xml

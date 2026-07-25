@@ -1,0 +1,141 @@
+/* ════════════════════════════════════════════════════════
+   IMAGEYANTRA — DESIGN TOKENS v2
+   Brand: rgb(129, 51, 224) | Premium Purple
+   Fonts: Syne (headings) + DM Sans (body)
+════════════════════════════════════════════════════════ */
+
+/* ── Cascade layer order ──────────────────────────────
+   Explicitly declared so the hand-written "legacy" CSS
+   (global.css, components.css, animations.css, responsive.css)
+   always loses to Tailwind's utility classes when both target
+   the same element. Without this, unlayered legacy rules like
+   `a { color: inherit }` silently beat layered Tailwind classes
+   like `.text-violet-700`, regardless of specificity — which is
+   what caused links/buttons to render in the wrong (often
+   invisible) color on the homepage.
+────────────────────────────────────────────────────────── */
+@layer legacy, theme, utilities;
+
+:root {
+  /* ── Brand Colors ──────────────────────────────── */
+  --col-accent: #8133E0;
+  --col-accent-d: #641CC0;
+  --col-accent-l: #A36CF2;
+  --col-accent-xl: #EDE9FE;
+  --col-accent-xxl: #F5F3FF;
+  --col-glow: rgba(129, 51, 224, 0.10);
+  --col-glow2: rgba(129, 51, 224, 0.20);
+
+  /* ── Neutrals ──────────────────────────────────── */
+  --col-bg: #F4F3FB;
+  --col-white: #FFFFFF;
+  --col-surface2: #EEECF8;
+  --col-surface3: #E2DEEF;
+  --col-text: #0D0B1A;
+  --col-text2: #56507A;
+  --col-text3: #A49EC0;
+
+  /* ── Borders ────────────────────────────────────── */
+  --col-border: rgba(129, 51, 224, 0.10);
+  --col-border2: rgba(129, 51, 224, 0.22);
+  --col-border3: rgba(129, 51, 224, 0.35);
+
+  /* ── Semantic Colors ───────────────────────────── */
+  --col-green: #059669;
+  --col-green-bg: #D1FAE5;
+  --col-red: #DC2626;
+  --col-red-bg: #FEE2E2;
+  --col-amber: #D97706;
+  --col-amber-bg: #FEF3C7;
+
+  /* ── Authority Colors ──────────────────────────── */
+  --col-nta: #7C3AED;
+  --col-nta-bg: #EDE9FE;
+  --col-iit: #1D4ED8;
+  --col-iit-bg: #DBEAFE;
+  --col-ssc: #059669;
+  --col-ssc-bg: #D1FAE5;
+  --col-banking: #B45309;
+  --col-banking-bg: #FEF3C7;
+  --col-upsc: #DC2626;
+  --col-upsc-bg: #FEE2E2;
+  --col-defence: #0F766E;
+  --col-defence-bg: #CCFBF1;
+  --col-railway: #7C2D12;
+  --col-railway-bg: #FED7AA;
+  --col-teaching: #0369A1;
+  --col-teaching-bg: #DBEAFE;
+  --col-law: #6D28D9;
+  --col-law-bg: #EDE9FE;
+
+  /* ── Typography ─────────────────────────────────── */
+  --ff-head: 'Syne', sans-serif;
+  --ff-body: 'DM Sans', sans-serif;
+
+  --fs-xs: 11px;
+  --fs-sm: 13px;
+  --fs-base: 15px;
+  --fs-md: 17px;
+  --fs-lg: 20px;
+  --fs-xl: 26px;
+  --fs-2xl: 36px;
+  --fs-3xl: clamp(36px, 5.5vw, 42px);
+  --fs-hero: clamp(28px, 4vw, 56px);
+  --fw-reg: 400;
+  --fw-med: 500;
+  --fw-semi: 600;
+  --fw-bold: 700;
+  --fw-xbld: 800;
+
+  --lh-tight: 1.1;
+  --lh-snug: 1.25;
+  --lh-normal: 1.5;
+  --lh-relaxed: 1.65;
+  --lh-loose: 1.75;
+
+  /* ── Spacing ────────────────────────────────────── */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-7: 28px;
+  --sp-8: 32px;
+  --sp-9: 40px;
+  --sp-10: 48px;
+  --sp-11: 64px;
+  --sp-12: 80px;
+  --sp-13: 96px;
+  --sp-14: 120px;
+
+  /* ── Border Radius ──────────────────────────────── */
+  --r-xs: 6px;
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 18px;
+  --r-xl: 24px;
+  --r-full: 9999px;
+
+  /* ── Shadows ────────────────────────────────────── */
+  --sh-xs: 0 1px 4px rgba(129, 51, 224, 0.06);
+  --sh-sm: 0 2px 12px rgba(129, 51, 224, 0.08);
+  --sh-md: 0 4px 24px rgba(129, 51, 224, 0.11);
+  --sh-lg: 0 8px 40px rgba(129, 51, 224, 0.16);
+  --sh-xl: 0 16px 64px rgba(129, 51, 224, 0.22);
+
+  /* ── Layout ─────────────────────────────────────── */
+  --nav-h: 64px;
+  --content-w: 1536px;
+  --nav-px: 24px;
+  --page-px: clamp(16px, 3.4vw, 48px);
+  --ad-size: 300px;
+  --ad-height: 600px;
+  --ad-gap: 28px;
+
+  /* ── Transitions ────────────────────────────────── */
+  --t-fast: 0.15s ease;
+  --t-base: 0.20s ease;
+  --t-slow: 0.32s ease;
+  --t-spring: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}

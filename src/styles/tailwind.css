@@ -1,0 +1,6 @@
+/* Tailwind utilities only — NO preflight/base reset, so this can't
+   clobber the existing hand-written design system used everywhere
+   else on the site. Only used by the new Tailwind-based homepage
+   sections that need to match the supplied design 1:1. */
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);

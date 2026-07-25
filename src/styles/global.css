@@ -1,0 +1,375 @@
+@layer legacy {
+/* ════════════════════════════════════════════════════════
+   IMAGEYANTRA — GLOBAL STYLES v2
+════════════════════════════════════════════════════════ */
+
+/* ── 1. Reset ──────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  overflow-x: clip;
+}
+
+body {
+  font-family: var(--ff-body);
+  background: var(--col-bg);
+  color: var(--col-text);
+  min-height: 100vh;
+  overflow-x: clip;
+  width: 100%;
+  font-size: var(--fs-base);
+  line-height: var(--lh-relaxed);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--col-accent);
+  outline-offset: 3px;
+  border-radius: var(--r-xs);
+}
+
+button {
+  font-family: var(--ff-body);
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+input, select, textarea {
+  font-family: var(--ff-body);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+/* ── 2. Layout Utilities ────────────────────────────── */
+.container {
+  max-width: var(--content-w);
+  margin: 0 auto;
+  padding: 0 var(--page-px);
+  width: 100%;
+}
+
+/* Nav uses a fixed, tighter horizontal padding regardless of viewport */
+.container--nav {
+  max-width: var(--content-w);
+  margin: 0 auto;
+  padding: 0 var(--nav-px);
+  width: 100%;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.pt-nav {
+  padding-top: var(--nav-h);
+}
+
+/* ── 3. Typography Utilities ────────────────────────── */
+.font-head {
+  font-family: var(--ff-head);
+}
+
+.text-accent { color: var(--col-accent); }
+.text-muted  { color: var(--col-text2); }
+.text-faint  { color: var(--col-text3); }
+
+/* ── 4. Section Patterns ────────────────────────────── */
+.section {
+  padding: var(--sp-12) 0;
+}
+
+.section--white {
+  background: var(--col-white);
+  border-top: 1px solid var(--col-border);
+  border-bottom: 1px solid var(--col-border);
+}
+
+.section__label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 5px 14px;
+  background: var(--col-accent-xl);
+  color: var(--col-accent);
+  border-radius: var(--r-full);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semi);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: var(--sp-4);
+}
+
+.section__title {
+  font-family: var(--ff-head);
+  font-size: var(--fs-3xl);
+  font-weight: var(--fw-xbld);
+  color: var(--col-text);
+  line-height: var(--lh-tight);
+  letter-spacing: -0.025em;
+  margin-bottom: var(--sp-3);
+}
+
+.section__sub {
+  font-size: var(--fs-md);
+  color: var(--col-text2);
+  line-height: var(--lh-relaxed);
+  margin-bottom: var(--sp-10);
+  max-width: 640px;
+}
+
+.section__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-6);
+  margin-bottom: var(--sp-10);
+  flex-wrap: wrap;
+}
+
+/* ── 5. Grid Utilities ──────────────────────────────── */
+.grid-tools {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-4);
+}
+
+.grid-exams {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--sp-3);
+}
+
+/* Used where exactly 3 related items are shown (avoids an empty 4th
+   column) — mobile breakpoints in responsive.css still apply on top
+   of this since they're defined later in the cascade. */
+.grid-exams--related {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-blog {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-4);
+}
+
+/* ── LEGAL / INFO CONTENT PAGES ──────────────────────── */
+.legal-page__header {
+  padding: calc(var(--nav-h) + var(--sp-8)) 0 var(--sp-6);
+  background: var(--col-surface2);
+  border-bottom: 1px solid var(--col-border);
+}
+.legal-page__title {
+  font-family: var(--ff-head);
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: var(--fw-bold);
+  color: var(--col-text);
+  margin-bottom: var(--sp-2);
+}
+.legal-page__sub { font-size: var(--fs-base); color: var(--col-text2); max-width: 640px; }
+
+.legal-page__body {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: var(--sp-8) var(--page-px) var(--sp-12);
+}
+.legal-page__body h2 {
+  font-family: var(--ff-head);
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  color: var(--col-text);
+  margin: var(--sp-6) 0 var(--sp-3);
+}
+.legal-page__body h2:first-child { margin-top: 0; }
+.legal-page__body p {
+  font-size: var(--fs-base);
+  line-height: var(--lh-relaxed);
+  color: var(--col-text2);
+  margin-bottom: var(--sp-3);
+}
+.legal-page__body ul { margin: 0 0 var(--sp-3); padding-left: var(--sp-5); }
+.legal-page__body li {
+  list-style: disc;
+  font-size: var(--fs-base);
+  line-height: var(--lh-relaxed);
+  color: var(--col-text2);
+  margin-bottom: 6px;
+}
+.legal-page__body a { color: var(--col-accent); text-decoration: underline; text-underline-offset: 2px; }
+.legal-page__body strong { color: var(--col-text); }
+
+.exam-detail__tools {
+  grid-template-columns: 1fr 1fr;
+}
+
+.grid-cats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-4);
+  max-width: 1080px;
+}
+
+.grid-features {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--sp-5);
+}
+
+/* ── 6. Breadcrumb ──────────────────────────────────── */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-sm);
+  color: var(--col-text3);
+  margin-bottom: var(--sp-7);
+  flex-wrap: wrap;
+}
+
+.breadcrumb__sep {
+  color: var(--col-text3);
+  font-size: 10px;
+  user-select: none;
+}
+
+.breadcrumb__link {
+  color: var(--col-text2);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: var(--fs-sm);
+  font-family: var(--ff-body);
+  transition: color var(--t-fast);
+  padding: 0;
+}
+
+.breadcrumb__link:hover {
+  color: var(--col-accent);
+}
+
+.breadcrumb__current {
+  color: var(--col-text);
+  font-weight: var(--fw-med);
+}
+
+/* ── 7. Tool Page 3-Column Layout ───────────────────── */
+.tool-page-layout {
+  display: flex;
+  gap: var(--ad-gap);
+  align-items: flex-start;
+}
+
+.tool-page-main {
+  flex: 1;
+  min-width: 0;
+}
+
+/* On wide screens (ads visible) the whole layout is pinned to the
+   viewport height below the nav; only the main column scrolls, so
+   the ad columns never have to move as you use a tool. */
+@media (min-width: 1400px) {
+  .tool-page-layout {
+    height: calc(100vh - var(--nav-h) - 112px);
+    align-items: stretch;
+  }
+  .tool-page-main {
+    height: 100%;
+    overflow-y: auto;
+    padding-right: var(--sp-2);
+  }
+}
+
+/* ── 8. Open Tool Link ──────────────────────────────── */
+.open-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--col-accent);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semi);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--ff-body);
+  padding: 0;
+  transition: color var(--t-fast);
+}
+
+.open-link svg {
+  transition: transform var(--t-fast);
+}
+
+.open-link:hover {
+  color: var(--col-accent-d);
+}
+
+.open-link:hover svg {
+  transform: translate(2px, -2px);
+}
+
+/* ── 9. Toast ───────────────────────────────────────── */
+#toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--col-text);
+  color: var(--col-white);
+  padding: 12px 24px;
+  border-radius: var(--r-full);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-med);
+  z-index: 9999;
+  transition: transform 0.3s var(--t-spring), opacity 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* ── 10. Scrollbar ──────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(129, 51, 224, 0.2);
+  border-radius: 100px;
+}
+
+} /* end @layer legacy */

@@ -1,0 +1,213 @@
+export const CATEGORIES = [
+  {
+    id: 'image-tools',
+    name: 'Image Tools',
+    desc: 'Compress, resize, crop, convert and edit images in seconds.',
+    count: 14,
+    path: '/image-tools',
+    color: 'purple',
+  },
+  {
+    id: 'pdf-tools',
+    name: 'PDF Tools',
+    desc: 'Merge, split, compress and transform PDF files effortlessly.',
+    count: 15,
+    path: '/pdf-tools',
+    color: 'red',
+  },
+  {
+    id: 'exam-tools',
+    name: 'Exam Tools',
+    desc: 'Official photo, signature and document specs for every major exam.',
+    count: 72,
+    path: '/exam-tools',
+    color: 'green',
+  },
+  {
+    id: 'id-photo-sizes',
+    name: 'ID Photo Sizes',
+    desc: 'Passport, PAN and other official ID photo size specifications.',
+    count: 6,
+    path: '/id-photo-sizes',
+    color: 'blue',
+  },
+  {
+    id: 'social-tools',
+    name: 'Social Tools',
+    desc: 'Resize images to the exact size every social platform expects.',
+    count: 15,
+    path: '/social-tools',
+    color: 'yellow',
+  },
+  {
+    id: 'other-tools',
+    name: 'Other Tools',
+    desc: 'QR codes, color picking, text and data utilities.',
+    count: 15,
+    path: '/other-tools',
+    color: 'black',
+  },
+];
+
+export const GOVT_TOOLS = [
+  {
+    slug: 'passport-photo',
+    name: 'Passport Photo',
+    desc: 'Create compliant passport-size photographs for Indian and international passports.',
+    icon: 'passport',
+    category: 'Government Docs',
+    popular: true,
+    specs: { format: 'JPG / JPEG', dims: '35 × 45 mm', bg: 'White', size: '20 – 100 KB' },
+  },
+  {
+    slug: 'pan-card-photo',
+    name: 'PAN Card Photo',
+    desc: 'Resize and prepare PAN card photos to exact Income Tax Department specifications.',
+    icon: 'govt',
+    category: 'Government Docs',
+    specs: { format: 'JPG / JPEG', dims: '200 × 200 px', bg: 'White', size: '20 – 50 KB' },
+  },
+  {
+    slug: 'photo-35mm-x-45mm',
+    name: '3.5cm x 4.5cm Photo',
+    desc: 'Resize a photo to the standard 3.5cm x 4.5cm ID photo size.',
+    icon: 'resolution',
+    category: 'Government Docs',
+    specs: { format: 'JPG / JPEG', dims: '35 × 45 mm', bg: 'White', size: '20 – 100 KB' },
+  },
+  {
+    slug: 'signature-50mm-x-20mm',
+    name: 'Signature 50mm x 20mm',
+    desc: 'Resize a scanned signature to the standard 50mm x 20mm size.',
+    icon: 'signature',
+    category: 'Government Docs',
+    specs: { format: 'JPG / JPEG', dims: '50 × 20 mm', bg: 'White', size: '10 – 20 KB' },
+  },
+  {
+    slug: 'photo-3x4-inch',
+    name: '3 x 4 Inch Photo',
+    desc: 'Resize a photo to the standard 3 x 4 inch print size.',
+    icon: 'resolution',
+    category: 'Government Docs',
+    specs: { format: 'JPG / JPEG', dims: '3 × 4 inch', bg: 'White', size: '20 – 100 KB' },
+  },
+  {
+    slug: 'photo-4x6-inch',
+    name: '4 x 6 Inch Photo',
+    desc: 'Resize a photo to the standard 4 x 6 inch print size.',
+    icon: 'resolution',
+    category: 'Government Docs',
+    specs: { format: 'JPG / JPEG', dims: '4 × 6 inch', bg: 'White', size: '20 – 150 KB' },
+  },
+];
+
+export const POPULAR_TOOLS = [
+  { slug: 'compress-image',name: 'Compress Image', desc: 'Reduce image file size without quality loss.',        category: 'image-tools', icon: 'compress'     },
+  { slug: 'resize-image',  name: 'Resize Image',   desc: 'Change image dimensions to any width and height.',   category: 'image-tools', icon: 'resize'       },
+  { slug: 'compress-pdf',  name: 'Compress PDF',   desc: 'Shrink PDF size while keeping readability.',         category: 'pdf-tools',   icon: 'compresspdf'  },
+  { slug: 'merge-pdf',     name: 'Merge PDF',      desc: 'Combine multiple PDFs into a single file.',          category: 'pdf-tools',   icon: 'merge'        },
+  { slug: 'jpg-to-pdf',    name: 'JPG to PDF',     desc: 'Convert JPG images into a single PDF document.',     category: 'pdf-tools',   icon: 'imgpdf'       },
+  { slug: 'passport-photo',name: 'Passport Photo', desc: 'Create compliant passport-size photographs.',        category: 'id-photo-sizes', icon: 'passport'  },
+  { slug: 'compress-under-50kb', name: 'Compress under 50KB', desc: 'Compress a photo to under 50KB for exam and form uploads.', category: 'image-tools', icon: 'compress' },
+  { slug: 'compress-under-10kb', name: 'Compress under 10KB', desc: 'Compress a photo to under 10KB for strict exam upload limits.', category: 'image-tools', icon: 'compress' },
+  { slug: 'background-remove',   name: 'Background Remove',   desc: 'Remove any image background instantly with a transparent PNG output.', category: 'image-tools', icon: 'removebg' },
+];
+
+export const BLOG_POSTS = [
+  {
+    slug: 'compress-image-guide',
+    title: 'How to compress images without losing quality',
+    excerpt: 'A practical guide to picking the right format, quality level and dimensions for every use case.',
+    date: 'Apr 22, 2025',
+    dateISO: '2025-04-22',
+    readTime: 6,
+    category: 'Image',
+    author: 'ImageYantra Team',
+  },
+  {
+    slug: 'compress-pdf-guide',
+    title: 'Compress PDFs the smart way',
+    excerpt: 'What actually shrinks a PDF — and what just degrades readability. A clear breakdown.',
+    date: 'Apr 29, 2025',
+    dateISO: '2025-04-29',
+    readTime: 5,
+    category: 'PDF',
+    author: 'ImageYantra Team',
+  },
+  {
+    slug: 'resize-image-guide',
+    title: 'Resizing images for every platform',
+    excerpt: 'Aspect ratios, DPI and exact pixel dimensions that work everywhere — web, print, and social media.',
+    date: 'May 6, 2025',
+    dateISO: '2025-05-06',
+    readTime: 7,
+    category: 'Image',
+    author: 'ImageYantra Team',
+  },
+  {
+    slug: 'image-to-pdf-guide',
+    title: 'Turning photos into clean PDFs',
+    excerpt: 'Page sizes, margins and ordering for professional output that looks great when printed or shared.',
+    date: 'May 13, 2025',
+    dateISO: '2025-05-13',
+    readTime: 4,
+    category: 'PDF',
+    author: 'ImageYantra Team',
+  },
+  {
+    slug: 'exam-photo-guide',
+    title: 'Preparing exam photos that get accepted',
+    excerpt: 'Common reasons photos get rejected and exactly how to avoid every single one.',
+    date: 'May 20, 2025',
+    dateISO: '2025-05-20',
+    readTime: 5,
+    category: 'Exam',
+    author: 'ImageYantra Team',
+  },
+  {
+    slug: 'rotate-flip-guide',
+    title: 'When to rotate and when to flip',
+    excerpt: 'Orientation, EXIF metadata, and the practical difference between rotation modes.',
+    date: 'May 27, 2025',
+    dateISO: '2025-05-27',
+    readTime: 4,
+    category: 'Image',
+    author: 'ImageYantra Team',
+  },
+];
+
+export const FAQS = [
+  {
+    q: 'Are my files uploaded to a server?',
+    a: 'Most ImageYantra tools process files locally in your browser using modern Web APIs (Canvas, WebAssembly). When server processing is needed, files are deleted automatically after a short retention period.',
+  },
+  {
+    q: 'Is ImageYantra free to use?',
+    a: 'Yes. Every tool on ImageYantra is completely free, with no signup required and no watermarks on your output.',
+  },
+  {
+    q: 'Do you store my files or personal data?',
+    a: 'No. We do not store the contents of files you process, and we do not sell personal data to third parties. Our privacy policy is available on the footer.',
+  },
+  {
+    q: 'Can I use ImageYantra on my mobile phone?',
+    a: 'Absolutely. The interface is fully responsive and every tool is optimised for touch devices and small screens.',
+  },
+  {
+    q: 'Do you support exam-specific photo and document requirements?',
+    a: 'Yes — our Exam Tools section follows official notifications from NTA, UPSC, SSC, IBPS, GATE and many more, and is updated whenever specifications change.',
+  },
+  {
+    q: 'What image and file formats are supported?',
+    a: 'ImageYantra supports JPG, JPEG, PNG, WebP, HEIC, AVIF for image tools, and standard PDF files for document tools.',
+  },
+];
+
+export const POPULAR_CHIPS = [
+  'Compress PDF',
+  'Image Compressor',
+  'Passport Photo',
+  'PAN Card Photo',
+  'SSC Photo',
+  'JEE Photo',
+];
