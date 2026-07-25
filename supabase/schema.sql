@@ -35,7 +35,7 @@ create table if not exists public.tools (
   id               uuid primary key default gen_random_uuid(),
   slug             text unique not null,
   name             text not null,
-  desc             text default '',
+  "desc"           text default '',
   category_slug    text references public.categories(slug) on delete set null,
   icon             text default 'file-output',
   seo_title        text default '',
@@ -152,25 +152,41 @@ alter table public.page_views    enable row level security;
 alter table public.error_reports enable row level security;
 
 -- Public read policies
-create policy if not exists "public read categories"   on public.categories    for select using (true);
-create policy if not exists "public read tools"         on public.tools         for select using (true);
-create policy if not exists "public read blog"          on public.blog_posts    for select using (true);
-create policy if not exists "public read footer"        on public.footer_links  for select using (true);
-create policy if not exists "public read ads"           on public.ad_placements for select using (true);
+drop policy if exists "public read categories" on public.categories;
+create policy "public read categories" on public.categories for select using (true);
+drop policy if exists "public read tools" on public.tools;
+create policy "public read tools" on public.tools for select using (true);
+drop policy if exists "public read blog" on public.blog_posts;
+create policy "public read blog" on public.blog_posts for select using (true);
+drop policy if exists "public read footer" on public.footer_links;
+create policy "public read footer" on public.footer_links for select using (true);
+drop policy if exists "public read ads" on public.ad_placements;
+create policy "public read ads" on public.ad_placements for select using (true);
 
 -- Admin (any authenticated user — this project assumes a single owner
 -- account, so "authenticated" == "the admin") write policies
-create policy if not exists "admin write categories"   on public.categories    for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
-create policy if not exists "admin write tools"        on public.tools         for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
-create policy if not exists "admin write blog"         on public.blog_posts    for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
-create policy if not exists "admin write footer"       on public.footer_links  for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
-create policy if not exists "admin write ads"          on public.ad_placements for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
+drop policy if exists "admin write categories" on public.categories;
+create policy "admin write categories" on public.categories for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
+drop policy if exists "admin write tools" on public.tools;
+create policy "admin write tools" on public.tools for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
+drop policy if exists "admin write blog" on public.blog_posts;
+create policy "admin write blog" on public.blog_posts for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
+drop policy if exists "admin write footer" on public.footer_links;
+create policy "admin write footer" on public.footer_links for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
+drop policy if exists "admin write ads" on public.ad_placements;
+create policy "admin write ads" on public.ad_placements for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 
 -- Analytics/error tables: public can insert only; only an admin can read/delete.
-create policy if not exists "public insert page_views"   on public.page_views    for insert with check (true);
-create policy if not exists "admin read page_views"      on public.page_views    for select using (auth.role() = 'authenticated');
-create policy if not exists "admin delete page_views"     on public.page_views    for delete using (auth.role() = 'authenticated');
+drop policy if exists "public insert page_views" on public.page_views;
+create policy "public insert page_views" on public.page_views for insert with check (true);
+drop policy if exists "admin read page_views" on public.page_views;
+create policy "admin read page_views" on public.page_views for select using (auth.role() = 'authenticated');
+drop policy if exists "admin delete page_views" on public.page_views;
+create policy "admin delete page_views" on public.page_views for delete using (auth.role() = 'authenticated');
 
-create policy if not exists "public insert error_reports" on public.error_reports for insert with check (true);
-create policy if not exists "admin read error_reports"    on public.error_reports for select using (auth.role() = 'authenticated');
-create policy if not exists "admin delete error_reports"  on public.error_reports for delete using (auth.role() = 'authenticated');
+drop policy if exists "public insert error_reports" on public.error_reports;
+create policy "public insert error_reports" on public.error_reports for insert with check (true);
+drop policy if exists "admin read error_reports" on public.error_reports;
+create policy "admin read error_reports" on public.error_reports for select using (auth.role() = 'authenticated');
+drop policy if exists "admin delete error_reports" on public.error_reports;
+create policy "admin delete error_reports" on public.error_reports for delete using (auth.role() = 'authenticated');
