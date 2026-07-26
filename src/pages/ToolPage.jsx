@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Head } from 'vite-react-ssg';
 import PageShell from '../components/layout/PageShell.jsx';
+import PageLoader from '../components/layout/PageLoader.jsx';
 import GenericSelectFilePage from './tools/GenericSelectFilePage.jsx';
 import ExamToolPage from './tools/ExamToolPage.jsx';
 import GovtToolPage from './tools/GovtToolPage.jsx';
@@ -22,11 +23,29 @@ import liveContent from '../data/generated/live.json';
  * what makes the admin panel's "upload tool code" feature work: once a
  * new file lands in this folder (via the GitHub-commit-and-rebuild flow)
  * and the build runs, it's picked up here with zero manual wiring.
+ *
+ * IMPORTANT: this is intentionally NOT `{ eager: true }`. Eager glob
+ * imports bundle every tool's code — including heavy per-tool libraries
+ * like heic2any, jsPDF, the background-removal ONNX runtime, and
+ * html2canvas — into the one shared chunk every page loads, which is a
+ * multi-megabyte download on every single pageview, including the
+ * homepage. Lazy glob + React.lazy() means a tool's code (and its heavy
+ * dependencies) only downloads when someone actually opens that tool.
  */
-const toolModules = import.meta.glob('./tools/*.jsx', { eager: true });
+const toolModuleLoaders = import.meta.glob('./tools/*.jsx');
+
+// Cache lazy() components per file so re-renders don't create a new
+// lazy-loaded component (which would remount and re-fetch on every render).
+const lazyComponentCache = new Map();
 
 function componentFromFile(fileName) {
-  return toolModules[`./tools/${fileName}`]?.default || null;
+  const key = `./tools/${fileName}`;
+  const loader = toolModuleLoaders[key];
+  if (!loader) return null;
+  if (!lazyComponentCache.has(key)) {
+    lazyComponentCache.set(key, lazy(loader));
+  }
+  return lazyComponentCache.get(key);
 }
 
 /* Tools with a fully custom, hand-built interface that predate the
@@ -135,13 +154,25 @@ export default function ToolPage() {
   // 1. A legacy hand-built tool?
   const legacyFile = LEGACY_SLUG_TO_FILE[slug];
   const LegacyComponent = legacyFile ? componentFromFile(legacyFile) : null;
-  if (LegacyComponent) return <LegacyComponent />;
+  if (LegacyComponent) {
+    return (
+      <Suspense fallback={<PageLoader />}>
+        <LegacyComponent />
+      </Suspense>
+    );
+  }
 
   // 2. An admin-uploaded tool whose code has been committed & bundled?
   const liveTool = liveTools.find((t) => t.slug === slug);
   if (liveTool?.component_path) {
     const UploadedComponent = componentFromFile(liveTool.component_path);
-    if (UploadedComponent) return <UploadedComponent />;
+    if (UploadedComponent) {
+      return (
+        <Suspense fallback={<PageLoader />}>
+          <UploadedComponent />
+        </Suspense>
+      );
+    }
     // Row exists but the file hasn't reached this build yet — the GitHub
     // commit succeeded but the rebuild triggered by it hasn't finished
     // (or hasn't run at all). Tell the visitor plainly rather than 404.
