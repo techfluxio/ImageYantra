@@ -69,7 +69,7 @@ export function AdRail() {
 export default function PageShell({ children, className = '' }) {
   return (
     <div className="bg-white text-neutral-900" style={{ paddingTop: 'var(--nav-h)' }}>
-      <div className="flex w-full gap-6 px-4 py-8 md:px-8 md:py-10">
+      <div className="container flex gap-6 py-8 md:py-10">
         <AdRail />
         <main className={`min-w-0 flex-1 ${className}`}>
           {children}
