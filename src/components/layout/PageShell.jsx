@@ -45,6 +45,8 @@ export function AdRail() {
   const top = findAdSlot(liveAds, 'rail-top', '');
   const bottom = findAdSlot(liveAds, 'rail-bottom', '');
 
+  if (!top.enabled && !bottom.enabled) return null;
+
   return (
     <aside className="hidden w-[300px] shrink-0 lg:block">
       <div className="sticky top-16 space-y-3 overflow-hidden rounded-2xl border border-violet-200 bg-white p-3">
