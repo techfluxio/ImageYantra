@@ -24,28 +24,39 @@ import liveContent from '../data/generated/live.json';
  * new file lands in this folder (via the GitHub-commit-and-rebuild flow)
  * and the build runs, it's picked up here with zero manual wiring.
  *
- * IMPORTANT: this is intentionally NOT `{ eager: true }`. Eager glob
- * imports bundle every tool's code — including heavy per-tool libraries
- * like heic2any, jsPDF, the background-removal ONNX runtime, and
- * html2canvas — into the one shared chunk every page loads, which is a
- * multi-megabyte download on every single pageview, including the
- * homepage. Lazy glob + React.lazy() means a tool's code (and its heavy
- * dependencies) only downloads when someone actually opens that tool.
+ * IMPORTANT — two different modes on purpose:
+ *   - During the SSG build (`import.meta.env.SSR` is true, Vite replaces
+ *     this with a literal at build time and tree-shakes the other
+ *     branch), imports are EAGER, so the prerendered static HTML
+ *     contains each tool's real, full content.
+ *   - In the actual browser bundle, imports are LAZY (React.lazy +
+ *     Suspense), so a tool's code — and its heavy dependencies like
+ *     heic2any, jsPDF, the background-removal ONNX runtime, and
+ *     html2canvas — only downloads when someone actually opens that tool,
+ *     instead of bloating every page's initial bundle.
+ *   Using lazy() during the SSG pass too would make the prerendered HTML
+ *   show only the Suspense fallback (a loading spinner) instead of the
+ *   real tool UI, which then causes a hydration mismatch the moment the
+ *   client swaps in the real content — exactly the React error #418/#422
+ *   pattern. Splitting the two modes like this avoids that entirely
+ *   while keeping the bundle-size win.
  */
-const toolModuleLoaders = import.meta.glob('./tools/*.jsx');
+const toolModuleLoaders = import.meta.env.SSR
+  ? import.meta.glob('./tools/*.jsx', { eager: true })
+  : import.meta.glob('./tools/*.jsx');
 
-// Cache lazy() components per file so re-renders don't create a new
-// lazy-loaded component (which would remount and re-fetch on every render).
-const lazyComponentCache = new Map();
+// Cache resolved/lazy components per file so re-renders don't create a
+// new component reference (which would remount and re-fetch on every render).
+const componentCache = new Map();
 
 function componentFromFile(fileName) {
   const key = `./tools/${fileName}`;
   const loader = toolModuleLoaders[key];
   if (!loader) return null;
-  if (!lazyComponentCache.has(key)) {
-    lazyComponentCache.set(key, lazy(loader));
+  if (!componentCache.has(key)) {
+    componentCache.set(key, import.meta.env.SSR ? (loader.default || null) : lazy(loader));
   }
-  return lazyComponentCache.get(key);
+  return componentCache.get(key);
 }
 
 /* Tools with a fully custom, hand-built interface that predate the
