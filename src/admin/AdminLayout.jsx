@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import {
+  LayoutDashboard, Wrench, LayoutGrid, Newspaper, PanelBottom, Megaphone, Bug, LogOut, ExternalLink,
+} from 'lucide-react';
 import { adminApi } from './adminApi.js';
 
 const NAV_ITEMS = [
-  { to: '/admin/dashboard', label: 'Dashboard' },
-  { to: '/admin/tools', label: 'Tools' },
-  { to: '/admin/categories', label: 'Categories' },
-  { to: '/admin/blog', label: 'Blog' },
-  { to: '/admin/footer', label: 'Footer' },
-  { to: '/admin/ads', label: 'Ads' },
-  { to: '/admin/glitches', label: 'Glitches' },
+  { to: '/admin/dashboard', label: 'Dashboard', Icon: LayoutDashboard },
+  { to: '/admin/tools', label: 'Tools', Icon: Wrench },
+  { to: '/admin/categories', label: 'Categories', Icon: LayoutGrid },
+  { to: '/admin/blog', label: 'Blog', Icon: Newspaper },
+  { to: '/admin/footer', label: 'Footer', Icon: PanelBottom },
+  { to: '/admin/ads', label: 'Ads', Icon: Megaphone },
+  { to: '/admin/glitches', label: 'Glitches', Icon: Bug },
 ];
 
 export default function AdminLayout() {
@@ -28,55 +31,83 @@ export default function AdminLayout() {
   }
 
   if (checking) {
-    return <div style={{ padding: 40, textAlign: 'center', color: 'var(--col-text2)' }}>Loading…</div>;
+    return (
+      <div style={{ display: 'flex', minHeight: '100vh', alignItems: 'center', justifyContent: 'center', background: 'var(--col-bg)', color: 'var(--col-text2)', fontFamily: 'var(--ff-body)' }}>
+        Loading…
+      </div>
+    );
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--col-bg)' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--col-bg)', fontFamily: 'var(--ff-body)' }}>
       <aside style={{
-        width: 220, flexShrink: 0, background: 'var(--col-text)', color: 'rgba(255,255,255,0.85)',
-        padding: 'var(--sp-6) var(--sp-4)', display: 'flex', flexDirection: 'column',
+        width: 240, flexShrink: 0, background: 'var(--col-white)', borderRight: '1px solid var(--col-border)',
+        padding: 'var(--sp-6) var(--sp-4)', display: 'flex', flexDirection: 'column', position: 'sticky', top: 0, height: '100vh',
       }}>
-        <div style={{ fontFamily: 'var(--ff-head)', fontSize: 18, fontWeight: 800, color: '#fff', marginBottom: 'var(--sp-8)' }}>
-          Image<span style={{ color: 'var(--col-accent-l)' }}>Yantra</span>
-          <div style={{ fontSize: 11, fontWeight: 500, color: 'rgba(255,255,255,0.5)', marginTop: 2 }}>Admin panel</div>
+        <div style={{ marginBottom: 'var(--sp-8)', paddingLeft: 'var(--sp-2)' }}>
+          <div style={{ fontFamily: 'var(--ff-head)', fontSize: 19, fontWeight: 800, color: 'var(--col-text)' }}>
+            Image<span style={{ color: 'var(--col-accent)' }}>Yantra</span>
+          </div>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 4, padding: '2px 8px',
+            borderRadius: 'var(--r-full)', background: 'var(--col-accent-xxl)', color: 'var(--col-accent)',
+            fontSize: 11, fontWeight: 700, letterSpacing: 0.3, textTransform: 'uppercase',
+          }}>
+            Admin
+          </div>
         </div>
 
         <nav style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          {NAV_ITEMS.map((item) => (
+          {NAV_ITEMS.map(({ to, label, Icon }) => (
             <NavLink
-              key={item.to}
-              to={item.to}
+              key={to}
+              to={to}
               style={({ isActive }) => ({
+                display: 'flex', alignItems: 'center', gap: 10,
                 padding: '10px 14px',
-                borderRadius: 'var(--r-sm)',
+                borderRadius: 'var(--r-md)',
                 fontSize: 14,
-                fontWeight: 600,
-                color: isActive ? '#fff' : 'rgba(255,255,255,0.65)',
-                background: isActive ? 'rgba(255,255,255,0.1)' : 'transparent',
+                fontWeight: isActive ? 700 : 600,
+                color: isActive ? 'var(--col-accent)' : 'var(--col-text2)',
+                background: isActive ? 'var(--col-accent-xxl)' : 'transparent',
                 textDecoration: 'none',
+                transition: 'background var(--t-fast), color var(--t-fast)',
               })}
             >
-              {item.label}
+              <Icon size={17} strokeWidth={2.25} />
+              {label}
             </NavLink>
           ))}
         </nav>
 
-        <div style={{ marginTop: 'auto', paddingTop: 'var(--sp-6)' }}>
-          <button
-            onClick={handleLogout}
+        <div style={{ marginTop: 'auto', paddingTop: 'var(--sp-6)', display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <a
+            href="/"
+            target="_blank"
+            rel="noreferrer"
             style={{
-              width: '100%', padding: '10px 14px', borderRadius: 'var(--r-sm)', fontSize: 14, fontWeight: 600,
-              color: 'rgba(255,255,255,0.65)', background: 'none', border: '1px solid rgba(255,255,255,0.15)', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', borderRadius: 'var(--r-md)',
+              fontSize: 13, fontWeight: 600, color: 'var(--col-text2)', textDecoration: 'none',
             }}
           >
+            <ExternalLink size={16} strokeWidth={2.25} />
+            View live site
+          </a>
+          <button
+            onClick={handleLogout}
+            className="btn btn--sm btn--secondary"
+            style={{ justifyContent: 'flex-start', width: '100%' }}
+          >
+            <LogOut size={16} strokeWidth={2.25} />
             Log out
           </button>
         </div>
       </aside>
 
       <main style={{ flex: 1, minWidth: 0, padding: 'var(--sp-8)', overflowY: 'auto' }}>
-        <Outlet />
+        <div style={{ maxWidth: 1080 }}>
+          <Outlet />
+        </div>
       </main>
     </div>
   );
