@@ -135,7 +135,7 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="footer__bottom">
-          <span>© {new Date().getFullYear()} ImageYantra. All rights reserved.</span>
+          <span>© {year ?? ''} ImageYantra. All rights reserved.</span>
           <div className="footer__bottom-links">
             {[
               { label: 'Privacy Policy',   path: '/privacy'    },
