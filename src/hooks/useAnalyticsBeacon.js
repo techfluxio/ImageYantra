@@ -51,6 +51,7 @@ export function useAnalyticsBeacon() {
       referrer_host: getReferrerHost(),
       session_id: getSessionId(),
       device_type: getDeviceType(),
+      user_agent: navigator.userAgent,
     }).then(() => {}, () => {}); // fire-and-forget, never surfaces errors to the user
   }, [location.pathname]);
 }

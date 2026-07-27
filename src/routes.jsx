@@ -23,6 +23,9 @@ const AdminBlog       = lazy(() => import('./admin/AdminBlog.jsx'));
 const AdminFooter     = lazy(() => import('./admin/AdminFooter.jsx'));
 const AdminAds        = lazy(() => import('./admin/AdminAds.jsx'));
 const AdminGlitches   = lazy(() => import('./admin/AdminGlitches.jsx'));
+const AdminSettings   = lazy(() => import('./admin/AdminSettings.jsx'));
+const AdminPages      = lazy(() => import('./admin/AdminPages.jsx'));
+const AdminBackup     = lazy(() => import('./admin/AdminBackup.jsx'));
 
 /* ── Data used to pre-generate one real .html file per dynamic page ── */
 import { IMAGE_TOOLS } from './data/imageTools.js';
@@ -96,6 +99,9 @@ export const routes = [
       { path: 'footer', element: <AdminFooter /> },
       { path: 'ads', element: <AdminAds /> },
       { path: 'glitches', element: <AdminGlitches /> },
+      { path: 'settings', element: <AdminSettings /> },
+      { path: 'pages', element: <AdminPages /> },
+      { path: 'backup', element: <AdminBackup /> },
     ],
   },
 ];

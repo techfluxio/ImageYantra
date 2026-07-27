@@ -116,6 +116,7 @@ create table if not exists public.page_views (
   session_id     text,
   device_type    text,                 -- 'mobile' | 'tablet' | 'desktop'
   referrer_host  text,
+  user_agent     text,                 -- used only to derive a coarse browser name (Chrome/Safari/etc) for the dashboard
   created_at     timestamptz default now()
 );
 create index if not exists page_views_created_at_idx on public.page_views (created_at);
@@ -138,18 +139,73 @@ create index if not exists error_reports_created_at_idx on public.error_reports 
 create index if not exists error_reports_tool_slug_idx on public.error_reports (tool_slug);
 
 -- ─────────────────────────────────────────────────────────────
+-- 8. TOOL COMPLETIONS
+--    One row per successful conversion, fed by ToolShell.jsx the
+--    moment a result is shown (covers nearly every file-based tool
+--    site-wide from one shared instrumentation point). Powers
+--    "Files Processed", "Success Rate" (against error_reports), and
+--    per-tool health/avg-time on the dashboard. No file content ever.
+-- ─────────────────────────────────────────────────────────────
+create table if not exists public.tool_completions (
+  id             bigint generated always as identity primary key,
+  tool_slug      text not null,
+  files_count    int default 1,
+  duration_ms    int,          -- time from file-select to result shown (includes any settings the visitor adjusts, not pure compute time — labelled accordingly in the dashboard)
+  created_at     timestamptz default now()
+);
+create index if not exists tool_completions_created_at_idx on public.tool_completions (created_at);
+create index if not exists tool_completions_tool_slug_idx on public.tool_completions (tool_slug);
+
+-- ─────────────────────────────────────────────────────────────
+-- 9. SITE SETTINGS
+--    Single-row table (id is always 'default') for site-wide fields
+--    the admin can edit: title, meta description, contact email,
+--    social links. Falls back to the existing hardcoded values
+--    anywhere it isn't set.
+-- ─────────────────────────────────────────────────────────────
+create table if not exists public.site_settings (
+  id                uuid primary key default gen_random_uuid(),
+  site_title        text default 'ImageYantra',
+  meta_description  text default '',
+  contact_email     text default '',
+  support_email     text default '',
+  twitter_url       text default '',
+  instagram_url     text default '',
+  linkedin_url      text default '',
+  updated_at        timestamptz default now()
+);
+
+-- ─────────────────────────────────────────────────────────────
+-- 10. PAGES
+--     Makes the previously-hardcoded legal/info pages
+--     (About/Privacy/Terms/Disclaimer) admin-editable, the same
+--     way blog posts are. Falls back to bundled static content if
+--     a given slug has no row here yet.
+-- ─────────────────────────────────────────────────────────────
+create table if not exists public.pages (
+  id           uuid primary key default gen_random_uuid(),
+  slug         text unique not null,   -- 'about' | 'privacy' | 'terms' | 'disclaimer'
+  title        text not null,
+  body         text default '',
+  updated_at   timestamptz default now()
+);
+
+-- ─────────────────────────────────────────────────────────────
 -- ROW LEVEL SECURITY
 --  - Site-content tables: anyone can read; only a signed-in admin can write.
 --  - page_views / error_reports: anyone can INSERT (that's the whole point —
 --    anonymous visitors send these), nobody can SELECT except an admin.
 -- ─────────────────────────────────────────────────────────────
-alter table public.categories    enable row level security;
-alter table public.tools         enable row level security;
-alter table public.blog_posts    enable row level security;
-alter table public.footer_links  enable row level security;
-alter table public.ad_placements enable row level security;
-alter table public.page_views    enable row level security;
-alter table public.error_reports enable row level security;
+alter table public.categories       enable row level security;
+alter table public.tools            enable row level security;
+alter table public.blog_posts       enable row level security;
+alter table public.footer_links     enable row level security;
+alter table public.ad_placements    enable row level security;
+alter table public.page_views       enable row level security;
+alter table public.error_reports    enable row level security;
+alter table public.tool_completions enable row level security;
+alter table public.site_settings    enable row level security;
+alter table public.pages            enable row level security;
 
 -- Public read policies
 drop policy if exists "public read categories" on public.categories;
@@ -190,3 +246,36 @@ drop policy if exists "admin read error_reports" on public.error_reports;
 create policy "admin read error_reports" on public.error_reports for select using (auth.role() = 'authenticated');
 drop policy if exists "admin delete error_reports" on public.error_reports;
 create policy "admin delete error_reports" on public.error_reports for delete using (auth.role() = 'authenticated');
+
+-- tool_completions: same pattern as error_reports (anon insert-only, admin read/delete)
+drop policy if exists "public insert tool_completions" on public.tool_completions;
+create policy "public insert tool_completions" on public.tool_completions for insert with check (true);
+drop policy if exists "admin read tool_completions" on public.tool_completions;
+create policy "admin read tool_completions" on public.tool_completions for select using (auth.role() = 'authenticated');
+drop policy if exists "admin delete tool_completions" on public.tool_completions;
+create policy "admin delete tool_completions" on public.tool_completions for delete using (auth.role() = 'authenticated');
+
+-- site_settings: public read (the site needs these values), admin write
+drop policy if exists "public read site_settings" on public.site_settings;
+create policy "public read site_settings" on public.site_settings for select using (true);
+drop policy if exists "admin write site_settings" on public.site_settings;
+create policy "admin write site_settings" on public.site_settings for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
+
+-- pages: public read, admin write (same pattern as blog_posts/categories)
+drop policy if exists "public read pages" on public.pages;
+create policy "public read pages" on public.pages for select using (true);
+drop policy if exists "admin write pages" on public.pages;
+create policy "admin write pages" on public.pages for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
+
+-- Seed a single default settings row and the 4 existing legal pages
+-- (empty body = "no override yet", falls back to bundled static content).
+insert into public.site_settings (site_title, meta_description)
+select 'ImageYantra', 'Compress, resize, convert, and optimize images, PDFs, and exam documents — instantly in your browser.'
+where not exists (select 1 from public.site_settings);
+
+insert into public.pages (slug, title, body) values
+  ('about',       'About Us',   ''),
+  ('privacy',     'Privacy Policy', ''),
+  ('terms',       'Terms of Service', ''),
+  ('disclaimer',  'Disclaimer', '')
+on conflict (slug) do nothing;

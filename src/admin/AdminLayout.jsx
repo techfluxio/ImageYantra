@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, Wrench, LayoutGrid, Newspaper, PanelBottom, Megaphone, Bug, LogOut, ExternalLink,
+  FileText, Settings, DatabaseBackup,
 } from 'lucide-react';
 import { adminApi } from './adminApi.js';
 
@@ -10,9 +11,12 @@ const NAV_ITEMS = [
   { to: '/admin/tools', label: 'Tools', Icon: Wrench },
   { to: '/admin/categories', label: 'Categories', Icon: LayoutGrid },
   { to: '/admin/blog', label: 'Blog', Icon: Newspaper },
+  { to: '/admin/pages', label: 'Pages', Icon: FileText },
   { to: '/admin/footer', label: 'Footer', Icon: PanelBottom },
   { to: '/admin/ads', label: 'Ads', Icon: Megaphone },
   { to: '/admin/glitches', label: 'Glitches', Icon: Bug },
+  { to: '/admin/settings', label: 'Settings', Icon: Settings },
+  { to: '/admin/backup', label: 'Backup', Icon: DatabaseBackup },
 ];
 
 export default function AdminLayout() {

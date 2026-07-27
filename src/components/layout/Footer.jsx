@@ -2,15 +2,17 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShieldIcon, MailIcon } from '../../utils/icons.jsx';
 import { BLOG_POSTS } from '../../data/index.js';
-import { fetchLiveFooterLinks } from '../../utils/publicApi.js';
+import { fetchLiveFooterLinks, fetchSiteSettings } from '../../utils/publicApi.js';
 import logoMark from '../../assets/images/logo-64.png';
 
 export default function Footer() {
   const navigate = useNavigate();
   const [liveLinks, setLiveLinks] = useState(null);
+  const [settings, setSettings] = useState(null);
 
   useEffect(() => {
     fetchLiveFooterLinks().then((rows) => { if (rows && rows.length) setLiveLinks(rows); });
+    fetchSiteSettings().then((s) => { if (s) setSettings(s); });
   }, []);
 
   const staticColumns = [
@@ -93,7 +95,10 @@ export default function Footer() {
               <span>Your files never leave your device.</span>
             </div>
             <div style={{ marginTop: 'var(--sp-5)', display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {['contact@imageyantra.in', 'business@imageyantra.in'].map((email) => (
+              {(settings?.contact_email || settings?.support_email
+                ? [settings.contact_email, settings.support_email].filter(Boolean)
+                : ['contact@imageyantra.in', 'business@imageyantra.in']
+              ).map((email) => (
                 <a
                   key={email}
                   href={`mailto:${email}`}

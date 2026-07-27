@@ -16,6 +16,26 @@ function unwrap({ data, error }) {
   return data;
 }
 
+function browserFromUA(ua = '') {
+  if (!ua) return 'Other';
+  if (/Edg\//.test(ua)) return 'Edge';
+  if (/Chrome\//.test(ua) && !/Chromium/.test(ua)) return 'Chrome';
+  if (/Safari\//.test(ua) && !/Chrome/.test(ua)) return 'Safari';
+  if (/Firefox\//.test(ua)) return 'Firefox';
+  return 'Other';
+}
+
+const SOCIAL_HOSTS = ['facebook.com', 'instagram.com', 'twitter.com', 'x.com', 't.co', 'linkedin.com', 'pinterest.com', 'reddit.com', 'wa.me', 'whatsapp.com'];
+const SEARCH_HOSTS = ['google.', 'bing.com', 'yahoo.', 'duckduckgo.com'];
+
+function trafficSourceFromReferrer(host) {
+  if (!host) return 'Direct';
+  const h = host.toLowerCase();
+  if (SEARCH_HOSTS.some((s) => h.includes(s))) return 'Google Search';
+  if (SOCIAL_HOSTS.some((s) => h.includes(s))) return 'Social Media';
+  return 'Referral';
+}
+
 export const adminApi = {
   // ── Auth ──────────────────────────────────────────────
   async login(email, password) {
@@ -72,7 +92,7 @@ export const adminApi = {
     const since = new Date(Date.now() - days * 86400000).toISOString();
     const { data, error } = await supabase
       .from('page_views')
-      .select('path, tool_slug, device_type, referrer_host, session_id, created_at')
+      .select('path, tool_slug, device_type, referrer_host, session_id, user_agent, created_at')
       .gte('created_at', since);
     if (error) throw new Error(error.message);
 
@@ -83,6 +103,8 @@ export const adminApi = {
     const byPath = {};
     const byTool = {};
     const byReferrer = {};
+    const byBrowser = {};
+    const byTrafficSource = { 'Google Search': 0, 'Direct': 0, 'Social Media': 0, 'Referral': 0 };
     const deviceBreakdown = { desktop: 0, mobile: 0, tablet: 0 };
 
     for (const row of data) {
@@ -97,6 +119,11 @@ export const adminApi = {
         deviceBreakdown[row.device_type] += 1;
       }
       if (row.referrer_host) byReferrer[row.referrer_host] = (byReferrer[row.referrer_host] || 0) + 1;
+
+      const browser = browserFromUA(row.user_agent);
+      byBrowser[browser] = (byBrowser[browser] || 0) + 1;
+
+      byTrafficSource[trafficSourceFromReferrer(row.referrer_host)] += 1;
     }
 
     return {
@@ -104,12 +131,88 @@ export const adminApi = {
       totalViews,
       uniqueSessions: sessions.size,
       deviceBreakdown,
+      browserBreakdown: Object.entries(byBrowser).sort((a, b) => b[1] - a[1]).map(([browser, views]) => ({ browser, views })),
+      trafficSources: Object.entries(byTrafficSource).map(([source, views]) => ({ source, views })).filter((s) => s.views > 0),
       viewsByDay: Object.entries(byDay).sort(([a], [b]) => a.localeCompare(b)).map(([date, views]) => ({ date, views })),
       viewsByMonth: Object.entries(byMonth).sort(([a], [b]) => a.localeCompare(b)).map(([month, views]) => ({ month, views })),
       topPages: Object.entries(byPath).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([path, views]) => ({ path, views })),
       topTools: Object.entries(byTool).sort((a, b) => b[1] - a[1]).map(([tool, views]) => ({ tool, views })),
       topReferrers: Object.entries(byReferrer).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([host, views]) => ({ host, views })),
     };
+  },
+
+  // ── Tool health / completions ──────────────────────────
+  async toolStats(days = 30) {
+    const since = new Date(Date.now() - days * 86400000).toISOString();
+    const [{ data: completions, error: e1 }, { data: errors, error: e2 }] = await Promise.all([
+      supabase.from('tool_completions').select('tool_slug, files_count, duration_ms, created_at').gte('created_at', since),
+      supabase.from('error_reports').select('tool_slug, created_at').gte('created_at', since),
+    ]);
+    if (e1) throw new Error(e1.message);
+    if (e2) throw new Error(e2.message);
+
+    const filesProcessed = completions.reduce((sum, c) => sum + (c.files_count || 1), 0);
+    const durations = completions.map((c) => c.duration_ms).filter((d) => typeof d === 'number' && d > 0);
+    const avgDurationMs = durations.length ? Math.round(durations.reduce((a, b) => a + b, 0) / durations.length) : null;
+
+    const errorsByTool = {};
+    for (const e of errors) errorsByTool[e.tool_slug] = (errorsByTool[e.tool_slug] || 0) + 1;
+
+    const completionsByTool = {};
+    for (const c of completions) completionsByTool[c.tool_slug] = (completionsByTool[c.tool_slug] || 0) + 1;
+
+    const allToolSlugs = new Set([...Object.keys(completionsByTool), ...Object.keys(errorsByTool)]);
+    const perTool = Array.from(allToolSlugs).map((slug) => {
+      const ok = completionsByTool[slug] || 0;
+      const fail = errorsByTool[slug] || 0;
+      const total = ok + fail;
+      const successRate = total > 0 ? Math.round((ok / total) * 100) : null;
+      let status = 'Healthy';
+      if (successRate !== null && successRate < 70) status = 'Degraded';
+      if (successRate !== null && successRate < 40) status = 'Failing';
+      return { tool: slug, completions: ok, errors: fail, successRate, status };
+    }).sort((a, b) => b.completions - a.completions);
+
+    const totalOk = completions.length;
+    const totalFail = errors.length;
+    const overallTotal = totalOk + totalFail;
+    const successRate = overallTotal > 0 ? Math.round((totalOk / overallTotal) * 100) : null;
+
+    return { rangeDays: days, filesProcessed, avgDurationMs, successRate, perTool };
+  },
+
+  // ── Website settings ──────────────────────────────────
+  async getSettings() {
+    const { data, error } = await supabase.from('site_settings').select('*').limit(1).single();
+    if (error) throw new Error(error.message);
+    return data;
+  },
+  updateSettings: (id, patch) => supabase.from('site_settings').update({ ...patch, updated_at: new Date().toISOString() }).eq('id', id).select().single().then(unwrap),
+
+  // ── Pages (About / Privacy / Terms / Disclaimer) ──────
+  listPages: () => supabase.from('pages').select('*').order('slug').then(unwrap),
+  updatePage: (id, patch) => supabase.from('pages').update({ ...patch, updated_at: new Date().toISOString() }).eq('id', id).select().single().then(unwrap),
+
+  // ── Backup & Restore ───────────────────────────────────
+  async exportAllData() {
+    const tables = ['categories', 'tools', 'blog_posts', 'footer_links', 'ad_placements', 'site_settings', 'pages'];
+    const result = {};
+    for (const t of tables) {
+      const { data, error } = await supabase.from(t).select('*');
+      if (error) throw new Error(`Failed exporting ${t}: ${error.message}`);
+      result[t] = data;
+    }
+    result._exportedAt = new Date().toISOString();
+    return result;
+  },
+  async restoreData(backup) {
+    const tables = ['categories', 'tools', 'blog_posts', 'footer_links', 'ad_placements', 'site_settings', 'pages'];
+    for (const t of tables) {
+      if (!Array.isArray(backup[t]) || !backup[t].length) continue;
+      const { error } = await supabase.from(t).upsert(backup[t]);
+      if (error) throw new Error(`Failed restoring ${t}: ${error.message}`);
+    }
+    return true;
   },
 
   // ── Error / glitch reports ────────────────────────────

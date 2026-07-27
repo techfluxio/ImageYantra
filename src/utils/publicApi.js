@@ -48,6 +48,16 @@ export async function fetchLiveFooterLinks() {
   return safeQuery(supabase.from('footer_links').select('*').order('group_sort').order('sort_order'));
 }
 
+export async function fetchSiteSettings() {
+  const rows = await safeQuery(supabase.from('site_settings').select('*').limit(1));
+  return rows && rows.length ? rows[0] : null;
+}
+
+export async function fetchLivePage(slug) {
+  const rows = await safeQuery(supabase.from('pages').select('*').eq('slug', slug).limit(1));
+  return rows && rows.length ? rows[0] : null;
+}
+
 export async function fetchLiveAds() {
   return safeQuery(supabase.from('ad_placements').select('*'));
 }

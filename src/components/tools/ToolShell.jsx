@@ -1,6 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
 import { UploadCloud } from 'lucide-react';
 import ToolWorkspaceLayout from './ToolWorkspaceLayout.jsx';
+import { reportToolCompletion } from '../../utils/completionTracking.js';
 
 export default function ToolShell({
   title,
@@ -19,12 +20,14 @@ export default function ToolShell({
   const [results, setResults] = useState(null);
   const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef(null);
+  const workingStartedAt = useRef(null);
 
   const addFiles = useCallback((incoming) => {
     const list = Array.from(incoming).slice(0, maxFiles);
     if (!list.length) return;
     setFiles((prev) => [...prev, ...list].slice(0, maxFiles));
     setPhase('working');
+    workingStartedAt.current = Date.now();
   }, [maxFiles]);
 
   const api = {
@@ -33,7 +36,12 @@ export default function ToolShell({
     addMore: () => inputRef.current?.click(),
     removeAll: () => { setFiles([]); setPhase('idle'); },
     removeOne: (idx) => setFiles((prev) => prev.filter((_, i) => i !== idx)),
-    goToResult: (r) => { setResults(r); setPhase('result'); },
+    goToResult: (r) => {
+      setResults(r);
+      setPhase('result');
+      const durationMs = workingStartedAt.current ? Date.now() - workingStartedAt.current : null;
+      reportToolCompletion({ filesCount: files.length || 1, durationMs });
+    },
     reset: () => { setFiles([]); setResults(null); setPhase('idle'); },
   };
 
