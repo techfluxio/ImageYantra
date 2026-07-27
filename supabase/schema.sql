@@ -121,6 +121,9 @@ create table if not exists public.page_views (
 );
 create index if not exists page_views_created_at_idx on public.page_views (created_at);
 create index if not exists page_views_tool_slug_idx on public.page_views (tool_slug);
+-- Safe to re-run: adds the column if this table already existed from an
+-- earlier version of this schema, does nothing if it's already there.
+alter table public.page_views add column if not exists user_agent text;
 
 -- ─────────────────────────────────────────────────────────────
 -- 7. ERROR REPORTS ("glitches")
