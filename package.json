@@ -7,6 +7,7 @@
     "dev": "vite",
     "prebuild": "node scripts/fetch-live-content.js && node scripts/generate-sitemap.js",
     "build": "vite-react-ssg build",
+    "postbuild": "node scripts/generate-admin-shell.js",
     "preview": "vite preview",
     "lint": "eslint src --ext .js,.jsx"
   },
