@@ -4,12 +4,20 @@ import { Clock } from 'lucide-react';
 import { BLOG_POSTS } from '../data/index.js';
 import PageShell from '../components/layout/PageShell.jsx';
 import { blogCategoryClass } from '../utils/helpers.js';
+import { useLiveBlogPost } from '../hooks/useLiveBlog.js';
 
 export default function BlogPostPage() {
   const { slug } = useParams();
-  const post = BLOG_POSTS.find((p) => p.slug === slug);
+  const staticPost = BLOG_POSTS.find((p) => p.slug === slug) || null;
+  const { post, liveBody, loading } = useLiveBlogPost(slug, staticPost);
 
-  if (!post) return <Navigate to="/blog" replace />;
+  // Only bounce to /blog once we've actually checked Supabase and there's
+  // still no post anywhere (static or live) — otherwise a brand-new,
+  // admin-only post gets redirected away before the live fetch resolves.
+  if (!post && !loading) return <Navigate to="/blog" replace />;
+  if (!post) return null;
+
+  const readTime = post.readTime ?? post.read_time ?? 4;
 
   return (
     <>
@@ -40,16 +48,22 @@ export default function BlogPostPage() {
           <span>·</span>
           <span>{post.date}</span>
           <span className="ml-auto flex items-center gap-1">
-            <Clock className="h-3.5 w-3.5" /> {post.readTime} min read
+            <Clock className="h-3.5 w-3.5" /> {readTime} min read
           </span>
         </div>
 
         <p className="mt-6 text-lg text-neutral-700">{post.excerpt}</p>
 
-        <div className="mt-6 rounded-xl border border-dashed border-neutral-300 bg-neutral-50 p-6 text-center text-sm text-neutral-500">
-          Full article content for this post hasn't been written yet — this page is a placeholder
-          so the blog listing links resolve correctly.
-        </div>
+        {liveBody ? (
+          <div className="prose prose-neutral mt-6 max-w-none whitespace-pre-line">
+            {liveBody}
+          </div>
+        ) : (
+          <div className="mt-6 rounded-xl border border-dashed border-neutral-300 bg-neutral-50 p-6 text-center text-sm text-neutral-500">
+            Full article content for this post hasn't been written yet — this page is a placeholder
+            so the blog listing links resolve correctly.
+          </div>
+        )}
       </PageShell>
     </>
   );
