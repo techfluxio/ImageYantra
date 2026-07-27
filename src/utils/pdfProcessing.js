@@ -413,7 +413,12 @@ export async function encryptPdf(file, onProg = () => {}, opts = {}) {
     },
   });
   onProg(90, 'Finalizing…');
-  const pdfBytes = await src.save();
+  // IMPORTANT: object streams (a PDF compression feature) are incompatible
+  // with encryption — saving an encrypted document with them enabled
+  // produces a structurally broken file that many PDF readers can't even
+  // parse, so they show a generic error instead of prompting for the
+  // password. Must be explicitly disabled here.
+  const pdfBytes = await src.save({ useObjectStreams: false });
   const blob = new Blob([pdfBytes], { type: 'application/pdf' });
   onProg(100, 'Done');
   return { blob, finalSize: blob.size };

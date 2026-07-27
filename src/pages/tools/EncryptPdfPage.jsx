@@ -1,14 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { reportToolError } from '../../utils/errorReporting.js';
 import { Head } from 'vite-react-ssg';
-import { ArrowRight, Trash2, Lock, Eye, EyeOff } from 'lucide-react';
+import { ArrowRight, Trash2, Lock, Eye, EyeOff, FileText } from 'lucide-react';
 import { PDF_TOOLS } from '../../data/pdfTools.js';
 import { iconForSlug } from '../../utils/toolIcons.js';
 import PageShell from '../../components/layout/PageShell.jsx';
 import ToolShell from '../../components/tools/ToolShell.jsx';
 import ToolResultExtras from '../../components/tools/ToolResultExtras.jsx';
 import PdfResult from '../../components/tools/PdfResult.jsx';
-import { encryptPdf, formatBytes } from '../../utils/pdfProcessing.js';
+import { encryptPdf, formatBytes, renderPdfBlobThumbnail } from '../../utils/pdfProcessing.js';
 import { BLOG_POSTS } from '../../data/index.js';
 
 const RELATED_TOOLS = [
@@ -65,6 +65,18 @@ function EncryptWorking({ file, api }) {
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [showPw, setShowPw] = useState(false);
+  const [thumb, setThumb] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    setThumb(null);
+    if (file) {
+      renderPdfBlobThumbnail(file, { maxWidth: 220 }).then((url) => {
+        if (!cancelled) setThumb(url);
+      });
+    }
+    return () => { cancelled = true; };
+  }, [file]);
 
   const tooShort = password.length > 0 && password.length < 4;
   const mismatch = confirm.length > 0 && password !== confirm;
@@ -98,8 +110,19 @@ function EncryptWorking({ file, api }) {
             <Trash2 className="h-3.5 w-3.5" /> Remove
           </button>
         </div>
-        <div className="flex flex-col items-center justify-center gap-2 rounded-xl bg-neutral-50 py-14 text-center">
-          <div className="text-2xl font-extrabold text-neutral-900">{formatBytes(file?.size)}</div>
+        <div className="flex flex-col items-center justify-center gap-3 rounded-xl bg-neutral-50 py-8 text-center">
+          {thumb ? (
+            <img
+              src={thumb}
+              alt="First page preview"
+              className="max-h-56 rounded-lg border border-neutral-200 bg-white shadow-sm"
+            />
+          ) : (
+            <div className="flex h-40 w-32 items-center justify-center rounded-lg border border-dashed border-neutral-300 bg-white">
+              <FileText className="h-8 w-8 text-neutral-300" />
+            </div>
+          )}
+          <div className="text-lg font-extrabold text-neutral-900">{formatBytes(file?.size)}</div>
           <div className="text-sm text-neutral-500">current size</div>
         </div>
       </div>
