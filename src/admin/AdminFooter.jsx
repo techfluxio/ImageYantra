@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { adminApi } from './adminApi.js';
-import { Card, AdminButton, Field, inputStyle, Table } from './AdminUI.jsx';
+import { Card, AdminButton, Field, inputStyle, Table, PageHeader } from './AdminUI.jsx';
+import { PanelBottom } from 'lucide-react';
 
 const EMPTY_FORM = { group_name: '', group_sort: 0, label: '', url: '', external: false, sort_order: 0 };
 
@@ -60,14 +61,11 @@ export default function AdminFooter() {
 
   return (
     <div>
-      <h1 style={{ fontFamily: 'var(--ff-head)', fontSize: 24, fontWeight: 800, color: 'var(--col-text)', marginBottom: 'var(--sp-6)' }}>
-        Footer
-      </h1>
-      <p style={{ fontSize: 13, color: 'var(--col-text2)', marginBottom: 'var(--sp-5)' }}>
-        These become the footer's link columns, grouped by "Group name" (e.g. "Categories",
-        "Popular Tools", "Company"). If no footer links have been added here yet, the site
-        falls back to its original built-in footer — you won't lose anything by leaving this empty.
-      </p>
+      <PageHeader
+        icon={PanelBottom}
+        title="Footer"
+        description={<>These become the footer's link columns, grouped by "Group name" (e.g. "Categories", "Popular Tools", "Company"). If no footer links have been added here yet, the site falls back to its original built-in footer — you won't lose anything by leaving this empty.</>}
+      />
 
       <Card title={editingId ? 'Edit link' : 'Add a footer link'}>
         <form onSubmit={handleSubmit}>

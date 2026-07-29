@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { adminApi } from './adminApi.js';
-import { Card, StatCard, AdminButton } from './AdminUI.jsx';
+import { Card, StatCard, AdminButton, PageHeader } from './AdminUI.jsx';
+import { LayoutDashboard } from 'lucide-react';
 
 const RANGE_OPTIONS = [7, 30, 90];
 
@@ -38,25 +39,28 @@ export default function AdminDashboard() {
 
   return (
     <div>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--sp-6)' }}>
-        <h1 style={{ fontFamily: 'var(--ff-head)', fontSize: 24, fontWeight: 800, color: 'var(--col-text)' }}>Visitor insights</h1>
-        <div style={{ display: 'flex', gap: 8 }}>
-          {RANGE_OPTIONS.map((d) => (
-            <button
-              key={d}
-              onClick={() => setDays(d)}
-              style={{
-                padding: '6px 12px', borderRadius: 'var(--r-sm)', fontSize: 13, fontWeight: 600, cursor: 'pointer',
-                border: '1.5px solid var(--col-border2)',
-                background: days === d ? 'var(--col-accent)' : 'var(--col-white)',
-                color: days === d ? '#fff' : 'var(--col-text2)',
-              }}
-            >
+      <PageHeader
+        icon={LayoutDashboard}
+        title="Visitor insights"
+        action={
+          <div style={{ display: 'flex', gap: 8 }}>
+            {RANGE_OPTIONS.map((d) => (
+              <button
+                key={d}
+                onClick={() => setDays(d)}
+                style={{
+                  padding: '6px 12px', borderRadius: 'var(--r-sm)', fontSize: 13, fontWeight: 600, cursor: 'pointer',
+                  border: '1.5px solid var(--col-border2)',
+                  background: days === d ? 'var(--col-accent)' : 'var(--col-white)',
+                  color: days === d ? '#fff' : 'var(--col-text2)',
+                }}
+              >
               {d}d
             </button>
           ))}
         </div>
-      </div>
+        }
+      />
 
       {error && <Card><p style={{ color: 'var(--col-red)' }}>{error}</p></Card>}
       {loading && <Card><p style={{ color: 'var(--col-text2)' }}>Loading…</p></Card>}

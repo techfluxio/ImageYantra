@@ -1,0 +1,69 @@
+/* Scoped overrides so Quill (a third-party editor) matches the rest of
+   the admin panel's look instead of its own default styling. */
+.admin-rich-text .ql-toolbar.ql-snow {
+  border: none;
+  border-bottom: 1.5px solid var(--col-border2);
+  background: var(--col-bg2, #fafafa);
+  font-family: var(--ff-body);
+  padding: 10px 12px;
+}
+
+.admin-rich-text .ql-container.ql-snow {
+  border: none;
+  font-family: var(--ff-body);
+  font-size: 14px;
+  color: var(--col-text);
+}
+
+.admin-rich-text .ql-editor {
+  min-height: var(--rte-min-height, 260px);
+  line-height: 1.7;
+}
+
+.admin-rich-text .ql-editor h2 {
+  font-family: var(--ff-head);
+  font-weight: 800;
+  font-size: 22px;
+  margin: 0.6em 0 0.3em;
+  color: var(--col-text);
+}
+
+.admin-rich-text .ql-editor h3 {
+  font-family: var(--ff-head);
+  font-weight: 700;
+  font-size: 18px;
+  margin: 0.6em 0 0.3em;
+  color: var(--col-text);
+}
+
+.admin-rich-text .ql-editor.ql-blank::before {
+  color: var(--col-text3);
+  font-style: normal;
+}
+
+.admin-rich-text .ql-snow .ql-stroke {
+  stroke: var(--col-text2);
+}
+
+.admin-rich-text .ql-snow .ql-fill {
+  fill: var(--col-text2);
+}
+
+.admin-rich-text .ql-snow.ql-toolbar button:hover,
+.admin-rich-text .ql-snow .ql-toolbar button:hover,
+.admin-rich-text .ql-snow.ql-toolbar button.ql-active,
+.admin-rich-text .ql-snow .ql-toolbar button.ql-active {
+  color: var(--col-accent);
+}
+.admin-rich-text .ql-snow.ql-toolbar button:hover .ql-stroke,
+.admin-rich-text .ql-snow .ql-toolbar button:hover .ql-stroke,
+.admin-rich-text .ql-snow.ql-toolbar button.ql-active .ql-stroke,
+.admin-rich-text .ql-snow .ql-toolbar button.ql-active .ql-stroke {
+  stroke: var(--col-accent);
+}
+.admin-rich-text .ql-snow.ql-toolbar button:hover .ql-fill,
+.admin-rich-text .ql-snow .ql-toolbar button:hover .ql-fill,
+.admin-rich-text .ql-snow.ql-toolbar button.ql-active .ql-fill,
+.admin-rich-text .ql-snow .ql-toolbar button.ql-active .ql-fill {
+  fill: var(--col-accent);
+}

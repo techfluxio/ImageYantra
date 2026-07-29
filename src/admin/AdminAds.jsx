@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { adminApi } from './adminApi.js';
-import { Card, AdminButton, Field, inputStyle, Table } from './AdminUI.jsx';
+import { Card, AdminButton, Field, inputStyle, Table, PageHeader } from './AdminUI.jsx';
+import { Megaphone } from 'lucide-react';
 
 const AD_FORMATS = ['auto', 'rectangle', 'horizontal', 'vertical'];
 const EMPTY_NEW_PLACEMENT = { placement: '', label: '', slot: '', ad_format: 'auto', enabled: false };
@@ -58,12 +59,11 @@ export default function AdminAds() {
 
   return (
     <div>
-      <h1 style={{ fontFamily: 'var(--ff-head)', fontSize: 24, fontWeight: 800, color: 'var(--col-text)', marginBottom: 'var(--sp-2)' }}>
-        Ads
-      </h1>
-      <p style={{ color: 'var(--col-text2)', fontSize: 14, marginBottom: 'var(--sp-6)' }}>
-        Manage AdSense slot IDs and toggle ad placements on/off across the site — changes take effect immediately, no redeploy needed.
-      </p>
+      <PageHeader
+        icon={Megaphone}
+        title="Ads"
+        description="Manage AdSense slot IDs and toggle ad placements on/off across the site — changes take effect immediately, no redeploy needed."
+      />
 
       <Card title="Register a new ad placement">
         <p style={{ fontSize: 13, color: 'var(--col-text2)', marginBottom: 'var(--sp-4)' }}>

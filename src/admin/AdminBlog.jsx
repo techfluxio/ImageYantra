@@ -1,16 +1,10 @@
 import { useEffect, useState } from 'react';
 import { adminApi } from './adminApi.js';
-import { Card, AdminButton, Field, inputStyle, Table } from './AdminUI.jsx';
+import { Card, AdminButton, Field, inputStyle, Table, PageHeader } from './AdminUI.jsx';
+import RichTextEditor from './RichTextEditor.jsx';
+import { Newspaper } from 'lucide-react';
 
 const EMPTY_FORM = { title: '', slug: '', excerpt: '', body: '', category: 'Image', author: 'ImageYantra Team', published: true };
-
-function slugify(text) {
-  return (text || '')
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-}
 
 export default function AdminBlog() {
   const [posts, setPosts] = useState([]);
@@ -47,23 +41,15 @@ export default function AdminBlog() {
     setSaving(true);
     setError('');
     try {
-      const slug = slugify(form.slug) || slugify(form.title);
-      if (!slug) throw new Error('Please enter a title (or a slug) before saving.');
-      const payload = { ...form, slug };
-
       if (editingId) {
-        await adminApi.updateBlogPost(editingId, payload);
+        await adminApi.updateBlogPost(editingId, form);
       } else {
-        await adminApi.createBlogPost(payload);
+        await adminApi.createBlogPost(form);
       }
       cancelEdit();
       load();
     } catch (err) {
-      if (/duplicate key|unique constraint/i.test(err.message)) {
-        setError('That URL slug is already used by another post — please choose a different title or slug.');
-      } else {
-        setError(err.message);
-      }
+      setError(err.message);
     } finally {
       setSaving(false);
     }
@@ -82,9 +68,7 @@ export default function AdminBlog() {
 
   return (
     <div>
-      <h1 style={{ fontFamily: 'var(--ff-head)', fontSize: 24, fontWeight: 800, color: 'var(--col-text)', marginBottom: 'var(--sp-6)' }}>
-        Blog
-      </h1>
+      <PageHeader icon={Newspaper} title="Blog" />
 
       <Card title={editingId ? 'Edit post' : 'Write a new post'}>
         <form onSubmit={handleSubmit}>
@@ -105,8 +89,8 @@ export default function AdminBlog() {
           <Field label="Excerpt (shown on the blog list page)">
             <textarea style={{ ...inputStyle, minHeight: 60, resize: 'vertical' }} value={form.excerpt} onChange={(e) => setForm({ ...form, excerpt: e.target.value })} />
           </Field>
-          <Field label="Body (plain text / markdown-ish — line breaks are preserved)">
-            <textarea style={{ ...inputStyle, minHeight: 240, resize: 'vertical', fontFamily: 'monospace', fontSize: 13 }} value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })} />
+          <Field label="Body">
+            <RichTextEditor value={form.body} onChange={(html) => setForm((f) => ({ ...f, body: html }))} />
           </Field>
           <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, marginBottom: 'var(--sp-4)', color: 'var(--col-text2)' }}>
             <input type="checkbox" checked={form.published} onChange={(e) => setForm({ ...form, published: e.target.checked })} />

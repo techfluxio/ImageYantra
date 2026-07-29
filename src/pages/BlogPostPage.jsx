@@ -1,23 +1,36 @@
+import { useEffect, useState } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { Head } from 'vite-react-ssg';
 import { Clock } from 'lucide-react';
 import { BLOG_POSTS } from '../data/index.js';
 import PageShell from '../components/layout/PageShell.jsx';
 import { blogCategoryClass } from '../utils/helpers.js';
-import { useLiveBlogPost } from '../hooks/useLiveBlog.js';
+import { fetchLiveBlogPost } from '../utils/publicApi.js';
 
 export default function BlogPostPage() {
   const { slug } = useParams();
-  const staticPost = BLOG_POSTS.find((p) => p.slug === slug) || null;
-  const { post, liveBody, loading } = useLiveBlogPost(slug, staticPost);
+  const staticPost = BLOG_POSTS.find((p) => p.slug === slug);
+  const [livePost, setLivePost] = useState(null);
+  const [checkedLive, setCheckedLive] = useState(false);
 
-  // Only bounce to /blog once we've actually checked Supabase and there's
-  // still no post anywhere (static or live) — otherwise a brand-new,
-  // admin-only post gets redirected away before the live fetch resolves.
-  if (!post && !loading) return <Navigate to="/blog" replace />;
+  useEffect(() => {
+    setCheckedLive(false);
+    fetchLiveBlogPost(slug).then((p) => { setLivePost(p); setCheckedLive(true); });
+  }, [slug]);
+
+  // Admin-created posts only exist in Supabase, not the bundled static
+  // list — so don't redirect away until we've actually checked live data.
+  const post = livePost
+    ? {
+        ...staticPost,
+        ...livePost,
+        readTime: livePost.readTime ?? livePost.read_time ?? staticPost?.readTime ?? 4,
+        date: livePost.date || staticPost?.date || (livePost.created_at ? new Date(livePost.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''),
+      }
+    : staticPost;
+
+  if (!post && checkedLive) return <Navigate to="/blog" replace />;
   if (!post) return null;
-
-  const readTime = post.readTime ?? post.read_time ?? 4;
 
   return (
     <>
@@ -42,22 +55,20 @@ export default function BlogPostPage() {
 
         <div className="mt-4 flex items-center gap-3 border-b border-neutral-100 pb-4 text-sm text-neutral-500">
           <div className="grid h-8 w-8 place-items-center rounded-full bg-violet-100 text-xs font-bold text-violet-700">
-            {post.author.charAt(0)}
+            {post.author?.charAt(0)}
           </div>
           <span className="font-medium text-neutral-700">{post.author}</span>
           <span>·</span>
           <span>{post.date}</span>
           <span className="ml-auto flex items-center gap-1">
-            <Clock className="h-3.5 w-3.5" /> {readTime} min read
+            <Clock className="h-3.5 w-3.5" /> {post.readTime} min read
           </span>
         </div>
 
         <p className="mt-6 text-lg text-neutral-700">{post.excerpt}</p>
 
-        {liveBody ? (
-          <div className="prose prose-neutral mt-6 max-w-none whitespace-pre-line">
-            {liveBody}
-          </div>
+        {post.body ? (
+          <div className="prose-content mt-6" dangerouslySetInnerHTML={{ __html: post.body }} />
         ) : (
           <div className="mt-6 rounded-xl border border-dashed border-neutral-300 bg-neutral-50 p-6 text-center text-sm text-neutral-500">
             Full article content for this post hasn't been written yet — this page is a placeholder

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { adminApi } from './adminApi.js';
-import { Card, AdminButton, Field, inputStyle, Table } from './AdminUI.jsx';
+import { Card, AdminButton, Field, inputStyle, Table, PageHeader } from './AdminUI.jsx';
+import { LayoutGrid } from 'lucide-react';
 
 const COLOR_OPTIONS = ['purple', 'red', 'green', 'blue', 'yellow', 'black'];
 const EMPTY_FORM = { slug: '', name: '', description: '', icon: 'sparkles', color: 'purple' };
@@ -69,15 +70,11 @@ export default function AdminCategories() {
 
   return (
     <div>
-      <h1 style={{ fontFamily: 'var(--ff-head)', fontSize: 24, fontWeight: 800, color: 'var(--col-text)', marginBottom: 'var(--sp-6)' }}>
-        Categories
-      </h1>
-      <p style={{ fontSize: 13, color: 'var(--col-text2)', marginBottom: 'var(--sp-5)' }}>
-        A new category gets a real listing page (e.g. <code>/{form.slug || 'your-slug'}</code>) and
-        shows up in the site's navigation automatically — no code changes needed. Note: it can take a
-        couple of minutes for a brand-new category's own prerendered page to appear after the next
-        rebuild; it's visible immediately via the live site in the meantime.
-      </p>
+      <PageHeader
+        icon={LayoutGrid}
+        title="Categories"
+        description={<>A new category gets a real listing page (e.g. <code>/{form.slug || 'your-slug'}</code>) and shows up in the site's navigation automatically — no code changes needed. It can take a couple of minutes for a brand-new category's own prerendered page to appear after the next rebuild; it's visible immediately via the live site in the meantime.</>}
+      />
 
       <Card title={editingId ? 'Edit category' : 'Add a new category'}>
         <form onSubmit={handleSubmit}>

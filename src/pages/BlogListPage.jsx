@@ -1,10 +1,22 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Head } from 'vite-react-ssg';
 import { Search, ChevronDown, Clock } from 'lucide-react';
 import { BLOG_POSTS } from '../data/index.js';
 import PageShell from '../components/layout/PageShell.jsx';
-import { useLiveBlogPosts } from '../hooks/useLiveBlog.js';
+import { fetchLiveBlogPosts, mergeBySlug } from '../utils/publicApi.js';
+
+/** Supabase rows use snake_case (read_time) and don't have a
+ *  pre-computed dateISO — normalize to what this page (and the static
+ *  data) already expects. */
+function normalizePost(row) {
+  return {
+    ...row,
+    readTime: row.readTime ?? row.read_time ?? 4,
+    dateISO: row.dateISO || row.date || row.created_at || null,
+    date: row.date || (row.created_at ? new Date(row.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''),
+  };
+}
 
 const CATEGORY_STYLE = {
   Image: { grad: 'from-violet-200 to-fuchsia-200', badge: 'bg-violet-100 text-violet-700', glyph: '🖼️' },
@@ -19,29 +31,28 @@ export default function BlogListPage() {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('All Categories');
   const [sort, setSort] = useState('Latest');
+  const [livePosts, setLivePosts] = useState(null);
 
-  const liveBlogPosts = useLiveBlogPosts(BLOG_POSTS);
+  useEffect(() => {
+    fetchLiveBlogPosts().then((rows) => { if (rows) setLivePosts(rows); });
+  }, []);
+
+  const allPosts = useMemo(
+    () => mergeBySlug(BLOG_POSTS, livePosts, 'slug').map(normalizePost),
+    [livePosts],
+  );
 
   const posts = useMemo(() => {
-    // Live (Supabase) posts use `date`/`read_time`; static posts use
-    // `dateISO`/`readTime` — normalize so sorting/display works for both.
-    let list = liveBlogPosts
-      .filter((p) => p.published !== false)
-      .map((p) => ({
-        ...p,
-        dateISO: p.dateISO || p.date,
-        readTime: p.readTime ?? p.read_time ?? 4,
-      }))
-      .filter((p) => {
-        const matchesQuery = !query || p.title.toLowerCase().includes(query.toLowerCase());
-        const matchesCategory = category === 'All Categories' || p.category === category;
-        return matchesQuery && matchesCategory;
-      });
+    let list = allPosts.filter((p) => {
+      const matchesQuery = !query || p.title.toLowerCase().includes(query.toLowerCase());
+      const matchesCategory = category === 'All Categories' || p.category === category;
+      return matchesQuery && matchesCategory;
+    });
     if (sort === 'Latest') list = [...list].sort((a, b) => new Date(b.dateISO) - new Date(a.dateISO));
     if (sort === 'Oldest') list = [...list].sort((a, b) => new Date(a.dateISO) - new Date(b.dateISO));
     if (sort === 'Quick reads') list = [...list].sort((a, b) => a.readTime - b.readTime);
     return list;
-  }, [liveBlogPosts, query, category, sort]);
+  }, [allPosts, query, category, sort]);
 
   return (
     <>

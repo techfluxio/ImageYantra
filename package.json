@@ -7,7 +7,6 @@
     "dev": "vite",
     "prebuild": "node scripts/fetch-live-content.js && node scripts/generate-sitemap.js",
     "build": "vite-react-ssg build",
-    "postbuild": "node scripts/generate-admin-shell.js",
     "preview": "vite preview",
     "lint": "eslint src --ext .js,.jsx"
   },
@@ -27,7 +26,8 @@
     "react-helmet-async": "^2.0.5",
     "react-router-dom": "^6.28.0",
     "recharts": "^3.9.2",
-    "@supabase/supabase-js": "^2.45.4"
+    "@supabase/supabase-js": "^2.45.4",
+    "quill": "^2.0.2"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",

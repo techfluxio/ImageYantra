@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { adminApi } from './adminApi.js';
-import { Card, AdminButton, Field, inputStyle, Table } from './AdminUI.jsx';
+import { Card, AdminButton, Field, inputStyle, Table, PageHeader } from './AdminUI.jsx';
+import RichTextEditor from './RichTextEditor.jsx';
+import { FileText } from 'lucide-react';
 
 export default function AdminPages() {
   const [pages, setPages] = useState([]);
@@ -42,12 +44,11 @@ export default function AdminPages() {
 
   return (
     <div>
-      <h1 style={{ fontFamily: 'var(--ff-head)', fontSize: 24, fontWeight: 800, color: 'var(--col-text)', marginBottom: 'var(--sp-6)' }}>
-        Pages
-      </h1>
-      <p style={{ fontSize: 13, color: 'var(--col-text2)', marginBottom: 'var(--sp-5)' }}>
-        About Us, Privacy Policy, Terms of Service, and Disclaimer. Leave a page's content blank to keep showing the site's original built-in version.
-      </p>
+      <PageHeader
+        icon={FileText}
+        title="Pages"
+        description="About Us, Privacy Policy, Terms of Service, and Disclaimer. Leave a page's content blank to keep showing the site's original built-in version."
+      />
 
       {editingId ? (
         <Card title={`Edit: ${pages.find((p) => p.id === editingId)?.title}`}>
@@ -55,8 +56,8 @@ export default function AdminPages() {
             <Field label="Title">
               <input style={inputStyle} required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
             </Field>
-            <Field label="Content (plain text or simple HTML)">
-              <textarea style={{ ...inputStyle, minHeight: 260, fontFamily: 'monospace', fontSize: 13 }} value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })} />
+            <Field label="Content">
+              <RichTextEditor value={form.body} onChange={(html) => setForm((f) => ({ ...f, body: html }))} minHeight={340} />
             </Field>
             {error && <p style={{ color: 'var(--col-red)', fontSize: 13, marginBottom: 'var(--sp-3)' }}>{error}</p>}
             <div style={{ display: 'flex', gap: 8 }}>

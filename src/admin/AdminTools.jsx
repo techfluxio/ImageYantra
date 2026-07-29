@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { adminApi } from './adminApi.js';
-import { Card, AdminButton, Field, inputStyle, Table } from './AdminUI.jsx';
+import { Card, AdminButton, Field, inputStyle, Table, PageHeader } from './AdminUI.jsx';
+import { Wrench } from 'lucide-react';
 
 const EMPTY_FORM = {
   slug: '', name: '', desc: '', category_slug: '', icon: 'file-output',
@@ -81,9 +82,7 @@ export default function AdminTools() {
 
   return (
     <div>
-      <h1 style={{ fontFamily: 'var(--ff-head)', fontSize: 24, fontWeight: 800, color: 'var(--col-text)', marginBottom: 'var(--sp-6)' }}>
-        Tools
-      </h1>
+      <PageHeader icon={Wrench} title="Tools" />
 
       <Card title={editingId ? 'Edit tool' : 'Add a new tool'}>
         <form onSubmit={handleSubmit}>

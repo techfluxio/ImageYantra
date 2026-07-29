@@ -1,3 +1,25 @@
+export function PageHeader({ icon: Icon, title, description, action }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, marginBottom: 'var(--sp-7)', flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+        {Icon && (
+          <div style={{
+            width: 46, height: 46, borderRadius: 'var(--r-md)', background: 'var(--col-accent-xxl)',
+            display: 'grid', placeItems: 'center', flexShrink: 0,
+          }}>
+            <Icon size={22} color="var(--col-accent)" strokeWidth={2.25} />
+          </div>
+        )}
+        <div>
+          <h1 style={{ fontFamily: 'var(--ff-head)', fontSize: 26, fontWeight: 800, color: 'var(--col-text)', lineHeight: 1.15 }}>{title}</h1>
+          {description && <p style={{ fontSize: 13.5, color: 'var(--col-text2)', marginTop: 4, maxWidth: 560 }}>{description}</p>}
+        </div>
+      </div>
+      {action}
+    </div>
+  );
+}
+
 export function Card({ title, action, children, style }) {
   return (
     <div style={{

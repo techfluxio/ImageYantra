@@ -37,12 +37,7 @@ export default function LegalPage({ pageKey }) {
           {!livePage && <p className="mt-3 text-base text-neutral-500">{page.sub}</p>}
 
           {livePage ? (
-            // Admin-edited content — plain text/simple HTML, one paragraph per blank-separated block.
-            <div className="mt-8 space-y-4 leading-relaxed text-neutral-700">
-              {livePage.body.split(/\n{2,}/).map((para, i) => (
-                <p key={i} dangerouslySetInnerHTML={{ __html: para.replace(/\n/g, '<br />') }} />
-              ))}
-            </div>
+            <div className="prose-content mt-8" dangerouslySetInnerHTML={{ __html: livePage.body }} />
           ) : (
             <div className="mt-8 space-y-8">
               {page.sections.map((s) => (

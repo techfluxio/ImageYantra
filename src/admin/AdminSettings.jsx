@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { adminApi } from './adminApi.js';
-import { Card, AdminButton, Field, inputStyle } from './AdminUI.jsx';
+import { Card, AdminButton, Field, inputStyle, PageHeader } from './AdminUI.jsx';
+import { Settings } from 'lucide-react';
 
 export default function AdminSettings() {
   const [settings, setSettings] = useState(null);
@@ -33,9 +34,7 @@ export default function AdminSettings() {
 
   return (
     <div>
-      <h1 style={{ fontFamily: 'var(--ff-head)', fontSize: 24, fontWeight: 800, color: 'var(--col-text)', marginBottom: 'var(--sp-6)' }}>
-        Website Settings
-      </h1>
+      <PageHeader icon={Settings} title="Website Settings" />
 
       {!form ? (
         <p style={{ color: 'var(--col-text2)' }}>Loading…</p>

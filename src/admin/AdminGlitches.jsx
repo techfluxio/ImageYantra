@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { adminApi } from './adminApi.js';
-import { Card, AdminButton, StatCard, Table } from './AdminUI.jsx';
+import { Card, AdminButton, StatCard, Table, PageHeader } from './AdminUI.jsx';
+import { Bug } from 'lucide-react';
 
 function browserFromUA(ua = '') {
   if (/Edg\//.test(ua)) return 'Edge';
@@ -45,13 +46,11 @@ export default function AdminGlitches() {
 
   return (
     <div>
-      <h1 style={{ fontFamily: 'var(--ff-head)', fontSize: 24, fontWeight: 800, color: 'var(--col-text)', marginBottom: 'var(--sp-6)' }}>
-        Glitches
-      </h1>
-      <p style={{ fontSize: 13, color: 'var(--col-text2)', marginBottom: 'var(--sp-5)' }}>
-        Lightweight error reports from real visitors — tool, message, browser and device
-        only. No uploaded file content or personal data is ever captured.
-      </p>
+      <PageHeader
+        icon={Bug}
+        title="Glitches"
+        description="Lightweight error reports from real visitors — tool, message, browser and device only. No uploaded file content or personal data is ever captured."
+      />
 
       <div style={{ display: 'flex', gap: 'var(--sp-4)', marginBottom: 'var(--sp-5)', flexWrap: 'wrap' }}>
         <StatCard label={`Reports (last ${days}d)`} value={reports.length} />

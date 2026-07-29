@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { adminApi } from './adminApi.js';
-import { Card, AdminButton } from './AdminUI.jsx';
+import { Card, AdminButton, PageHeader } from './AdminUI.jsx';
+import { DatabaseBackup } from 'lucide-react';
 
 export default function AdminBackup() {
   const [busy, setBusy] = useState(false);
@@ -54,9 +55,7 @@ export default function AdminBackup() {
 
   return (
     <div>
-      <h1 style={{ fontFamily: 'var(--ff-head)', fontSize: 24, fontWeight: 800, color: 'var(--col-text)', marginBottom: 'var(--sp-6)' }}>
-        Backup &amp; Restore
-      </h1>
+      <PageHeader icon={DatabaseBackup} title="Backup & Restore" />
 
       <Card title="Export a backup">
         <p style={{ fontSize: 13, color: 'var(--col-text2)', marginBottom: 'var(--sp-4)' }}>
