@@ -20,8 +20,8 @@ function normalizePost(row) {
 
 const CATEGORY_STYLE = {
   Image: { grad: 'from-violet-200 to-fuchsia-200', badge: 'bg-violet-100 text-violet-700', glyph: '🖼️' },
-  PDF:   { grad: 'from-sky-200 to-blue-200',        badge: 'bg-sky-100 text-sky-700',       glyph: '📄' },
-  Exam:  { grad: 'from-rose-200 to-orange-200',     badge: 'bg-rose-100 text-rose-700',     glyph: '🎓' },
+  PDF: { grad: 'from-sky-200 to-blue-200', badge: 'bg-sky-100 text-sky-700', glyph: '📄' },
+  Exam: { grad: 'from-rose-200 to-orange-200', badge: 'bg-rose-100 text-rose-700', glyph: '🎓' },
 };
 
 const CATEGORIES = ['All Categories', 'Image', 'PDF', 'Exam'];
@@ -37,8 +37,9 @@ export default function BlogListPage() {
     fetchLiveBlogPosts().then((rows) => { if (rows) setLivePosts(rows); });
   }, []);
 
+  // Only real, admin-published posts — no static/demo placeholders.
   const allPosts = useMemo(
-    () => mergeBySlug(BLOG_POSTS, livePosts, 'slug').map(normalizePost),
+    () => (livePosts || []).map(normalizePost),
     [livePosts],
   );
 
