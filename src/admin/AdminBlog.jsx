@@ -6,6 +6,14 @@ import { Newspaper } from 'lucide-react';
 
 const EMPTY_FORM = { title: '', slug: '', excerpt: '', body: '', category: 'Image', author: 'ImageYantra Team', published: true };
 
+function slugify(text) {
+  return (text || '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 export default function AdminBlog() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -41,15 +49,23 @@ export default function AdminBlog() {
     setSaving(true);
     setError('');
     try {
+      const slug = slugify(form.slug) || slugify(form.title);
+      if (!slug) throw new Error('Please enter a title (or a slug) before saving.');
+      const payload = { ...form, slug };
+
       if (editingId) {
-        await adminApi.updateBlogPost(editingId, form);
+        await adminApi.updateBlogPost(editingId, payload);
       } else {
-        await adminApi.createBlogPost(form);
+        await adminApi.createBlogPost(payload);
       }
       cancelEdit();
       load();
     } catch (err) {
-      setError(err.message);
+      if (/duplicate key|unique constraint/i.test(err.message)) {
+        setError('That URL slug is already used by another post — please choose a different title or slug.');
+      } else {
+        setError(err.message);
+      }
     } finally {
       setSaving(false);
     }
