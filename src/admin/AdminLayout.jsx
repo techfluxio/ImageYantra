@@ -59,7 +59,7 @@ export default function AdminLayout() {
               Image<span style={{ color: 'var(--col-accent)' }}>Yantra</span>
             </div>
             <span style={{
-              position: 'absolute', right: 0, top: '100%', marginTop: 6, whiteSpace: 'nowrap',
+              position: 'absolute', right: 0, top: '100%', marginTop: 3, marginBottom: 3, whiteSpace: 'nowrap',
               padding: '3px 10px', borderRadius: 'var(--r-full)', background: 'var(--col-accent-xxl, #f3e8ff)', color: 'var(--col-accent)',
               fontSize: 11, fontWeight: 700, letterSpacing: 0.3, textTransform: 'uppercase',
             }}>
