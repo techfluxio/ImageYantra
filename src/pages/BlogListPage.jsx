@@ -4,24 +4,12 @@ import { Head } from 'vite-react-ssg';
 import { Search, ChevronDown, Clock } from 'lucide-react';
 import { BLOG_POSTS } from '../data/index.js';
 import PageShell from '../components/layout/PageShell.jsx';
-import { fetchLiveBlogPosts, mergeBySlug } from '../utils/publicApi.js';
-
-/** Supabase rows use snake_case (read_time) and don't have a
- *  pre-computed dateISO — normalize to what this page (and the static
- *  data) already expects. */
-function normalizePost(row) {
-  return {
-    ...row,
-    readTime: row.readTime ?? row.read_time ?? 4,
-    dateISO: row.dateISO || row.date || row.created_at || null,
-    date: row.date || (row.created_at ? new Date(row.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''),
-  };
-}
+import { fetchLiveBlogPosts, mergeBySlug, normalizeBlogPost } from '../utils/publicApi.js';
 
 const CATEGORY_STYLE = {
   Image: { grad: 'from-violet-200 to-fuchsia-200', badge: 'bg-violet-100 text-violet-700', glyph: '🖼️' },
-  PDF: { grad: 'from-sky-200 to-blue-200', badge: 'bg-sky-100 text-sky-700', glyph: '📄' },
-  Exam: { grad: 'from-rose-200 to-orange-200', badge: 'bg-rose-100 text-rose-700', glyph: '🎓' },
+  PDF:   { grad: 'from-sky-200 to-blue-200',        badge: 'bg-sky-100 text-sky-700',       glyph: '📄' },
+  Exam:  { grad: 'from-rose-200 to-orange-200',     badge: 'bg-rose-100 text-rose-700',     glyph: '🎓' },
 };
 
 const CATEGORIES = ['All Categories', 'Image', 'PDF', 'Exam'];
@@ -37,9 +25,8 @@ export default function BlogListPage() {
     fetchLiveBlogPosts().then((rows) => { if (rows) setLivePosts(rows); });
   }, []);
 
-  // Only real, admin-published posts — no static/demo placeholders.
   const allPosts = useMemo(
-    () => (livePosts || []).map(normalizePost),
+    () => mergeBySlug(BLOG_POSTS, livePosts, 'slug').map(normalizeBlogPost),
     [livePosts],
   );
 

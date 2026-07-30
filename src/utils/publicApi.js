@@ -63,6 +63,18 @@ export async function fetchLiveAds() {
 }
 
 /** Look up a single ad slot by placement name from a fetched ads array. */
+/** Supabase blog_post rows use snake_case (read_time) and don't have a
+ *  pre-computed dateISO — normalize to what the static bundled data (and
+ *  every page that renders posts) already expects. */
+export function normalizeBlogPost(row) {
+  return {
+    ...row,
+    readTime: row.readTime ?? row.read_time ?? 4,
+    dateISO: row.dateISO || row.date || row.created_at || null,
+    date: row.date || (row.created_at ? new Date(row.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''),
+  };
+}
+
 export function findAdSlot(adsArray, placement, fallbackSlot) {
   if (!adsArray) return { slot: fallbackSlot, enabled: true };
   const match = adsArray.find((a) => a.placement === placement);

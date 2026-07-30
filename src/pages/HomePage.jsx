@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Head } from 'vite-react-ssg';
 import {
@@ -16,6 +16,7 @@ import { FAQAccordion } from '../components/ui/index.jsx';
 import PageShell from '../components/layout/PageShell.jsx';
 import { blogCategoryClass } from '../utils/helpers.js';
 import { toolIcon } from '../utils/toolIcons.js';
+import { fetchLiveBlogPosts, mergeBySlug, normalizeBlogPost } from '../utils/publicApi.js';
 
 
 
@@ -231,6 +232,15 @@ export default function HomePage() {
 
   const examItems = EXAM_TOOLS.slice(0, 16).map((t) => ({ ...t, _path: `/tools/${t.slug}` }));
 
+  const [liveBlogs, setLiveBlogs] = useState(null);
+  useEffect(() => {
+    fetchLiveBlogPosts().then((rows) => { if (rows) setLiveBlogs(rows); });
+  }, []);
+  const recentBlogs = useMemo(() => {
+    const merged = mergeBySlug(BLOG_POSTS, liveBlogs, 'slug').map(normalizeBlogPost);
+    return merged.sort((a, b) => new Date(b.dateISO) - new Date(a.dateISO)).slice(0, 3);
+  }, [liveBlogs]);
+
   return (
     <>
       <Head>
@@ -354,7 +364,7 @@ export default function HomePage() {
                   </a>
                 </div>
                 <ul className="space-y-4">
-                  {BLOG_POSTS.slice(0, 3).map((b) => (
+                  {recentBlogs.map((b) => (
                     <li key={b.slug}>
                       <a onClick={() => navigate(`/blog/${b.slug}`)} className="group block rounded-xl p-3 -mx-3 hover:bg-neutral-50 transition-colors cursor-pointer">
                         <div className="flex items-center gap-2">

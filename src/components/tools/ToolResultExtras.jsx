@@ -1,8 +1,11 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, HelpCircle, Newspaper } from 'lucide-react';
 import { FAQAccordion } from '../ui/index.jsx';
 import { AdBanner } from '../cards/index.jsx';
 import { blogCategoryClass, getToolTone } from '../../utils/helpers.js';
+import { fetchLiveBlogPosts, mergeBySlug, normalizeBlogPost } from '../../utils/publicApi.js';
+import { BLOG_POSTS } from '../../data/index.js';
 
 /**
  * Ad banner + Related Tools + Related Blogs + FAQ, meant to sit below
@@ -12,9 +15,28 @@ import { blogCategoryClass, getToolTone } from '../../utils/helpers.js';
  * `tone` picks the category colour ('image'|'pdf'|'exam'|'govt'|'social'|'other')
  * so the Related Tools icons (and section accents) always match the
  * category the current tool page belongs to.
+ *
+ * `relatedBlogs` is only the SSG-safe initial fallback (usually
+ * `BLOG_POSTS.slice(0, 3)` from whichever tool page renders this) — once
+ * mounted, this component fetches the live, admin-managed blog list
+ * itself and swaps in real posts, so every tool page's "Related Blogs"
+ * section stays current without needing to touch each tool file.
  */
 export default function ToolResultExtras({ relatedTools = [], relatedBlogs = [], faqs = [], tone = 'image' }) {
   const t = getToolTone(tone);
+  const [liveBlogs, setLiveBlogs] = useState(null);
+
+  useEffect(() => {
+    fetchLiveBlogPosts().then((rows) => { if (rows) setLiveBlogs(rows); });
+  }, []);
+
+  const blogs = liveBlogs
+    ? mergeBySlug(BLOG_POSTS, liveBlogs, 'slug')
+        .map(normalizeBlogPost)
+        .sort((a, b) => new Date(b.dateISO) - new Date(a.dateISO))
+        .slice(0, 3)
+    : relatedBlogs;
+
   return (
     <div className="mt-6 space-y-6">
       {/* Ad banner — live, admin-controlled slot */}
@@ -47,7 +69,7 @@ export default function ToolResultExtras({ relatedTools = [], relatedBlogs = [],
       )}
 
       {/* Related Blogs */}
-      {relatedBlogs.length > 0 && (
+      {blogs.length > 0 && (
         <div className="rounded-2xl border border-neutral-200 bg-white p-5 md:p-6">
           <div className="mb-4 flex items-center gap-3">
             <div className={`grid h-9 w-9 place-items-center rounded-lg ${t.headerBg}`}>
@@ -56,7 +78,7 @@ export default function ToolResultExtras({ relatedTools = [], relatedBlogs = [],
             <h2 className="text-lg font-semibold text-neutral-900">Related Blogs</h2>
           </div>
           <ul className="space-y-4">
-            {relatedBlogs.map((b) => (
+            {blogs.map((b) => (
               <li key={b.slug}>
                 <Link to={`/blog/${b.slug}`} className="group flex items-start justify-between gap-3">
                   <div className="min-w-0">
