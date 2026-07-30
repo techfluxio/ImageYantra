@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { adminApi } from './adminApi.js';
 import { Card, StatCard, AdminButton, PageHeader } from './AdminUI.jsx';
-import { LayoutDashboard } from 'lucide-react';
+import { LayoutDashboard, Eye, Users, FileCheck2, CheckCircle2, Timer, Monitor, Smartphone, Tablet, Bug } from 'lucide-react';
 
 const RANGE_OPTIONS = [7, 30, 90];
 
@@ -67,30 +67,39 @@ export default function AdminDashboard() {
 
       {data && !loading && (
         <>
-          <div style={{ display: 'flex', gap: 'var(--sp-4)', flexWrap: 'wrap', marginBottom: 'var(--sp-5)' }}>
-            <StatCard label="Total page views" value={data.totalViews.toLocaleString()} sub={`Last ${data.rangeDays} days`} />
-            <StatCard label="Unique visitors" value={data.uniqueSessions.toLocaleString()} sub="Approx., by session" />
+          <div style={{
+            display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+            gap: 'var(--sp-4)', marginBottom: 'var(--sp-6)',
+          }}>
+            <StatCard icon={Eye} tone="accent" label="Total page views" value={data.totalViews.toLocaleString()} sub={`Last ${data.rangeDays} days`} />
+            <StatCard icon={Users} tone="blue" label="Unique visitors" value={data.uniqueSessions.toLocaleString()} sub="Approx., by session" />
             {toolStats && (
               <>
-                <StatCard label="Files processed" value={toolStats.filesProcessed.toLocaleString()} sub={`Last ${days} days`} />
+                <StatCard icon={FileCheck2} tone="accent" label="Files processed" value={toolStats.filesProcessed.toLocaleString()} sub={`Last ${days} days`} />
                 <StatCard
+                  icon={CheckCircle2}
+                  tone="green"
                   label="Success rate"
                   value={toolStats.successRate !== null ? `${toolStats.successRate}%` : '—'}
                   sub="Completions vs. glitches"
                 />
                 <StatCard
+                  icon={Timer}
+                  tone="amber"
                   label="Avg. time to result"
                   value={toolStats.avgDurationMs !== null ? `${(toolStats.avgDurationMs / 1000).toFixed(1)}s` : '—'}
                   sub="From file select to done"
                 />
               </>
             )}
-            <StatCard label="Desktop" value={data.deviceBreakdown.desktop} />
-            <StatCard label="Mobile" value={data.deviceBreakdown.mobile} />
-            <StatCard label="Tablet" value={data.deviceBreakdown.tablet} />
+            <StatCard icon={Monitor} tone="blue" label="Desktop" value={data.deviceBreakdown.desktop} />
+            <StatCard icon={Smartphone} tone="blue" label="Mobile" value={data.deviceBreakdown.mobile} />
+            <StatCard icon={Tablet} tone="blue" label="Tablet" value={data.deviceBreakdown.tablet} />
             {glitchCount !== null && (
               <Link to="/admin/glitches" style={{ textDecoration: 'none' }}>
                 <StatCard
+                  icon={Bug}
+                  tone="red"
                   label="Glitches (14d)"
                   value={glitchCount}
                   sub={topGlitchTool ? `Most: ${topGlitchTool.tool} (${topGlitchTool.count})` : 'No glitches reported'}
@@ -110,13 +119,19 @@ export default function AdminDashboard() {
           >
             {(granularity === 'day' ? data.viewsByDay : data.viewsByMonth).length ? (
               <ResponsiveContainer width="100%" height={260}>
-                <LineChart data={granularity === 'day' ? data.viewsByDay : data.viewsByMonth}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="var(--col-border)" />
-                  <XAxis dataKey={granularity === 'day' ? 'date' : 'month'} tick={{ fontSize: 11 }} />
-                  <YAxis tick={{ fontSize: 11 }} allowDecimals={false} />
-                  <Tooltip />
-                  <Line type="monotone" dataKey="views" stroke="#8133e0" strokeWidth={2} dot={false} />
-                </LineChart>
+                <AreaChart data={granularity === 'day' ? data.viewsByDay : data.viewsByMonth}>
+                  <defs>
+                    <linearGradient id="viewsGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#8133e0" stopOpacity={0.28} />
+                      <stop offset="100%" stopColor="#8133e0" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--col-border)" vertical={false} />
+                  <XAxis dataKey={granularity === 'day' ? 'date' : 'month'} tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fontSize: 11 }} allowDecimals={false} axisLine={false} tickLine={false} />
+                  <Tooltip contentStyle={{ borderRadius: 10, border: '1px solid var(--col-border)', fontSize: 13 }} />
+                  <Area type="monotone" dataKey="views" stroke="#8133e0" strokeWidth={2.5} fill="url(#viewsGradient)" />
+                </AreaChart>
               </ResponsiveContainer>
             ) : (
               <p style={{ color: 'var(--col-text3)', fontSize: 14 }}>No page views recorded yet for this range.</p>
