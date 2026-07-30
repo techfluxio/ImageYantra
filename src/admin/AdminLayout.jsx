@@ -50,7 +50,7 @@ export default function AdminLayout() {
         padding: 'var(--sp-6) var(--sp-4)', display: 'flex', flexDirection: 'column', position: 'sticky', top: 0, height: '100vh',
       }}>
         <div style={{
-          marginBottom: 'var(--sp-8)', paddingLeft: 'var(--sp-2)', width: 'fit-content',
+          marginBottom: 'var(--sp-6)', paddingLeft: 'var(--sp-2)', width: 'fit-content',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8,
         }}>
           <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
@@ -59,7 +59,7 @@ export default function AdminLayout() {
               Image<span style={{ color: 'var(--col-accent)' }}>Yantra</span>
             </div>
             <span style={{
-              position: 'absolute', right: 0, top: '100%', marginTop: 3, marginBottom: 3, whiteSpace: 'nowrap',
+              position: 'absolute', right: 0, top: '100%', marginTop: 3, marginBottom: 5, whiteSpace: 'nowrap',
               padding: '3px 10px', borderRadius: 'var(--r-full)', background: 'var(--col-accent-xxl, #f3e8ff)', color: 'var(--col-accent)',
               fontSize: 11, fontWeight: 700, letterSpacing: 0.3, textTransform: 'uppercase',
             }}>
