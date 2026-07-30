@@ -57,7 +57,7 @@ export default function AdminLayout() {
             </div>
           </div>
           <div style={{
-            display: 'block', width: 'fit-content', marginTop: 8, marginLeft: 'auto', padding: '3px 10px',
+            alignSelf: 'flex-end', marginTop: 8, padding: '3px 10px',
             borderRadius: 'var(--r-full)', background: 'var(--col-accent-xxl, #f3e8ff)', color: 'var(--col-accent)',
             fontSize: 11, fontWeight: 700, letterSpacing: 0.3, textTransform: 'uppercase',
           }}>
