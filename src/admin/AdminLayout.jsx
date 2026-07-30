@@ -53,18 +53,18 @@ export default function AdminLayout() {
           marginBottom: 'var(--sp-8)', paddingLeft: 'var(--sp-2)', width: 'fit-content',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8,
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
+          <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
             <img src={logoMark} alt="ImageYantra" width={26} height={26} style={{ objectFit: 'contain', flexShrink: 0 }} />
-            <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 19, fontWeight: 800, color: 'var(--col-text)', whiteSpace: 'nowrap' }}>
+            <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 19, fontWeight: 800, color: 'var(--col-text)' }}>
               Image<span style={{ color: 'var(--col-accent)' }}>Yantra</span>
             </div>
-          </div>
-          <div style={{
-            flexShrink: 0, whiteSpace: 'nowrap', padding: '3px 10px',
-            borderRadius: 'var(--r-full)', background: 'var(--col-accent-xxl, #f3e8ff)', color: 'var(--col-accent)',
-            fontSize: 11, fontWeight: 700, letterSpacing: 0.3, textTransform: 'uppercase',
-          }}>
-            Admin
+            <span style={{
+              position: 'absolute', right: 0, top: '100%', marginTop: 6, whiteSpace: 'nowrap',
+              padding: '3px 10px', borderRadius: 'var(--r-full)', background: 'var(--col-accent-xxl, #f3e8ff)', color: 'var(--col-accent)',
+              fontSize: 11, fontWeight: 700, letterSpacing: 0.3, textTransform: 'uppercase',
+            }}>
+              Admin
+            </span>
           </div>
         </div>
 
