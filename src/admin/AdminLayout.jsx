@@ -50,7 +50,7 @@ export default function AdminLayout() {
         padding: 'var(--sp-6) var(--sp-4)', display: 'flex', flexDirection: 'column', position: 'sticky', top: 0, height: '100vh',
       }}>
         <div style={{
-          marginBottom: 'var(--sp-8)', paddingLeft: 'var(--sp-2)',
+          marginBottom: 'var(--sp-8)', paddingLeft: 'var(--sp-2)', width: 'fit-content',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8,
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
