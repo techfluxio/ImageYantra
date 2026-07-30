@@ -49,15 +49,18 @@ export default function AdminLayout() {
         width: 280, flexShrink: 0, background: 'var(--col-white)', borderRight: '1px solid var(--col-border)',
         padding: 'var(--sp-6) var(--sp-4)', display: 'flex', flexDirection: 'column', position: 'sticky', top: 0, height: '100vh',
       }}>
-        <div style={{ marginBottom: 'var(--sp-8)', paddingLeft: 'var(--sp-2)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{
+          marginBottom: 'var(--sp-8)', paddingLeft: 'var(--sp-2)',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8,
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
             <img src={logoMark} alt="ImageYantra" width={26} height={26} style={{ objectFit: 'contain', flexShrink: 0 }} />
-            <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 19, fontWeight: 800, color: 'var(--col-text)' }}>
+            <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 19, fontWeight: 800, color: 'var(--col-text)', whiteSpace: 'nowrap' }}>
               Image<span style={{ color: 'var(--col-accent)' }}>Yantra</span>
             </div>
           </div>
           <div style={{
-            display: 'block', width: 'fit-content', marginTop: 8, padding: '3px 10px',
+            flexShrink: 0, whiteSpace: 'nowrap', padding: '3px 10px',
             borderRadius: 'var(--r-full)', background: 'var(--col-accent-xxl, #f3e8ff)', color: 'var(--col-accent)',
             fontSize: 11, fontWeight: 700, letterSpacing: 0.3, textTransform: 'uppercase',
           }}>
