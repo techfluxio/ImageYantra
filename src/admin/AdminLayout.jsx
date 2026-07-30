@@ -5,6 +5,7 @@ import {
   FileText, Settings, DatabaseBackup,
 } from 'lucide-react';
 import { adminApi } from './adminApi.js';
+import logoMark from '../assets/images/logo-64.png';
 
 const NAV_ITEMS = [
   { to: '/admin/dashboard', label: 'Dashboard', Icon: LayoutDashboard },
@@ -36,21 +37,24 @@ export default function AdminLayout() {
 
   if (checking) {
     return (
-      <div style={{ display: 'flex', minHeight: '100vh', alignItems: 'center', justifyContent: 'center', background: 'var(--col-bg)', color: 'var(--col-text2)', fontFamily: 'var(--ff-body)' }}>
+      <div className="admin-shell" style={{ display: 'flex', minHeight: '100vh', alignItems: 'center', justifyContent: 'center', background: 'var(--col-bg)', color: 'var(--col-text2)', fontFamily: 'var(--ff-body)' }}>
         Loading…
       </div>
     );
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--col-bg)', fontFamily: 'var(--ff-body)' }}>
+    <div className="admin-shell" style={{ display: 'flex', minHeight: '100vh', background: 'var(--col-bg)', fontFamily: 'var(--ff-body)' }}>
       <aside style={{
         width: 240, flexShrink: 0, background: 'var(--col-white)', borderRight: '1px solid var(--col-border)',
         padding: 'var(--sp-6) var(--sp-4)', display: 'flex', flexDirection: 'column', position: 'sticky', top: 0, height: '100vh',
       }}>
         <div style={{ marginBottom: 'var(--sp-8)', paddingLeft: 'var(--sp-2)' }}>
-          <div style={{ fontFamily: 'var(--ff-head)', fontSize: 19, fontWeight: 800, color: 'var(--col-text)' }}>
-            Image<span style={{ color: 'var(--col-accent)' }}>Yantra</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <img src={logoMark} alt="ImageYantra" width={26} height={26} style={{ objectFit: 'contain', flexShrink: 0 }} />
+            <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 19, fontWeight: 800, color: 'var(--col-text)' }}>
+              Image<span style={{ color: 'var(--col-accent)' }}>Yantra</span>
+            </div>
           </div>
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 4, padding: '2px 8px',
@@ -85,7 +89,7 @@ export default function AdminLayout() {
         </nav>
 
         <div style={{ marginTop: 'auto', paddingTop: 'var(--sp-6)', display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <a
+          
             href="/"
             target="_blank"
             rel="noreferrer"
@@ -100,7 +104,7 @@ export default function AdminLayout() {
           <button
             onClick={handleLogout}
             className="btn btn--sm btn--secondary"
-            style={{ justifyContent: 'flex-start', width: '100%' }}
+            style={{ justifyContent: 'center', width: '100%' }}
           >
             <LogOut size={16} strokeWidth={2.25} />
             Log out
@@ -109,7 +113,7 @@ export default function AdminLayout() {
       </aside>
 
       <main style={{ flex: 1, minWidth: 0, padding: 'var(--sp-8)', overflowY: 'auto' }}>
-        <div style={{ maxWidth: 1080 }}>
+        <div style={{ maxWidth: 1600, width: '100%' }}>
           <Outlet />
         </div>
       </main>
