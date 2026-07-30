@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, Wrench, LayoutGrid, Newspaper, PanelBottom, Megaphone, Bug, LogOut, ExternalLink,
@@ -89,7 +89,7 @@ export default function AdminLayout() {
         </nav>
 
         <div style={{ marginTop: 'auto', paddingTop: 'var(--sp-6)', display: 'flex', flexDirection: 'column', gap: 6 }}>
-          
+          <a
             href="/"
             target="_blank"
             rel="noreferrer"
