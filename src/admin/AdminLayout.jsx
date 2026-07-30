@@ -46,7 +46,7 @@ export default function AdminLayout() {
   return (
     <div className="admin-shell" style={{ display: 'flex', minHeight: '100vh', background: 'var(--col-bg)', fontFamily: 'var(--ff-body)' }}>
       <aside style={{
-        width: 240, flexShrink: 0, background: 'var(--col-white)', borderRight: '1px solid var(--col-border)',
+        width: 260, flexShrink: 0, background: 'var(--col-white)', borderRight: '1px solid var(--col-border)',
         padding: 'var(--sp-6) var(--sp-4)', display: 'flex', flexDirection: 'column', position: 'sticky', top: 0, height: '100vh',
       }}>
         <div style={{ marginBottom: 'var(--sp-8)', paddingLeft: 'var(--sp-2)' }}>
