@@ -4,7 +4,7 @@ import { Head } from 'vite-react-ssg';
 import { Search, ChevronDown, Clock } from 'lucide-react';
 import { BLOG_POSTS } from '../data/index.js';
 import PageShell from '../components/layout/PageShell.jsx';
-import { fetchLiveBlogPosts, mergeBySlug, normalizeBlogPost } from '../utils/publicApi.js';
+import { fetchLiveBlogPosts, normalizeBlogPost } from '../utils/publicApi.js';
 
 const CATEGORY_STYLE = {
   Image: { grad: 'from-violet-200 to-fuchsia-200', badge: 'bg-violet-100 text-violet-700', glyph: '🖼️' },
@@ -26,7 +26,7 @@ export default function BlogListPage() {
   }, []);
 
   const allPosts = useMemo(
-    () => mergeBySlug(BLOG_POSTS, livePosts, 'slug').map(normalizeBlogPost),
+    () => (livePosts !== null ? livePosts.map(normalizeBlogPost) : BLOG_POSTS),
     [livePosts],
   );
 

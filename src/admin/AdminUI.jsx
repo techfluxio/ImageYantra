@@ -49,7 +49,7 @@ export function StatCard({ label, value, sub, icon: Icon, tone = 'accent', trend
     <div
       style={{
         background: 'var(--col-white)', border: '1px solid var(--col-border)', borderRadius: 'var(--r-lg)',
-        boxShadow: 'var(--sh-sm)', padding: 'var(--sp-5)', minWidth: 0,
+        boxShadow: 'var(--sh-sm)', padding: 'var(--sp-5)', minWidth: 180, flex: '1 1 180px',
         transition: 'transform var(--t-fast), box-shadow var(--t-fast)',
       }}
       onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = 'var(--sh-md)'; }}

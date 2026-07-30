@@ -4,8 +4,7 @@ import { ArrowRight, HelpCircle, Newspaper } from 'lucide-react';
 import { FAQAccordion } from '../ui/index.jsx';
 import { AdBanner } from '../cards/index.jsx';
 import { blogCategoryClass, getToolTone } from '../../utils/helpers.js';
-import { fetchLiveBlogPosts, mergeBySlug, normalizeBlogPost } from '../../utils/publicApi.js';
-import { BLOG_POSTS } from '../../data/index.js';
+import { fetchLiveBlogPosts, normalizeBlogPost } from '../../utils/publicApi.js';
 
 /**
  * Ad banner + Related Tools + Related Blogs + FAQ, meant to sit below
@@ -30,8 +29,8 @@ export default function ToolResultExtras({ relatedTools = [], relatedBlogs = [],
     fetchLiveBlogPosts().then((rows) => { if (rows) setLiveBlogs(rows); });
   }, []);
 
-  const blogs = liveBlogs
-    ? mergeBySlug(BLOG_POSTS, liveBlogs, 'slug')
+  const blogs = liveBlogs !== null
+    ? liveBlogs
         .map(normalizeBlogPost)
         .sort((a, b) => new Date(b.dateISO) - new Date(a.dateISO))
         .slice(0, 3)

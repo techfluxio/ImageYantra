@@ -16,7 +16,7 @@ import { FAQAccordion } from '../components/ui/index.jsx';
 import PageShell from '../components/layout/PageShell.jsx';
 import { blogCategoryClass } from '../utils/helpers.js';
 import { toolIcon } from '../utils/toolIcons.js';
-import { fetchLiveBlogPosts, mergeBySlug, normalizeBlogPost } from '../utils/publicApi.js';
+import { fetchLiveBlogPosts, normalizeBlogPost } from '../utils/publicApi.js';
 
 
 
@@ -237,8 +237,8 @@ export default function HomePage() {
     fetchLiveBlogPosts().then((rows) => { if (rows) setLiveBlogs(rows); });
   }, []);
   const recentBlogs = useMemo(() => {
-    const merged = mergeBySlug(BLOG_POSTS, liveBlogs, 'slug').map(normalizeBlogPost);
-    return merged.sort((a, b) => new Date(b.dateISO) - new Date(a.dateISO)).slice(0, 3);
+    const posts = liveBlogs !== null ? liveBlogs.map(normalizeBlogPost) : BLOG_POSTS;
+    return [...posts].sort((a, b) => new Date(b.dateISO) - new Date(a.dateISO)).slice(0, 3);
   }, [liveBlogs]);
 
   return (

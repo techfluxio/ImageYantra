@@ -68,7 +68,7 @@ export default function AdminDashboard() {
       {data && !loading && (
         <>
           <div style={{
-            display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+            display: 'flex', flexWrap: 'wrap',
             gap: 'var(--sp-4)', marginBottom: 'var(--sp-6)',
           }}>
             <StatCard icon={Eye} tone="accent" label="Total page views" value={data.totalViews.toLocaleString()} sub={`Last ${data.rangeDays} days`} />
@@ -96,7 +96,7 @@ export default function AdminDashboard() {
             <StatCard icon={Smartphone} tone="blue" label="Mobile" value={data.deviceBreakdown.mobile} />
             <StatCard icon={Tablet} tone="blue" label="Tablet" value={data.deviceBreakdown.tablet} />
             {glitchCount !== null && (
-              <Link to="/admin/glitches" style={{ textDecoration: 'none' }}>
+              <Link to="/admin/glitches" style={{ textDecoration: 'none', flex: '1 1 180px' }}>
                 <StatCard
                   icon={Bug}
                   tone="red"
