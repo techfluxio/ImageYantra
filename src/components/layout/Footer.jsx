@@ -2,57 +2,65 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShieldIcon, MailIcon } from '../../utils/icons.jsx';
 import { BLOG_POSTS } from '../../data/index.js';
-import { fetchLiveFooterLinks, fetchSiteSettings } from '../../utils/publicApi.js';
+import { fetchLiveFooterLinks, fetchSiteSettings, fetchLiveBlogPosts, normalizeBlogPost } from '../../utils/publicApi.js';
 import logoMark from '../../assets/images/logo-64.png';
 
 export default function Footer() {
   const navigate = useNavigate();
   const [liveLinks, setLiveLinks] = useState(null);
   const [settings, setSettings] = useState(null);
+  const [liveBlogs, setLiveBlogs] = useState(null);
 
   useEffect(() => {
     fetchLiveFooterLinks().then((rows) => { if (rows && rows.length) setLiveLinks(rows); });
     fetchSiteSettings().then((s) => { if (s) setSettings(s); });
+    fetchLiveBlogPosts().then((rows) => { if (rows) setLiveBlogs(rows); });
   }, []);
+
+  const blogLinks = (liveBlogs !== null ? liveBlogs.map(normalizeBlogPost) : BLOG_POSTS)
+    .slice()
+    .sort((a, b) => new Date(b.dateISO || b.date) - new Date(a.dateISO || a.date))
+    .slice(0, 4)
+    .map((p) => ({
+      label: p.title.length > 36 ? p.title.slice(0, 36) + '…' : p.title,
+      path: `/blog/${p.slug}`,
+    }));
 
   const staticColumns = [
     {
       title: 'ImageYantra',
       links: [
-        { label: 'About Us', path: '/about' },
-        { label: 'Blog', path: '/blog' },
-        { label: 'Privacy Policy', path: '/privacy' },
-        { label: 'Terms of Service', path: '/terms' },
-        { label: 'Disclaimer', path: '/disclaimer' },
-        { label: 'Sitemap', path: '/sitemap.xml', external: true },
+        { label: 'About Us',         path: '/about' },
+        { label: 'Blog',             path: '/blog' },
+        { label: 'Privacy Policy',   path: '/privacy' },
+        { label: 'Terms of Service', path: '/terms'   },
+        { label: 'Disclaimer',       path: '/disclaimer' },
+        { label: 'Sitemap',          path: '/sitemap.xml', external: true },
       ],
     },
     {
       title: 'Categories',
       links: [
-        { label: 'Image Tools', path: '/image-tools' },
-        { label: 'PDF Tools', path: '/pdf-tools' },
-        { label: 'Exam Tools', path: '/exam-tools' },
-        { label: 'ID Photo Sizes', path: '/id-photo-sizes' },
+        { label: 'Image Tools',      path: '/image-tools'   },
+        { label: 'PDF Tools',        path: '/pdf-tools'     },
+        { label: 'Exam Tools',       path: '/exam-tools'    },
+        { label: 'ID Photo Sizes',   path: '/id-photo-sizes' },
       ],
     },
     {
       title: 'Popular Tools',
       links: [
-        { label: 'Compress Image', path: '/tools/compress-image' },
-        { label: 'Resize Image', path: '/tools/resize-image' },
-        { label: 'Compress PDF', path: '/tools/compress-pdf' },
-        { label: 'Merge PDF', path: '/tools/merge-pdf' },
-        { label: 'JPG to PDF', path: '/tools/jpg-to-pdf' },
-        { label: 'Remove Background', path: '/tools/background-remove' },
+        { label: 'Compress Image',   path: '/tools/compress-image'    },
+        { label: 'Resize Image',     path: '/tools/resize-image'      },
+        { label: 'Compress PDF',     path: '/tools/compress-pdf'      },
+        { label: 'Merge PDF',        path: '/tools/merge-pdf'         },
+        { label: 'JPG to PDF',       path: '/tools/jpg-to-pdf'        },
+        { label: 'Remove Background',path: '/tools/background-remove' },
       ],
     },
     {
       title: 'Latest from Blog',
-      links: BLOG_POSTS.slice(0, 4).map((p) => ({
-        label: p.title.length > 36 ? p.title.slice(0, 36) + '…' : p.title,
-        path: `/blog/${p.slug}`,
-      })),
+      links: blogLinks,
     },
   ];
 
@@ -74,6 +82,7 @@ export default function Footer() {
       blogColumn,
     ];
   }
+  columns = columns.filter((col) => col.links.length > 0);
 
   return (
     <footer className="footer">
@@ -135,12 +144,13 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="footer__bottom">
-          <span>© {new Date().getFullYear()} ImageYantra. All rights reserved.</span>          <div className="footer__bottom-links">
+          <span>© {new Date().getFullYear()} ImageYantra. All rights reserved.</span>
+          <div className="footer__bottom-links">
             {[
-              { label: 'Privacy Policy', path: '/privacy' },
-              { label: 'Terms of Service', path: '/terms' },
-              { label: 'Disclaimer', path: '/disclaimer' },
-              { label: 'Sitemap', path: '/sitemap.xml', external: true },
+              { label: 'Privacy Policy',   path: '/privacy'    },
+              { label: 'Terms of Service', path: '/terms'      },
+              { label: 'Disclaimer',       path: '/disclaimer' },
+              { label: 'Sitemap',          path: '/sitemap.xml', external: true },
             ].map((link) =>
               link.external ? (
                 <a key={link.path} href={link.path} className="footer__bottom-link" target="_blank" rel="noopener noreferrer">
