@@ -294,9 +294,12 @@ export function buildExamToolMeta(exam, toolType) {
 /** Category label background colour class by blog category */
 export function blogCategoryClass(cat) {
   const map = {
-    Image: 'badge--accent',
-    PDF:   'badge--red',
-    Exam:  'badge--green',
+    Image:  'badge--accent',
+    PDF:    'badge--red',
+    Exam:   'badge--green',
+    Social: 'badge--amber',
+    Govt:   'badge--blue',
+    Other:  'badge--neutral',
   };
   return map[cat] || 'badge--accent';
 }

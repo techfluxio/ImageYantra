@@ -102,6 +102,8 @@
 .badge--green     { background: var(--col-green-bg);  color: var(--col-green);  }
 .badge--red       { background: var(--col-red-bg);    color: var(--col-red);    }
 .badge--amber     { background: var(--col-amber-bg);  color: var(--col-amber);  }
+.badge--blue      { background: var(--col-teaching-bg); color: var(--col-teaching); }
+.badge--neutral   { background: #F3F4F6;               color: #374151; }
 .badge--nta       { background: var(--col-nta-bg);    color: var(--col-nta);    }
 .badge--iit       { background: var(--col-iit-bg);    color: var(--col-iit);    }
 .badge--ssc       { background: var(--col-ssc-bg);    color: var(--col-ssc);    }

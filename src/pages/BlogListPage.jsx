@@ -1,18 +1,25 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Head } from 'vite-react-ssg';
-import { Search, ChevronDown, Clock } from 'lucide-react';
+import { Search, ChevronDown, Clock, Image as ImageIcon, FileText, GraduationCap, MessageCircle, Users, Grid } from 'lucide-react';
 import { BLOG_POSTS } from '../data/index.js';
 import PageShell from '../components/layout/PageShell.jsx';
 import { fetchLiveBlogPosts, normalizeBlogPost } from '../utils/publicApi.js';
 
+/** Colors and icons match the same conventions used everywhere else on
+ *  the site for these categories (see data/index.js CATEGORIES[].color
+ *  and HomePage.jsx's CATEGORY_ICONS) — kept in sync deliberately so a
+ *  post tagged "PDF" always looks red, "Image" always violet, etc. */
 const CATEGORY_STYLE = {
-  Image: { grad: 'from-violet-200 to-fuchsia-200', badge: 'bg-violet-100 text-violet-700', glyph: '🖼️' },
-  PDF:   { grad: 'from-sky-200 to-blue-200',        badge: 'bg-sky-100 text-sky-700',       glyph: '📄' },
-  Exam:  { grad: 'from-rose-200 to-orange-200',     badge: 'bg-rose-100 text-rose-700',     glyph: '🎓' },
+  Image:  { grad: 'from-violet-200 to-fuchsia-200', badge: 'bg-violet-100 text-violet-700', Icon: ImageIcon },
+  PDF:    { grad: 'from-red-200 to-rose-200',        badge: 'bg-red-100 text-red-700',       Icon: FileText },
+  Exam:   { grad: 'from-emerald-200 to-teal-200',    badge: 'bg-emerald-100 text-emerald-700', Icon: GraduationCap },
+  Social: { grad: 'from-amber-200 to-yellow-200',    badge: 'bg-amber-100 text-amber-700',    Icon: MessageCircle },
+  Govt:   { grad: 'from-sky-200 to-blue-200',        badge: 'bg-sky-100 text-sky-700',        Icon: Users },
+  Other:  { grad: 'from-neutral-200 to-neutral-300', badge: 'bg-neutral-100 text-neutral-700', Icon: Grid },
 };
 
-const CATEGORIES = ['All Categories', 'Image', 'PDF', 'Exam'];
+const CATEGORIES = ['All Categories', 'Image', 'PDF', 'Exam', 'Social', 'Govt', 'Other'];
 const SORTS = ['Latest', 'Oldest', 'Quick reads'];
 
 export default function BlogListPage() {
@@ -110,8 +117,8 @@ export default function BlogListPage() {
                   to={`/blog/${post.slug}`}
                   className="group overflow-hidden rounded-2xl border border-neutral-200 bg-white transition hover:-translate-y-0.5 hover:shadow-lg"
                 >
-                  <div className={`grid h-36 place-items-center bg-gradient-to-br ${style.grad} text-5xl`}>
-                    {style.glyph}
+                  <div className={`grid h-36 place-items-center bg-gradient-to-br ${style.grad}`}>
+                    <style.Icon className="h-12 w-12 text-white/90" strokeWidth={1.5} />
                   </div>
                   <div className="p-5">
                     <span className={`inline-block rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${style.badge}`}>

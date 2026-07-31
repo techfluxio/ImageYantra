@@ -6,13 +6,10 @@ import { Newspaper } from 'lucide-react';
 
 const EMPTY_FORM = { title: '', slug: '', excerpt: '', body: '', category: 'Image', author: 'ImageYantra Team', published: true };
 
-function slugify(text) {
-  return (text || '')
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-}
+/** Must exactly match the keys in blogCategoryClass() / BlogListPage's
+ *  CATEGORY_STYLE — these are what actually color-code and icon the
+ *  category badge everywhere blog posts are shown. */
+const BLOG_CATEGORIES = ['Image', 'PDF', 'Exam', 'Social', 'Govt', 'Other'];
 
 export default function AdminBlog() {
   const [posts, setPosts] = useState([]);
@@ -49,10 +46,10 @@ export default function AdminBlog() {
     setSaving(true);
     setError('');
     try {
-      const slug = slugify(form.slug) || slugify(form.title);
-      if (!slug) throw new Error('Please enter a title (or a slug) before saving.');
-      const payload = { ...form, slug };
-
+      const payload = {
+        ...form,
+        slug: form.slug.trim() || form.title.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+      };
       if (editingId) {
         await adminApi.updateBlogPost(editingId, payload);
       } else {
@@ -61,11 +58,7 @@ export default function AdminBlog() {
       cancelEdit();
       load();
     } catch (err) {
-      if (/duplicate key|unique constraint/i.test(err.message)) {
-        setError('That URL slug is already used by another post — please choose a different title or slug.');
-      } else {
-        setError(err.message);
-      }
+      setError(err.message);
     } finally {
       setSaving(false);
     }
@@ -96,7 +89,9 @@ export default function AdminBlog() {
               <input style={inputStyle} value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} placeholder="auto" />
             </Field>
             <Field label="Category">
-              <input style={inputStyle} value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} />
+              <select style={inputStyle} value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
+                {BLOG_CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+              </select>
             </Field>
             <Field label="Author">
               <input style={inputStyle} value={form.author} onChange={(e) => setForm({ ...form, author: e.target.value })} />
