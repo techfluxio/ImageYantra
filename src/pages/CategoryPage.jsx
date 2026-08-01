@@ -5,7 +5,7 @@ import { TOOL_ICONS } from '../utils/toolIcons.js';
 import { CATEGORIES as STATIC_CATEGORIES } from '../data/index.js';
 import { IMAGE_TOOLS } from '../data/imageTools.js';
 import { PDF_TOOLS } from '../data/pdfTools.js';
-import { GOVT_TOOLS } from '../data/index.js';
+import { ID_PHOTO_SIZES } from '../data/index.js';
 import { SOCIAL_TOOLS } from '../data/socialTools.js';
 import { OTHER_TOOLS } from '../data/otherTools.js';
 import { fetchLiveCategories, fetchLiveTools, mergeBySlug } from '../utils/publicApi.js';
@@ -16,7 +16,7 @@ import generatedLive from '../data/generated/live.json';
 const STATIC_TOOLS_BY_CATEGORY = {
   'image-tools': IMAGE_TOOLS,
   'pdf-tools': PDF_TOOLS.map((t) => ({ ...t, category: t.group })),
-  'id-photo-sizes': GOVT_TOOLS,
+  'id-photo-sizes': ID_PHOTO_SIZES,
   'social-tools': SOCIAL_TOOLS.map((t) => ({ ...t, desc: `${t.desc} (${t.dims})` })),
   'other-tools': OTHER_TOOLS,
 };

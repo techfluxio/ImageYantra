@@ -10,7 +10,7 @@ import SocialToolPage from './tools/SocialToolPage.jsx';
 import OtherToolPage from './tools/OtherToolPage.jsx';
 import { IMAGE_TOOLS } from '../data/imageTools.js';
 import { PDF_TOOLS } from '../data/pdfTools.js';
-import { GOVT_TOOLS } from '../data/index.js';
+import { ID_PHOTO_SIZES } from '../data/index.js';
 import { SOCIAL_TOOLS } from '../data/socialTools.js';
 import { OTHER_TOOLS } from '../data/otherTools.js';
 import { EXAM_TOOLS } from '../data/examTools.js';
@@ -113,7 +113,7 @@ function withSource(tools, source) {
 const STATIC_ALL_TOOLS = [
   ...withSource(IMAGE_TOOLS, 'image'),
   ...withSource(PDF_TOOLS, 'pdf'),
-  ...withSource(GOVT_TOOLS, 'govt'),
+  ...withSource(ID_PHOTO_SIZES, 'govt'),
   ...withSource(SOCIAL_TOOLS, 'social'),
   ...withSource(OTHER_TOOLS, 'other'),
   ...withSource(EXAM_TOOLS, 'exam'),

@@ -6,7 +6,7 @@ import {
   ArrowRight, HelpCircle, Newspaper, Calendar, X,
 } from 'lucide-react';
 
-import { CATEGORIES, POPULAR_TOOLS, BLOG_POSTS, FAQS, GOVT_TOOLS } from '../data/index.js';
+import { CATEGORIES, POPULAR_TOOLS, BLOG_POSTS, FAQS, ID_PHOTO_SIZES } from '../data/index.js';
 import { IMAGE_TOOLS } from '../data/imageTools.js';
 import { PDF_TOOLS } from '../data/pdfTools.js';
 import { EXAM_TOOLS } from '../data/examTools.js';
@@ -118,7 +118,7 @@ function SearchBar() {
   const allSearchable = useMemo(() => ([
     ...IMAGE_TOOLS.map((t) => ({ ...t, _path: `/tools/${t.slug}`, _cat: 'Image Tools' })),
     ...PDF_TOOLS.map((t) => ({ ...t, _path: `/tools/${t.slug}`, _cat: 'PDF Tools' })),
-    ...GOVT_TOOLS.map((t) => ({ ...t, _path: `/tools/${t.slug}`, _cat: 'ID Photo Sizes' })),
+    ...ID_PHOTO_SIZES.map((t) => ({ ...t, _path: `/tools/${t.slug}`, _cat: 'ID Photo Sizes' })),
     ...SOCIAL_TOOLS.map((t) => ({ ...t, _path: `/tools/${t.slug}`, _cat: 'Social Tools' })),
     ...OTHER_TOOLS.map((t) => ({ ...t, _path: `/tools/${t.slug}`, _cat: 'Other Tools' })),
     ...EXAM_TOOLS.map((t) => ({ ...t, _path: `/tools/${t.slug}`, _cat: 'Exam Tools' })),
@@ -329,7 +329,7 @@ export default function HomePage() {
               <CategorySection title="Image Tools"    categoryId="image-tools" tools={IMAGE_TOOLS.slice(0, 18)} viewAllPath="/image-tools" />
               <CategorySection title="PDF Tools"       categoryId="pdf-tools"   tools={PDF_TOOLS.slice(0, 18)}   viewAllPath="/pdf-tools" />
               <CategorySection title="Exam Tools"      categoryId="exam-tools"  tools={examItems}                viewAllPath="/exam-tools" />
-              <CategorySection title="ID Photo Sizes"  categoryId="id-photo-sizes"  tools={GOVT_TOOLS}       viewAllPath="/id-photo-sizes" />
+              <CategorySection title="ID Photo Sizes"  categoryId="id-photo-sizes"  tools={ID_PHOTO_SIZES}       viewAllPath="/id-photo-sizes" />
               <CategorySection title="Social Tools"    categoryId="social-tools" tools={SOCIAL_TOOLS}        viewAllPath="/social-tools" />
               <CategorySection title="Other Tools"     categoryId="other-tools" tools={OTHER_TOOLS}          viewAllPath="/other-tools" />
             </div>

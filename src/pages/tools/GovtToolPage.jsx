@@ -4,14 +4,14 @@ import ToolShell from '../../components/tools/ToolShell.jsx';
 import ToolResult from '../../components/tools/ToolResult.jsx';
 import ToolResultExtras from '../../components/tools/ToolResultExtras.jsx';
 import ExamImageWorking from '../../components/tools/ExamImageWorking.jsx';
-import { GOVT_TOOLS } from '../../data/index.js';
+import { ID_PHOTO_SIZES } from '../../data/index.js';
 import { downloadDataURL, parseDimsSpec, parseSizeSpec } from '../../utils/imageProcessing.js';
 import { toolIcon } from '../../utils/toolIcons.js';
 import { BLOG_POSTS } from '../../data/index.js';
 
 /**
  * Builds the same `spec` shape ExamImageWorking expects, but sourced
- * directly from a GOVT_TOOLS entry's own `specs` field instead of the
+ * directly from a ID_PHOTO_SIZES entry's own `specs` field instead of the
  * exams.js lookup table (there is no "exam" behind these — just a
  * fixed official document size).
  */
@@ -35,7 +35,7 @@ function buildGovtSpec(tool) {
 }
 
 function getRelatedGovtTools(tool, limit = 4) {
-  return GOVT_TOOLS.filter((t) => t.slug !== tool.slug).slice(0, limit);
+  return ID_PHOTO_SIZES.filter((t) => t.slug !== tool.slug).slice(0, limit);
 }
 
 function getGovtFaqs(tool) {
