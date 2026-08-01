@@ -5,7 +5,7 @@ import { Search, ChevronDown, Clock } from 'lucide-react';
 import { BLOG_POSTS } from '../data/index.js';
 import PageShell from '../components/layout/PageShell.jsx';
 import { fetchLiveBlogPosts, normalizeBlogPost } from '../utils/publicApi.js';
-import { ImageCover, PdfCover, ExamCover, SocialCover, GovtCover, OtherCover } from '../components/blog/BlogCoverIllustrations.jsx';
+import { ImageCover, PdfCover, ExamCover, SocialCover, IDCover, OtherCover } from '../components/blog/BlogCoverIllustrations.jsx';
 
 /** Colors match the same conventions used everywhere else on the site
  *  for these categories (see data/index.js CATEGORIES[].color) — kept
@@ -13,15 +13,15 @@ import { ImageCover, PdfCover, ExamCover, SocialCover, GovtCover, OtherCover } f
  *  "Image" always violet, etc. Cover is a custom illustration, one per
  *  category, instead of an emoji or a plain icon. */
 const CATEGORY_STYLE = {
-  Image:  { badge: 'bg-violet-100 text-violet-700',   Cover: ImageCover },
-  PDF:    { badge: 'bg-red-100 text-red-700',         Cover: PdfCover },
-  Exam:   { badge: 'bg-emerald-100 text-emerald-700', Cover: ExamCover },
-  Social: { badge: 'bg-amber-100 text-amber-700',     Cover: SocialCover },
-  Govt:   { badge: 'bg-sky-100 text-sky-700',         Cover: GovtCover },
-  Other:  { badge: 'bg-neutral-100 text-neutral-700', Cover: OtherCover },
+  Image: { badge: 'bg-violet-100 text-violet-700', Cover: ImageCover },
+  PDF: { badge: 'bg-red-100 text-red-700', Cover: PdfCover },
+  Exam: { badge: 'bg-emerald-100 text-emerald-700', Cover: ExamCover },
+  Social: { badge: 'bg-amber-100 text-amber-700', Cover: SocialCover },
+  'ID Photo Sizes': { badge: 'bg-sky-100 text-sky-700', Cover: IDCover },
+  Other: { badge: 'bg-neutral-100 text-neutral-700', Cover: OtherCover },
 };
 
-const CATEGORIES = ['All Categories', 'Image', 'PDF', 'Exam', 'Social', 'Govt', 'Other'];
+const CATEGORIES = ['All Categories', 'Image', 'PDF', 'Exam', 'Social', 'ID Photo Sizes', 'Other'];
 const SORTS = ['Latest', 'Oldest', 'Quick reads'];
 
 export default function BlogListPage() {

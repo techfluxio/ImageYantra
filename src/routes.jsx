@@ -30,7 +30,7 @@ const AdminBackup     = lazy(() => import('./admin/AdminBackup.jsx'));
 /* ── Data used to pre-generate one real .html file per dynamic page ── */
 import { IMAGE_TOOLS } from './data/imageTools.js';
 import { PDF_TOOLS } from './data/pdfTools.js';
-import { GOVT_TOOLS, BLOG_POSTS } from './data/index.js';
+import { ID_PHOTO_SIZES, BLOG_POSTS } from './data/index.js';
 import { SOCIAL_TOOLS } from './data/socialTools.js';
 import { OTHER_TOOLS } from './data/otherTools.js';
 import { EXAM_TOOLS } from './data/examTools.js';
@@ -41,7 +41,7 @@ import liveContent from './data/generated/live.json';
 
 const ALL_TOOL_SLUGS = Array.from(
   new Set(
-    [...IMAGE_TOOLS, ...PDF_TOOLS, ...GOVT_TOOLS, ...SOCIAL_TOOLS, ...OTHER_TOOLS, ...EXAM_TOOLS, ...liveContent.tools]
+    [...IMAGE_TOOLS, ...PDF_TOOLS, ...ID_PHOTO_SIZES, ...SOCIAL_TOOLS, ...OTHER_TOOLS, ...EXAM_TOOLS, ...liveContent.tools]
       .map((t) => t.slug)
       .filter(Boolean),
   ),

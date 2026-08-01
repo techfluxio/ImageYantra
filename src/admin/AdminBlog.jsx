@@ -9,7 +9,7 @@ const EMPTY_FORM = { title: '', slug: '', excerpt: '', body: '', category: 'Imag
 /** Must exactly match the keys in blogCategoryClass() / BlogListPage's
  *  CATEGORY_STYLE — these are what actually color-code and icon the
  *  category badge everywhere blog posts are shown. */
-const BLOG_CATEGORIES = ['Image', 'PDF', 'Exam', 'Social', 'Govt', 'Other'];
+const BLOG_CATEGORIES = ['Image', 'PDF', 'Exam', 'Social', 'ID Photo Sizes', 'Other'];
 
 export default function AdminBlog() {
   const [posts, setPosts] = useState([]);

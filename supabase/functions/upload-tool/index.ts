@@ -27,7 +27,7 @@ const GITHUB_REPO = Deno.env.get('GITHUB_REPO')!; // "owner/repo"
 const GITHUB_BRANCH = Deno.env.get('GITHUB_BRANCH') || 'main';
 const VERCEL_DEPLOY_HOOK = Deno.env.get('VERCEL_DEPLOY_HOOK')!;
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
-const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+const SERVICE_ROLE_KEY = Deno.env.get('SERVICE_ROLE_KEY')!;
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
