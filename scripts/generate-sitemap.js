@@ -30,7 +30,7 @@ async function main() {
 
   const toolSlugs = Array.from(
     new Set(
-      [...IMAGE_TOOLS, ...PDF_TOOLS, ...GOVT_TOOLS, ...SOCIAL_TOOLS, ...OTHER_TOOLS, ...EXAM_TOOLS, ...live.tools]
+      [...IMAGE_TOOLS, ...PDF_TOOLS, ...ID_PHOTO_SIZES, ...SOCIAL_TOOLS, ...OTHER_TOOLS, ...EXAM_TOOLS, ...live.tools]
         .map((t) => t.slug)
         .filter(Boolean),
     ),
