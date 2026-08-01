@@ -44,15 +44,12 @@ export function PdfCover() {
       </g>
       <g transform="rotate(4 190 110)">
         <rect x="120" y="35" width="120" height="150" rx="10" fill="#FFFFFF" stroke="#E63946" strokeWidth="3" />
-        <rect x="138" y="60" width="84" height="9" rx="4.5" fill="#E63946" opacity="0.85" />
-        <rect x="138" y="80" width="84" height="6" rx="3" fill="#F5B4B4" />
-        <rect x="138" y="94" width="60" height="6" rx="3" fill="#F5B4B4" />
-        <rect x="138" y="108" width="84" height="6" rx="3" fill="#F5B4B4" />
-        <rect x="138" y="122" width="50" height="6" rx="3" fill="#F5B4B4" />
-      </g>
-      <g transform="translate(295 150)">
-        <circle r="30" fill="#E63946" />
-        <path d="M -12 0 l 8 9 l 18 -20" stroke="#fff" strokeWidth="5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        <text x="180" y="72" textAnchor="middle" fontFamily="var(--ff-head, sans-serif)" fontWeight="800" fontSize="26" fill="#E63946">PDF</text>
+        <rect x="138" y="90" width="84" height="6" rx="3" fill="#F5B4B4" />
+        <rect x="138" y="104" width="60" height="6" rx="3" fill="#F5B4B4" />
+        <rect x="138" y="118" width="84" height="6" rx="3" fill="#F5B4B4" />
+        <rect x="138" y="132" width="50" height="6" rx="3" fill="#F5B4B4" />
+        <rect x="138" y="146" width="70" height="6" rx="3" fill="#F5B4B4" />
       </g>
     </svg>
   );
@@ -73,10 +70,12 @@ export function ExamCover() {
         <rect x="126" y="118" width="118" height="6" rx="3" fill="#A7F0D0" />
         <rect x="126" y="132" width="90" height="6" rx="3" fill="#A7F0D0" />
       </g>
-      <g transform="translate(300 155)">
-        <polygon points="0,-16 44,0 0,16 -44,0" fill="#065F46" />
-        <rect x="-7" y="0" width="14" height="24" rx="4" fill="#10B981" />
-        <circle cx="0" cy="24" r="5" fill="#065F46" />
+      <g transform="translate(298 158)">
+        <ellipse cx="0" cy="10" rx="26" ry="10" fill="#065F46" />
+        <polygon points="0,-20 46,3 0,26 -46,3" fill="#047857" />
+        <circle cx="0" cy="3" r="5" fill="#065F46" />
+        <line x1="0" y1="3" x2="24" y2="14" stroke="#065F46" strokeWidth="2.5" />
+        <circle cx="26" cy="16" r="4.5" fill="#065F46" />
       </g>
     </svg>
   );
@@ -109,7 +108,7 @@ export function SocialCover() {
   );
 }
 
-export function IDCover() {
+export function GovtCover() {
   return (
     <svg viewBox="0 0 400 220" className="h-full w-full" preserveAspectRatio="xMidYMid slice">
       <rect width="400" height="220" fill="#EFF7FF" />
@@ -141,15 +140,17 @@ export function OtherCover() {
       <g transform="rotate(-4 195 110)">
         <rect x="120" y="55" width="150" height="110" rx="12" fill="#E5E7EB" />
       </g>
-      <g transform="translate(150 65)">
-        <rect x="0" y="0" width="56" height="56" rx="12" fill="#4B5563" />
-        <rect x="68" y="0" width="56" height="56" rx="12" fill="#9CA3AF" />
-        <rect x="0" y="68" width="56" height="56" rx="12" fill="#9CA3AF" />
-        <rect x="68" y="68" width="56" height="56" rx="12" fill="#4B5563" />
+      <g transform="rotate(3 205 108)">
+        <rect x="130" y="45" width="150" height="110" rx="12" fill="#FFFFFF" stroke="#6B7280" strokeWidth="3" />
+        <text x="205" y="90" textAnchor="middle" fontFamily="var(--ff-head, sans-serif)" fontWeight="800" fontSize="24" fill="#4B5563">Other</text>
+        <rect x="160" y="108" width="90" height="7" rx="3.5" fill="#D1D5DB" />
+        <rect x="160" y="124" width="70" height="6" rx="3" fill="#D1D5DB" />
       </g>
-      <g transform="translate(305 150) rotate(25)">
-        <rect x="-8" y="-42" width="16" height="62" rx="8" fill="#374151" />
-        <circle cx="0" cy="-42" r="19" fill="none" stroke="#374151" strokeWidth="11" strokeDasharray="32 100" />
+      <g transform="translate(300 150)">
+        <rect x="-26" y="-26" width="24" height="24" rx="6" fill="#4B5563" />
+        <rect x="2" y="-26" width="24" height="24" rx="6" fill="#9CA3AF" />
+        <rect x="-26" y="2" width="24" height="24" rx="6" fill="#9CA3AF" />
+        <rect x="2" y="2" width="24" height="24" rx="6" fill="#4B5563" />
       </g>
     </svg>
   );

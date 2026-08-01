@@ -16,6 +16,22 @@ function unwrap({ data, error }) {
   return data;
 }
 
+/** Supabase's REST API caps any single query at 1000 rows by default.
+ *  Use this for any query whose row count can realistically grow past
+ *  that over time (analytics, logs) — pages through in batches until a
+ *  page comes back with fewer than PAGE_SIZE rows. */
+async function fetchAllRows(table, buildQuery) {
+  const PAGE_SIZE = 1000;
+  let rows = [];
+  for (let from = 0; ; from += PAGE_SIZE) {
+    const { data: page, error } = await buildQuery(supabase.from(table)).range(from, from + PAGE_SIZE - 1);
+    if (error) throw new Error(error.message);
+    rows = rows.concat(page);
+    if (page.length < PAGE_SIZE) break;
+  }
+  return rows;
+}
+
 function browserFromUA(ua = '') {
   if (!ua) return 'Other';
   if (/Edg\//.test(ua)) return 'Edge';
@@ -90,11 +106,9 @@ export const adminApi = {
   // ── Analytics (page views) ───────────────────────────
   async analyticsSummary(days = 30) {
     const since = new Date(Date.now() - days * 86400000).toISOString();
-    const { data, error } = await supabase
-      .from('page_views')
-      .select('path, tool_slug, device_type, referrer_host, session_id, user_agent, created_at')
-      .gte('created_at', since);
-    if (error) throw new Error(error.message);
+    const data = await fetchAllRows('page_views', (q) =>
+      q.select('path, tool_slug, device_type, referrer_host, session_id, user_agent, created_at').gte('created_at', since),
+    );
 
     const totalViews = data.length;
     const sessions = new Set();
@@ -144,12 +158,10 @@ export const adminApi = {
   // ── Tool health / completions ──────────────────────────
   async toolStats(days = 30) {
     const since = new Date(Date.now() - days * 86400000).toISOString();
-    const [{ data: completions, error: e1 }, { data: errors, error: e2 }] = await Promise.all([
-      supabase.from('tool_completions').select('tool_slug, files_count, duration_ms, created_at').gte('created_at', since),
-      supabase.from('error_reports').select('tool_slug, created_at').gte('created_at', since),
+    const [completions, errors] = await Promise.all([
+      fetchAllRows('tool_completions', (q) => q.select('tool_slug, files_count, duration_ms, created_at').gte('created_at', since)),
+      fetchAllRows('error_reports', (q) => q.select('tool_slug, created_at').gte('created_at', since)),
     ]);
-    if (e1) throw new Error(e1.message);
-    if (e2) throw new Error(e2.message);
 
     const filesProcessed = completions.reduce((sum, c) => sum + (c.files_count || 1), 0);
     const durations = completions.map((c) => c.duration_ms).filter((d) => typeof d === 'number' && d > 0);
