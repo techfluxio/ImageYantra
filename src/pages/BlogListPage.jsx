@@ -1,22 +1,24 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Head } from 'vite-react-ssg';
-import { Search, ChevronDown, Clock, Image as ImageIcon, FileText, GraduationCap, MessageCircle, Users, Grid } from 'lucide-react';
+import { Search, ChevronDown, Clock } from 'lucide-react';
 import { BLOG_POSTS } from '../data/index.js';
 import PageShell from '../components/layout/PageShell.jsx';
 import { fetchLiveBlogPosts, normalizeBlogPost } from '../utils/publicApi.js';
+import { ImageCover, PdfCover, ExamCover, SocialCover, GovtCover, OtherCover } from '../components/blog/BlogCoverIllustrations.jsx';
 
-/** Colors and icons match the same conventions used everywhere else on
- *  the site for these categories (see data/index.js CATEGORIES[].color
- *  and HomePage.jsx's CATEGORY_ICONS) — kept in sync deliberately so a
- *  post tagged "PDF" always looks red, "Image" always violet, etc. */
+/** Colors match the same conventions used everywhere else on the site
+ *  for these categories (see data/index.js CATEGORIES[].color) — kept
+ *  in sync deliberately so a post tagged "PDF" always looks red,
+ *  "Image" always violet, etc. Cover is a custom illustration, one per
+ *  category, instead of an emoji or a plain icon. */
 const CATEGORY_STYLE = {
-  Image:  { grad: 'from-violet-200 to-fuchsia-200', badge: 'bg-violet-100 text-violet-700', Icon: ImageIcon },
-  PDF:    { grad: 'from-red-200 to-rose-200',        badge: 'bg-red-100 text-red-700',       Icon: FileText },
-  Exam:   { grad: 'from-emerald-200 to-teal-200',    badge: 'bg-emerald-100 text-emerald-700', Icon: GraduationCap },
-  Social: { grad: 'from-amber-200 to-yellow-200',    badge: 'bg-amber-100 text-amber-700',    Icon: MessageCircle },
-  Govt:   { grad: 'from-sky-200 to-blue-200',        badge: 'bg-sky-100 text-sky-700',        Icon: Users },
-  Other:  { grad: 'from-neutral-200 to-neutral-300', badge: 'bg-neutral-100 text-neutral-700', Icon: Grid },
+  Image:  { badge: 'bg-violet-100 text-violet-700',   Cover: ImageCover },
+  PDF:    { badge: 'bg-red-100 text-red-700',         Cover: PdfCover },
+  Exam:   { badge: 'bg-emerald-100 text-emerald-700', Cover: ExamCover },
+  Social: { badge: 'bg-amber-100 text-amber-700',     Cover: SocialCover },
+  Govt:   { badge: 'bg-sky-100 text-sky-700',         Cover: GovtCover },
+  Other:  { badge: 'bg-neutral-100 text-neutral-700', Cover: OtherCover },
 };
 
 const CATEGORIES = ['All Categories', 'Image', 'PDF', 'Exam', 'Social', 'Govt', 'Other'];
@@ -117,8 +119,8 @@ export default function BlogListPage() {
                   to={`/blog/${post.slug}`}
                   className="group overflow-hidden rounded-2xl border border-neutral-200 bg-white transition hover:-translate-y-0.5 hover:shadow-lg"
                 >
-                  <div className={`grid h-36 place-items-center bg-gradient-to-br ${style.grad}`}>
-                    <style.Icon className="h-12 w-12 text-white/90" strokeWidth={1.5} />
+                  <div className="h-36 overflow-hidden">
+                    <style.Cover />
                   </div>
                   <div className="p-5">
                     <span className={`inline-block rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${style.badge}`}>
