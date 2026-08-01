@@ -2,7 +2,7 @@ import { EXAMS } from '../data/exams.js';
 import { EXAM_GROUPS } from '../data/examGroups.js';
 import { IMAGE_TOOLS } from '../data/imageTools.js';
 import { PDF_TOOLS } from '../data/pdfTools.js';
-import { GOVT_TOOLS } from '../data/index.js';
+import { ID_PHOTO_SIZES } from '../data/index.js';
 import { SOCIAL_TOOLS } from '../data/socialTools.js';
 import { OTHER_TOOLS } from '../data/otherTools.js';
 import { EXAM_TOOLS } from '../data/examTools.js';
@@ -134,7 +134,7 @@ export function getToolBySlug(slug) {
   return (
     IMAGE_TOOLS.find((t) => t.slug === slug)  ||
     PDF_TOOLS.find((t) => t.slug === slug)    ||
-    GOVT_TOOLS.find((t) => t.slug === slug)   ||
+    ID_PHOTO_SIZES.find((t) => t.slug === slug)   ||
     SOCIAL_TOOLS.find((t) => t.slug === slug) ||
     OTHER_TOOLS.find((t) => t.slug === slug)  ||
     null
@@ -170,7 +170,7 @@ function getSearchableTools() {
   return [
     ...IMAGE_TOOLS.map((t) => ({ ...t, _type: 'tool', _path: `/tools/${t.slug}` })),
     ...PDF_TOOLS.map((t) => ({ ...t, _type: 'tool', _path: `/tools/${t.slug}` })),
-    ...GOVT_TOOLS.map((t) => ({ ...t, _type: 'tool', _path: `/tools/${t.slug}` })),
+    ...ID_PHOTO_SIZES.map((t) => ({ ...t, _type: 'tool', _path: `/tools/${t.slug}` })),
     ...SOCIAL_TOOLS.map((t) => ({ ...t, _type: 'tool', _path: `/tools/${t.slug}` })),
     ...OTHER_TOOLS.map((t) => ({ ...t, _type: 'tool', _path: `/tools/${t.slug}` })),
   ];

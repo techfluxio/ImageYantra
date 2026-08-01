@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { Link, useNavigate } from 'react-router-dom';
 import { IMAGE_TOOLS } from '../../data/imageTools.js';
 import { PDF_TOOLS } from '../../data/pdfTools.js';
-import { GOVT_TOOLS, CATEGORIES as STATIC_CATEGORIES } from '../../data/index.js';
+import { ID_PHOTO_SIZES, CATEGORIES as STATIC_CATEGORIES } from '../../data/index.js';
 import { EXAM_GROUPS } from '../../data/examGroups.js';
 import { EXAM_TOOLS } from '../../data/examTools.js';
 import { fetchLiveCategories, mergeBySlug } from '../../utils/publicApi.js';
@@ -105,7 +105,7 @@ function IdPhotoMegaMenu({ isOpen, onNavigate }) {
     <div className={`mega-panel mega-panel--image ${isOpen ? 'is-open' : ''}`}>
       <div className="nav__mega-section-label">ID Photo Sizes</div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
-        {GOVT_TOOLS.map((tool) => (
+        {ID_PHOTO_SIZES.map((tool) => (
           <button
             key={tool.slug}
             className="nav__mega-item"

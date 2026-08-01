@@ -3,7 +3,7 @@ import { ToolCard, ExamCard, BlogCard, CategoryCard, MiniToolCard, MostUsedItem,
 import { SectionLabel } from '../ui/index.jsx';
 import { FAQAccordion } from '../ui/index.jsx';
 import { ShieldIcon, BoltIcon, CheckIcon, MobileIcon, ExtLinkIcon, getToolIcon, ImagesStackIcon, CompressPdfIcon, GraduationCapIcon, UsersIcon, ChatIcon, PlusIcon, HelpCircleIcon, NewspaperIcon, ClockIcon } from '../../utils/icons.jsx';
-import { CATEGORIES, POPULAR_TOOLS, BLOG_POSTS, FAQS, GOVT_TOOLS } from '../../data/index.js';
+import { CATEGORIES, POPULAR_TOOLS, BLOG_POSTS, FAQS, ID_PHOTO_SIZES } from '../../data/index.js';
 import { EXAMS } from '../../data/exams.js';
 import { IMAGE_TOOLS } from '../../data/imageTools.js';
 import { PDF_TOOLS } from '../../data/pdfTools.js';
@@ -121,7 +121,7 @@ export function ToolGridBands() {
     key: e.slug, icon: getToolIcon('exam', 18), name: e.name,
     sub: e.authority, onClick: () => navigate(`/exam-tools/${e.slug}`),
   }));
-  const govtItems = GOVT_TOOLS.map((t) => ({
+  const govtItems = ID_PHOTO_SIZES.map((t) => ({
     key: t.slug, icon: getToolIcon(t.icon, 18), name: t.name,
     sub: t.desc?.split('.')[0]?.slice(0, 28), onClick: () => navigate(`/tools/${t.slug}`),
   }));
