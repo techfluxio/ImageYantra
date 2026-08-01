@@ -18,7 +18,7 @@ async function main() {
   // for plain ESM data files with no JSX.
   const { IMAGE_TOOLS } = await import('../src/data/imageTools.js');
   const { PDF_TOOLS } = await import('../src/data/pdfTools.js');
-  const { GOVT_TOOLS, BLOG_POSTS } = await import('../src/data/index.js');
+  const { ID_PHOTO_SIZES, BLOG_POSTS } = await import('../src/data/index.js');
   const { SOCIAL_TOOLS } = await import('../src/data/socialTools.js');
   const { OTHER_TOOLS } = await import('../src/data/otherTools.js');
   const { EXAM_TOOLS } = await import('../src/data/examTools.js');
