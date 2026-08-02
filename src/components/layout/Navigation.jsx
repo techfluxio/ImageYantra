@@ -4,52 +4,50 @@ import { Link, useNavigate } from 'react-router-dom';
 import { IMAGE_TOOLS } from '../../data/imageTools.js';
 import { PDF_TOOLS } from '../../data/pdfTools.js';
 import { ID_PHOTO_SIZES, CATEGORIES as STATIC_CATEGORIES } from '../../data/index.js';
-import { EXAM_GROUPS } from '../../data/examGroups.js';
 import { EXAM_TOOLS } from '../../data/examTools.js';
-import { fetchLiveCategories, mergeBySlug } from '../../utils/publicApi.js';
+import { fetchLiveCategories, fetchLiveTools, mergeBySlug } from '../../utils/publicApi.js';
 
 /* Categories that already have their own bespoke mega menu below and
    shouldn't also appear in the generic "More" dropdown. */
 const MEGA_MENU_CATEGORY_SLUGS = new Set(['image-tools', 'pdf-tools', 'exam-tools', 'id-photo-sizes']);
 
-/* Maps an EXAM_GROUPS id (used by the Authority tabs in the nav) to the
-   authority label used inside EXAM_TOOLS[].authorities. The two data
-   files were built independently, so a couple of ids don't line up
-   1:1 (e.g. the "banking" group tab maps to the "IBPS" authority tag). */
-const GROUP_ID_TO_AUTHORITY = {
-  nta: 'NTA',
-  iit: 'IIT',
-  ssc: 'SSC',
-  banking: 'IBPS',
-  upsc: 'UPSC',
-  defence: 'Defence',
-  railway: 'Railway',
-  teaching: 'Teaching',
-  law: 'Law',
-};
-import { getToolIcon, getAuthorityIcon, ChevDownIcon, MenuIcon, CloseIcon, ExtLinkIcon } from '../../utils/icons.jsx';
+import { ChevDownIcon, MenuIcon, CloseIcon, ExtLinkIcon } from '../../utils/icons.jsx';
+import { toolIcon } from '../../utils/toolIcons.js';
 import logoMark from '../../assets/images/logo-64.png';
 
+/** Merges a category's bundled static tools with any admin-added tools
+ *  for that same category, so a newly created tool shows up in the nav
+ *  dropdown immediately instead of only after the next full rebuild. */
+function mergeLiveTools(staticList, liveTools, categorySlug) {
+  if (!liveTools) return staticList;
+  const forCategory = liveTools.filter((t) => t.category_slug === categorySlug);
+  return mergeBySlug(staticList, forCategory, 'slug');
+}
+
 /* ── Image Tools Mega Menu ───────────────────────────── */
-function ImageMegaMenu({ isOpen, onNavigate }) {
+function ImageMegaMenu({ isOpen, onNavigate, liveTools }) {
+  const tools = mergeLiveTools(IMAGE_TOOLS, liveTools, 'image-tools');
   return (
     <div className={`mega-panel mega-panel--image ${isOpen ? 'is-open' : ''}`}>
       <div className="mega-panel__scroll">
         <div className="nav__mega-section-label">Image Tools</div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
-          {IMAGE_TOOLS.slice(0, 10).map((tool) => (
-            <button
-              key={tool.slug}
-              className="nav__mega-item"
-              onClick={() => onNavigate(`/tools/${tool.slug}`)}
-            >
-              <span className="nav__mega-icon nav__mega-icon--purple">{getToolIcon(tool.icon, 17)}</span>
-              <div>
-                <div className="nav__mega-label">{tool.name}</div>
-                <div className="nav__mega-desc">{tool.desc.split('.')[0]}</div>
-              </div>
-            </button>
-          ))}
+          {tools.slice(0, 10).map((tool) => {
+            const Icon = toolIcon(tool.icon);
+            return (
+              <button
+                key={tool.slug}
+                className="nav__mega-item"
+                onClick={() => onNavigate(`/tools/${tool.slug}`)}
+              >
+                <span className="nav__mega-icon nav__mega-icon--purple"><Icon size={17} /></span>
+                <div>
+                  <div className="nav__mega-label">{tool.name}</div>
+                  <div className="nav__mega-desc">{tool.desc.split('.')[0]}</div>
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
       <div className="nav__mega-divider" />
@@ -63,33 +61,32 @@ function ImageMegaMenu({ isOpen, onNavigate }) {
 }
 
 /* ── PDF Tools Mega Menu ─────────────────────────────── */
-function PDFMegaMenu({ isOpen, onNavigate }) {
-  const groups = [...new Set(PDF_TOOLS.map((t) => t.group))];
+function PDFMegaMenu({ isOpen, onNavigate, liveTools }) {
+  const tools = mergeLiveTools(PDF_TOOLS, liveTools, 'pdf-tools');
   return (
     <div className={`mega-panel mega-panel--pdf ${isOpen ? 'is-open' : ''}`}>
       <div className="mega-panel__scroll">
-        {groups.map((group) => (
-          <div key={group}>
-            <div className="nav__mega-section-label">{group}</div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
-              {PDF_TOOLS.filter((t) => t.group === group).map((tool) => (
-                <button
-                  key={tool.slug}
-                  className="nav__mega-item"
-                  onClick={() => onNavigate(`/tools/${tool.slug}`)}
-                >
-                  <span className="nav__mega-icon nav__mega-icon--red">{getToolIcon(tool.icon, 17)}</span>
-                  <div>
-                    <div className="nav__mega-label">{tool.name}</div>
-                    <div className="nav__mega-desc">{tool.desc.split('.')[0]}</div>
-                  </div>
-                </button>
-              ))}
-            </div>
-            <div className="nav__mega-divider" />
-          </div>
-        ))}
+        <div className="nav__mega-section-label">PDF Tools</div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
+          {tools.slice(0, 10).map((tool) => {
+            const Icon = toolIcon(tool.icon);
+            return (
+              <button
+                key={tool.slug}
+                className="nav__mega-item"
+                onClick={() => onNavigate(`/tools/${tool.slug}`)}
+              >
+                <span className="nav__mega-icon nav__mega-icon--red"><Icon size={17} /></span>
+                <div>
+                  <div className="nav__mega-label">{tool.name}</div>
+                  <div className="nav__mega-desc">{tool.desc.split('.')[0]}</div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
       </div>
+      <div className="nav__mega-divider" />
       <div className="nav__mega-footer">
         <button className="open-link" onClick={() => onNavigate('/pdf-tools')}>
           View all PDF Tools <ExtLinkIcon size={12} />
@@ -100,24 +97,28 @@ function PDFMegaMenu({ isOpen, onNavigate }) {
 }
 
 /* ── ID Photo Sizes Mega Menu ────────────────────────── */
-function IdPhotoMegaMenu({ isOpen, onNavigate }) {
+function IdPhotoMegaMenu({ isOpen, onNavigate, liveTools }) {
+  const tools = mergeLiveTools(ID_PHOTO_SIZES, liveTools, 'id-photo-sizes');
   return (
     <div className={`mega-panel mega-panel--image ${isOpen ? 'is-open' : ''}`}>
       <div className="nav__mega-section-label">ID Photo Sizes</div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
-        {ID_PHOTO_SIZES.map((tool) => (
-          <button
-            key={tool.slug}
-            className="nav__mega-item"
-            onClick={() => onNavigate(`/tools/${tool.slug}`)}
-          >
-            <span className="nav__mega-icon nav__mega-icon--blue">{getToolIcon(tool.icon, 17)}</span>
-            <div>
-              <div className="nav__mega-label">{tool.name}</div>
-              <div className="nav__mega-desc">{tool.desc.split('.')[0]}</div>
-            </div>
-          </button>
-        ))}
+        {tools.map((tool) => {
+          const Icon = toolIcon(tool.icon);
+          return (
+            <button
+              key={tool.slug}
+              className="nav__mega-item"
+              onClick={() => onNavigate(`/tools/${tool.slug}`)}
+            >
+              <span className="nav__mega-icon nav__mega-icon--blue"><Icon size={17} /></span>
+              <div>
+                <div className="nav__mega-label">{tool.name}</div>
+                <div className="nav__mega-desc">{tool.desc.split('.')[0]}</div>
+              </div>
+            </button>
+          );
+        })}
       </div>
       <div className="nav__mega-divider" />
       <div className="nav__mega-footer">
@@ -130,69 +131,36 @@ function IdPhotoMegaMenu({ isOpen, onNavigate }) {
 }
 
 /* ── Exam Tools Mega Menu ────────────────────────────── */
-function ExamMegaMenu({ isOpen, onNavigate }) {
-  const [activeGroup, setActiveGroup] = useState('nta');
-  const activeAuthority = GROUP_ID_TO_AUTHORITY[activeGroup];
-  const activeTools = EXAM_TOOLS.filter((t) => t.authorities.includes(activeAuthority)).slice(0, 8);
-  const groupMeta = EXAM_GROUPS.find((g) => g.id === activeGroup);
-
+function ExamMegaMenu({ isOpen, onNavigate, liveTools }) {
+  const tools = mergeLiveTools(EXAM_TOOLS, liveTools, 'exam-tools');
   return (
     <div className={`mega-panel mega-panel--exam ${isOpen ? 'is-open' : ''}`}>
-      <div className="nav__exam-mega-inner">
-        {/* Authority tabs */}
-        <div className="nav__exam-tabs">
-          <div style={{ padding: '4px 8px 8px', fontSize: 10.5, fontWeight: 700, color: 'var(--col-text3)', letterSpacing: '.07em', textTransform: 'uppercase' }}>
-            Authority
-          </div>
-          {EXAM_GROUPS.map((g) => (
-            <button
-              key={g.id}
-              className={`nav__exam-tab ${activeGroup === g.id ? 'is-active' : ''}`}
-              onMouseEnter={() => setActiveGroup(g.id)}
-              onClick={() => setActiveGroup(g.id)}
-            >
-              <span
-                className="nav__exam-tab-icon"
-                style={{
-                  background: activeGroup === g.id ? g.bg : 'rgba(0,0,0,.045)',
-                  color: activeGroup === g.id ? g.color : 'var(--col-text3)',
-                }}
-              >
-                {getAuthorityIcon(g.id, 13)}
-              </span>
-              <span className="nav__exam-tab-label">{g.label}</span>
-            </button>
-          ))}
-        </div>
-
-        {/* Exam panel */}
-        <div className="nav__exam-panel">
-          <div className="nav__exam-panel-header">
-            <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--col-text)' }}>
-              {groupMeta?.fullName}
-            </span>
-            <span style={{ fontSize: 11.5, color: 'var(--col-text3)' }}>
-              {EXAM_TOOLS.filter((t) => t.authorities.includes(activeAuthority)).length} tools
-            </span>
-          </div>
-          <div className="nav__exam-grid">
-            {activeTools.map((tool) => (
+      <div className="mega-panel__scroll">
+        <div className="nav__mega-section-label">Exam Tools</div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
+          {tools.slice(0, 10).map((tool) => {
+            const Icon = toolIcon(tool.icon);
+            return (
               <button
                 key={tool.slug}
-                className="nav__exam-item"
+                className="nav__mega-item"
                 onClick={() => onNavigate(`/tools/${tool.slug}`)}
               >
-                <div className="nav__exam-item-name">{tool.name}</div>
-                <div className="nav__exam-item-desc">{tool.desc}</div>
+                <span className="nav__mega-icon nav__mega-icon--purple"><Icon size={17} /></span>
+                <div>
+                  <div className="nav__mega-label">{tool.name}</div>
+                  <div className="nav__mega-desc">{(tool.desc || '').split('.')[0]}</div>
+                </div>
               </button>
-            ))}
-          </div>
-          <div style={{ borderTop: '1px solid var(--col-border)', marginTop: 14, paddingTop: 12 }}>
-            <button className="open-link" onClick={() => onNavigate('/exam-tools')}>
-              View all Exam Tools <ExtLinkIcon size={12} />
-            </button>
-          </div>
+            );
+          })}
         </div>
+      </div>
+      <div className="nav__mega-divider" />
+      <div className="nav__mega-footer">
+        <button className="open-link" onClick={() => onNavigate('/exam-tools')}>
+          View all Exam Tools <ExtLinkIcon size={12} />
+        </button>
       </div>
     </div>
   );
@@ -206,7 +174,7 @@ function ExamMegaMenu({ isOpen, onNavigate }) {
    header of its own. Scroll lock uses overflow:hidden + a touchmove
    guard (not position:fixed on body, which causes ghost repaints on
    Android Chrome — learned the hard way on the original site). */
-function MobileDrawer({ isOpen, onClose, onNavigate, moreCategories = [] }) {
+function MobileDrawer({ isOpen, onClose, onNavigate, moreCategories = [], liveTools }) {
   const drawerRef = useRef(null);
   const [mounted, setMounted] = useState(false);
 
@@ -248,20 +216,26 @@ function MobileDrawer({ isOpen, onClose, onNavigate, moreCategories = [] }) {
         aria-label="Menu"
       >
         <div className="nav-drawer__section">Image Tools</div>
-        {IMAGE_TOOLS.map((t) => (
-          <button key={t.slug} className="nav-drawer__item" onClick={() => navTo(`/tools/${t.slug}`)}>
-            <span className="nav-drawer__item-icon">{getToolIcon(t.icon, 14)}</span>
-            {t.name}
-          </button>
-        ))}
+        {mergeLiveTools(IMAGE_TOOLS, liveTools, 'image-tools').map((t) => {
+          const Icon = toolIcon(t.icon);
+          return (
+            <button key={t.slug} className="nav-drawer__item" onClick={() => navTo(`/tools/${t.slug}`)}>
+              <span className="nav-drawer__item-icon"><Icon size={14} /></span>
+              {t.name}
+            </button>
+          );
+        })}
 
         <div className="nav-drawer__section">PDF Tools</div>
-        {PDF_TOOLS.map((t) => (
-          <button key={t.slug} className="nav-drawer__item" onClick={() => navTo(`/tools/${t.slug}`)}>
-            <span className="nav-drawer__item-icon" style={{ background: 'var(--col-red-bg)', color: 'var(--col-red)' }}>{getToolIcon(t.icon, 14)}</span>
-            {t.name}
-          </button>
-        ))}
+        {mergeLiveTools(PDF_TOOLS, liveTools, 'pdf-tools').map((t) => {
+          const Icon = toolIcon(t.icon);
+          return (
+            <button key={t.slug} className="nav-drawer__item" onClick={() => navTo(`/tools/${t.slug}`)}>
+              <span className="nav-drawer__item-icon" style={{ background: 'var(--col-red-bg)', color: 'var(--col-red)' }}><Icon size={14} /></span>
+              {t.name}
+            </button>
+          );
+        })}
 
         <div className="nav-drawer__section">More</div>
         {[
@@ -322,11 +296,13 @@ export default function Navigation() {
   const [openMenu, setOpenMenu] = useState(null); // 'image' | 'pdf' | 'exam' | 'more'
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [liveCategories, setLiveCategories] = useState(null);
+  const [liveTools, setLiveTools] = useState(null);
   const navRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchLiveCategories().then((c) => { if (c) setLiveCategories(c); });
+    fetchLiveTools().then((t) => { if (t) setLiveTools(t); });
   }, []);
 
   const moreCategories = useMemo(() => {
@@ -417,7 +393,7 @@ export default function Navigation() {
                   <ChevDownIcon size={13} />
                 </span>
               </button>
-              <Menu isOpen={openMenu === key} onNavigate={handleNavigate} />
+              <Menu isOpen={openMenu === key} onNavigate={handleNavigate} liveTools={liveTools} />
             </div>
           ))}
 
@@ -453,6 +429,7 @@ export default function Navigation() {
         onClose={() => setDrawerOpen(false)}
         onNavigate={(path) => { navigate(path); }}
         moreCategories={moreCategories}
+        liveTools={liveTools}
       />
     </nav>
   );

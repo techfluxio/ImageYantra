@@ -16,7 +16,7 @@ import { FAQAccordion } from '../components/ui/index.jsx';
 import PageShell from '../components/layout/PageShell.jsx';
 import { blogCategoryClass } from '../utils/helpers.js';
 import { toolIcon } from '../utils/toolIcons.js';
-import { fetchLiveBlogPosts, normalizeBlogPost } from '../utils/publicApi.js';
+import { fetchLiveBlogPosts, fetchLiveTools, mergeBySlug, normalizeBlogPost } from '../utils/publicApi.js';
 
 
 
@@ -233,9 +233,21 @@ export default function HomePage() {
   const examItems = EXAM_TOOLS.slice(0, 16).map((t) => ({ ...t, _path: `/tools/${t.slug}` }));
 
   const [liveBlogs, setLiveBlogs] = useState(null);
+  const [liveTools, setLiveTools] = useState(null);
   useEffect(() => {
     fetchLiveBlogPosts().then((rows) => { if (rows) setLiveBlogs(rows); });
+    fetchLiveTools().then((rows) => { if (rows) setLiveTools(rows); });
   }, []);
+
+  /** Merges a category's bundled static tools with any admin-added tools
+   *  for that same category (matched by category_slug), so a newly
+   *  created tool shows up on the homepage immediately instead of only
+   *  after the next full rebuild. */
+  function withLiveTools(staticList, categorySlug) {
+    if (!liveTools) return staticList;
+    const forCategory = liveTools.filter((t) => t.category_slug === categorySlug);
+    return mergeBySlug(staticList, forCategory, 'slug');
+  }
   const recentBlogs = useMemo(() => {
     const posts = liveBlogs !== null ? liveBlogs.map(normalizeBlogPost) : BLOG_POSTS;
     return [...posts].sort((a, b) => new Date(b.dateISO) - new Date(a.dateISO)).slice(0, 3);
@@ -326,12 +338,12 @@ export default function HomePage() {
 
             {/* Category sections */}
             <div>
-              <CategorySection title="Image Tools"    categoryId="image-tools" tools={IMAGE_TOOLS.slice(0, 18)} viewAllPath="/image-tools" />
-              <CategorySection title="PDF Tools"       categoryId="pdf-tools"   tools={PDF_TOOLS.slice(0, 18)}   viewAllPath="/pdf-tools" />
-              <CategorySection title="Exam Tools"      categoryId="exam-tools"  tools={examItems}                viewAllPath="/exam-tools" />
-              <CategorySection title="ID Photo Sizes"  categoryId="id-photo-sizes"  tools={ID_PHOTO_SIZES}       viewAllPath="/id-photo-sizes" />
-              <CategorySection title="Social Tools"    categoryId="social-tools" tools={SOCIAL_TOOLS}        viewAllPath="/social-tools" />
-              <CategorySection title="Other Tools"     categoryId="other-tools" tools={OTHER_TOOLS}          viewAllPath="/other-tools" />
+              <CategorySection title="Image Tools"    categoryId="image-tools" tools={withLiveTools(IMAGE_TOOLS, 'image-tools').slice(0, 18)} viewAllPath="/image-tools" />
+              <CategorySection title="PDF Tools"       categoryId="pdf-tools"   tools={withLiveTools(PDF_TOOLS, 'pdf-tools').slice(0, 18)}   viewAllPath="/pdf-tools" />
+              <CategorySection title="Exam Tools"      categoryId="exam-tools"  tools={withLiveTools(examItems, 'exam-tools')}                viewAllPath="/exam-tools" />
+              <CategorySection title="ID Photo Sizes"  categoryId="id-photo-sizes"  tools={withLiveTools(ID_PHOTO_SIZES, 'id-photo-sizes')}       viewAllPath="/id-photo-sizes" />
+              <CategorySection title="Social Tools"    categoryId="social-tools" tools={withLiveTools(SOCIAL_TOOLS, 'social-tools')}        viewAllPath="/social-tools" />
+              <CategorySection title="Other Tools"     categoryId="other-tools" tools={withLiveTools(OTHER_TOOLS, 'other-tools')}          viewAllPath="/other-tools" />
             </div>
 
             {/* FAQ + Recent Blogs */}
