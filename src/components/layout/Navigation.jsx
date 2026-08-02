@@ -131,6 +131,11 @@ function IdPhotoMegaMenu({ isOpen, onNavigate, liveTools }) {
 }
 
 /* ── Exam Tools Mega Menu ────────────────────────────── */
+function truncate(text, max = 46) {
+  if (!text) return '';
+  return text.length > max ? `${text.slice(0, max).trimEnd()}…` : text;
+}
+
 function ExamMegaMenu({ isOpen, onNavigate, liveTools }) {
   const tools = mergeLiveTools(EXAM_TOOLS, liveTools, 'exam-tools');
   return (
@@ -146,10 +151,10 @@ function ExamMegaMenu({ isOpen, onNavigate, liveTools }) {
                 className="nav__mega-item"
                 onClick={() => onNavigate(`/tools/${tool.slug}`)}
               >
-                <span className="nav__mega-icon nav__mega-icon--purple"><Icon size={17} /></span>
+                <span className="nav__mega-icon nav__mega-icon--green"><Icon size={17} /></span>
                 <div>
                   <div className="nav__mega-label">{tool.name}</div>
-                  <div className="nav__mega-desc">{(tool.desc || '').split('.')[0]}</div>
+                  <div className="nav__mega-desc">{truncate(tool.desc)}</div>
                 </div>
               </button>
             );
