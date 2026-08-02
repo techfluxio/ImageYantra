@@ -108,7 +108,7 @@ export function SocialCover() {
   );
 }
 
-export function GovtCover() {
+export function IDCover() {
   return (
     <svg viewBox="0 0 400 220" className="h-full w-full" preserveAspectRatio="xMidYMid slice">
       <rect width="400" height="220" fill="#EFF7FF" />
