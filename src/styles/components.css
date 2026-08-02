@@ -496,10 +496,11 @@
 
 .mega-panel--image { width: 600px; padding: var(--sp-4); }
 .mega-panel--pdf   { width: 600px; padding: var(--sp-4); }
-.mega-panel--exam  { width: 960px; padding: 0; overflow: hidden; }
+.mega-panel--exam  { width: 600px; padding: var(--sp-4); }
 
 .mega-panel--image,
-.mega-panel--pdf {
+.mega-panel--pdf,
+.mega-panel--exam {
   max-height: calc(100vh - var(--nav-h) - 32px);
   display: flex;
   flex-direction: column;
@@ -548,6 +549,10 @@
 .nav__mega-icon--blue {
   background: var(--col-iit-bg);
   color: var(--col-iit);
+}
+.nav__mega-icon--green {
+  background: var(--col-green-bg);
+  color: var(--col-green);
 }
 
 .nav__mega-label {
