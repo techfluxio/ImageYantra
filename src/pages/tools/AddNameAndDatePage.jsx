@@ -190,7 +190,7 @@ function PhotoNameDateWorking({ file, api }) {
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="e.g. Enter your name"
+            placeholder="e.g. Tony Stark"
             className="mb-3 w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm text-neutral-900 outline-none focus:border-violet-400"
           />
 
