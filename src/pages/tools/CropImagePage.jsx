@@ -232,7 +232,7 @@ function CropWorking({ file, api }) {
         {dataUrl && (
           <div
             ref={imgRef}
-            className="relative mx-auto max-h-[420px] max-w-full select-none overflow-hidden rounded-xl bg-neutral-100"
+            className="relative mx-auto w-fit max-h-[420px] max-w-full select-none overflow-hidden rounded-xl bg-neutral-100"
             style={{ touchAction: 'none' }}
           >
             <img
