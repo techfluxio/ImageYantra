@@ -49,7 +49,7 @@ export const CATEGORIES = [
   },
 ];
 
-export const GOVT_TOOLS = [
+export const ID_PHOTO_SIZES = [
   {
     slug: 'passport-photo',
     name: 'Passport Photo',
