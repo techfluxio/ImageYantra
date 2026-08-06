@@ -250,7 +250,7 @@ export default function HomePage() {
   }
   const recentBlogs = useMemo(() => {
     const posts = liveBlogs !== null ? liveBlogs.map(normalizeBlogPost) : BLOG_POSTS;
-    return [...posts].sort((a, b) => new Date(b.dateISO) - new Date(a.dateISO)).slice(0, 8);
+    return [...posts].sort((a, b) => new Date(b.dateISO) - new Date(a.dateISO)).slice(0, 3);
   }, [liveBlogs]);
 
   return (
@@ -359,7 +359,7 @@ export default function HomePage() {
                     <p className="text-xs text-neutral-500">Everything you need to know about ImageYantra.</p>
                   </div>
                 </div>
-                <FAQAccordion items={FAQS.slice(0, 8)} />
+                <FAQAccordion items={FAQS.slice(0, 5)} />
               </div>
 
               {/* Recent Blogs */}
