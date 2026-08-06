@@ -49,13 +49,13 @@ export const CATEGORIES = [
   },
 ];
 
-export const ID_PHOTO_SIZES = [
+export const GOVT_TOOLS = [
   {
     slug: 'passport-photo',
     name: 'Passport Photo',
     desc: 'Create compliant passport-size photographs for Indian and international passports.',
     icon: 'passport',
-    category: 'ID Photo Sizes',
+    category: 'Government Docs',
     popular: true,
     specs: { format: 'JPG / JPEG', dims: '35 × 45 mm', bg: 'White', size: '20 – 100 KB' },
   },
@@ -64,7 +64,7 @@ export const ID_PHOTO_SIZES = [
     name: 'PAN Card Photo',
     desc: 'Resize and prepare PAN card photos to exact Income Tax Department specifications.',
     icon: 'govt',
-    category: 'ID Photo Sizes',
+    category: 'Government Docs',
     specs: { format: 'JPG / JPEG', dims: '200 × 200 px', bg: 'White', size: '20 – 50 KB' },
   },
   {
@@ -72,7 +72,7 @@ export const ID_PHOTO_SIZES = [
     name: '3.5cm x 4.5cm Photo',
     desc: 'Resize a photo to the standard 3.5cm x 4.5cm ID photo size.',
     icon: 'resolution',
-    category: 'ID Photo Sizes',
+    category: 'Government Docs',
     specs: { format: 'JPG / JPEG', dims: '35 × 45 mm', bg: 'White', size: '20 – 100 KB' },
   },
   {
@@ -80,7 +80,7 @@ export const ID_PHOTO_SIZES = [
     name: 'Signature 50mm x 20mm',
     desc: 'Resize a scanned signature to the standard 50mm x 20mm size.',
     icon: 'signature',
-    category: 'ID Photo Sizes',
+    category: 'Government Docs',
     specs: { format: 'JPG / JPEG', dims: '50 × 20 mm', bg: 'White', size: '10 – 20 KB' },
   },
   {
@@ -88,7 +88,7 @@ export const ID_PHOTO_SIZES = [
     name: '3 x 4 Inch Photo',
     desc: 'Resize a photo to the standard 3 x 4 inch print size.',
     icon: 'resolution',
-    category: 'ID Photo Sizes',
+    category: 'Government Docs',
     specs: { format: 'JPG / JPEG', dims: '3 × 4 inch', bg: 'White', size: '20 – 100 KB' },
   },
   {
@@ -96,7 +96,7 @@ export const ID_PHOTO_SIZES = [
     name: '4 x 6 Inch Photo',
     desc: 'Resize a photo to the standard 4 x 6 inch print size.',
     icon: 'resolution',
-    category: 'ID Photo Sizes',
+    category: 'Government Docs',
     specs: { format: 'JPG / JPEG', dims: '4 × 6 inch', bg: 'White', size: '20 – 150 KB' },
   },
 ];
@@ -200,6 +200,14 @@ export const FAQS = [
   {
     q: 'What image and file formats are supported?',
     a: 'ImageYantra supports JPG, JPEG, PNG, WebP, HEIC, AVIF for image tools, and standard PDF files for document tools.',
+  },
+  {
+    q: 'Do I need to create an account to use the tools?',
+    a: 'No account or signup is needed for any tool. Just open the tool, upload your file, and download the result.',
+  },
+  {
+    q: 'Is there a limit on how many times I can use a tool?',
+    a: 'No. Every tool on ImageYantra can be used as many times as you like, with no daily limits or usage caps.',
   },
 ];
 

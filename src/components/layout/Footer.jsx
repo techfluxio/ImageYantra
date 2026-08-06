@@ -20,7 +20,7 @@ export default function Footer() {
   const blogLinks = (liveBlogs !== null ? liveBlogs.map(normalizeBlogPost) : BLOG_POSTS)
     .slice()
     .sort((a, b) => new Date(b.dateISO || b.date) - new Date(a.dateISO || a.date))
-    .slice(0, 4)
+    .slice(0, 10)
     .map((p) => ({
       label: p.title.length > 36 ? p.title.slice(0, 36) + '…' : p.title,
       path: `/blog/${p.slug}`,
@@ -45,6 +45,8 @@ export default function Footer() {
         { label: 'PDF Tools',        path: '/pdf-tools'     },
         { label: 'Exam Tools',       path: '/exam-tools'    },
         { label: 'ID Photo Sizes',   path: '/id-photo-sizes' },
+        { label: 'Social Tools',     path: '/social-tools'  },
+        { label: 'Other Tools',      path: '/other-tools'   },
       ],
     },
     {

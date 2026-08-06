@@ -1271,7 +1271,7 @@
 
 .footer__grid {
   display: grid;
-  grid-template-columns: 260px repeat(4, minmax(120px, 1fr));
+  grid-template-columns: 260px repeat(auto-fit, minmax(140px, 1fr));
   gap: var(--sp-8);
   margin-bottom: var(--sp-9);
 }
