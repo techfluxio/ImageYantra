@@ -82,7 +82,7 @@ export function FAQItem({ question, answer }) {
 
 export function FAQAccordion({ items }) {
   return (
-    <div>
+    <div className="flex h-full flex-col justify-between">
       {items.map((item, i) => (
         <FAQItem key={i} question={item.q} answer={item.a} />
       ))}

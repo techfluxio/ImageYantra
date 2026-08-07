@@ -6,7 +6,7 @@ import {
   ArrowRight, HelpCircle, Newspaper, Calendar, X,
 } from 'lucide-react';
 
-import { CATEGORIES, POPULAR_TOOLS, BLOG_POSTS, FAQS, ID_PHOTO_SIZES } from '../data/index.js';
+import { CATEGORIES, POPULAR_TOOLS, BLOG_POSTS, FAQS, GOVT_TOOLS } from '../data/index.js';
 import { IMAGE_TOOLS } from '../data/imageTools.js';
 import { PDF_TOOLS } from '../data/pdfTools.js';
 import { EXAM_TOOLS } from '../data/examTools.js';
@@ -118,7 +118,7 @@ function SearchBar() {
   const allSearchable = useMemo(() => ([
     ...IMAGE_TOOLS.map((t) => ({ ...t, _path: `/tools/${t.slug}`, _cat: 'Image Tools' })),
     ...PDF_TOOLS.map((t) => ({ ...t, _path: `/tools/${t.slug}`, _cat: 'PDF Tools' })),
-    ...ID_PHOTO_SIZES.map((t) => ({ ...t, _path: `/tools/${t.slug}`, _cat: 'ID Photo Sizes' })),
+    ...GOVT_TOOLS.map((t) => ({ ...t, _path: `/tools/${t.slug}`, _cat: 'ID Photo Sizes' })),
     ...SOCIAL_TOOLS.map((t) => ({ ...t, _path: `/tools/${t.slug}`, _cat: 'Social Tools' })),
     ...OTHER_TOOLS.map((t) => ({ ...t, _path: `/tools/${t.slug}`, _cat: 'Other Tools' })),
     ...EXAM_TOOLS.map((t) => ({ ...t, _path: `/tools/${t.slug}`, _cat: 'Exam Tools' })),
@@ -341,7 +341,7 @@ export default function HomePage() {
               <CategorySection title="Image Tools"    categoryId="image-tools" tools={withLiveTools(IMAGE_TOOLS, 'image-tools').slice(0, 18)} viewAllPath="/image-tools" />
               <CategorySection title="PDF Tools"       categoryId="pdf-tools"   tools={withLiveTools(PDF_TOOLS, 'pdf-tools').slice(0, 18)}   viewAllPath="/pdf-tools" />
               <CategorySection title="Exam Tools"      categoryId="exam-tools"  tools={withLiveTools(examItems, 'exam-tools')}                viewAllPath="/exam-tools" />
-              <CategorySection title="ID Photo Sizes"  categoryId="id-photo-sizes"  tools={withLiveTools(ID_PHOTO_SIZES, 'id-photo-sizes')}       viewAllPath="/id-photo-sizes" />
+              <CategorySection title="ID Photo Sizes"  categoryId="id-photo-sizes"  tools={withLiveTools(GOVT_TOOLS, 'id-photo-sizes')}       viewAllPath="/id-photo-sizes" />
               <CategorySection title="Social Tools"    categoryId="social-tools" tools={withLiveTools(SOCIAL_TOOLS, 'social-tools')}        viewAllPath="/social-tools" />
               <CategorySection title="Other Tools"     categoryId="other-tools" tools={withLiveTools(OTHER_TOOLS, 'other-tools')}          viewAllPath="/other-tools" />
             </div>
@@ -349,7 +349,7 @@ export default function HomePage() {
             {/* FAQ + Recent Blogs */}
             <section className="mt-4 grid gap-6 lg:grid-cols-5">
               {/* FAQ */}
-              <div className="rounded-2xl border border-neutral-200 bg-white p-5 md:p-6 lg:col-span-3">
+              <div className="flex flex-col rounded-2xl border border-neutral-200 bg-white p-5 md:p-6 lg:col-span-3">
                 <div className="mb-5 flex items-center gap-3">
                   <div className="grid h-9 w-9 place-items-center rounded-lg bg-violet-100">
                     <HelpCircle className="h-5 w-5 text-violet-600" />
@@ -359,7 +359,9 @@ export default function HomePage() {
                     <p className="text-xs text-neutral-500">Everything you need to know about ImageYantra.</p>
                   </div>
                 </div>
-                <FAQAccordion items={FAQS.slice(0, 8)} />
+                <div className="flex-1">
+                  <FAQAccordion items={FAQS.slice(0, 8)} />
+                </div>
               </div>
 
               {/* Recent Blogs */}
