@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { adminApi } from './adminApi.js';
 import logoMark from '../assets/images/logo-64.png';
@@ -21,6 +21,8 @@ export default function AdminLogin() {
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const signedOutReason = location.state?.reason;
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -37,7 +39,7 @@ export default function AdminLogin() {
   }
 
   return (
-    <div style={{
+    <div className="admin-shell" style={{
       minHeight: '100vh', position: 'relative', display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center', background: 'var(--col-bg)',
       padding: 'var(--sp-4)', overflow: 'hidden', fontFamily: 'var(--ff-body)',
@@ -78,7 +80,7 @@ export default function AdminLogin() {
       >
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: 'var(--sp-7)' }}>
           <img src={logoMark} alt="ImageYantra" width={44} height={44} style={{ objectFit: 'contain', marginBottom: 14 }} />
-          <div style={{ fontFamily: 'var(--ff-head)', fontSize: 22, fontWeight: 800, color: 'var(--col-text)' }}>
+          <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 22, fontWeight: 800, color: 'var(--col-text)' }}>
             Image<span style={{ color: 'var(--col-accent)' }}>Yantra</span>
           </div>
           <div style={{
@@ -90,6 +92,12 @@ export default function AdminLogin() {
           </div>
           <p style={{ fontSize: 14, color: 'var(--col-text2)', marginTop: 14 }}>Sign in to manage your site.</p>
         </div>
+
+        {signedOutReason && (
+          <div style={{ marginBottom: 18, fontSize: 13, color: '#b26a00', background: '#fff4e0', padding: '10px 12px', borderRadius: 'var(--r-sm)', fontWeight: 500 }}>
+            {signedOutReason}
+          </div>
+        )}
 
         <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 6, color: 'var(--col-text2)' }}>Email</label>
         <FocusInput

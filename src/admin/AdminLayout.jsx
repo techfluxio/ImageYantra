@@ -1,10 +1,10 @@
-﻿import { useEffect, useState } from 'react';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+﻿import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, Wrench, LayoutGrid, Newspaper, PanelBottom, Megaphone, Bug, LogOut, ExternalLink,
   FileText, Settings, DatabaseBackup,
 } from 'lucide-react';
 import { adminApi } from './adminApi.js';
+import { useAdminGuard } from './useAdminGuard.js';
 import logoMark from '../assets/images/logo-64.png';
 
 const NAV_ITEMS = [
@@ -21,14 +21,8 @@ const NAV_ITEMS = [
 ];
 
 export default function AdminLayout() {
-  const [checking, setChecking] = useState(true);
+  const { checking } = useAdminGuard();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    adminApi.me()
-      .then(() => setChecking(false))
-      .catch(() => navigate('/admin/login'));
-  }, [navigate]);
 
   async function handleLogout() {
     await adminApi.logout();
@@ -49,17 +43,14 @@ export default function AdminLayout() {
         width: 280, flexShrink: 0, background: 'var(--col-white)', borderRight: '1px solid var(--col-border)',
         padding: 'var(--sp-6) var(--sp-4)', display: 'flex', flexDirection: 'column', position: 'sticky', top: 0, height: '100vh',
       }}>
-        <div style={{
-          marginBottom: 'var(--sp-8)', paddingLeft: 'var(--sp-2)', width: 'fit-content',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8,
-        }}>
+        <div style={{ marginBottom: 'var(--sp-8)', paddingLeft: 'var(--sp-2)', paddingBottom: 26 }}>
           <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
             <img src={logoMark} alt="ImageYantra" width={26} height={26} style={{ objectFit: 'contain', flexShrink: 0 }} />
             <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 19, fontWeight: 800, color: 'var(--col-text)' }}>
               Image<span style={{ color: 'var(--col-accent)' }}>Yantra</span>
             </div>
             <span style={{
-              position: 'absolute', right: 0, top: '100%', marginBottom: 5, whiteSpace: 'nowrap',
+              position: 'absolute', right: 0, top: '100%', marginTop: 6, whiteSpace: 'nowrap',
               padding: '3px 10px', borderRadius: 'var(--r-full)', background: 'var(--col-accent-xxl, #f3e8ff)', color: 'var(--col-accent)',
               fontSize: 11, fontWeight: 700, letterSpacing: 0.3, textTransform: 'uppercase',
             }}>
