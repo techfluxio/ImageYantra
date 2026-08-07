@@ -61,7 +61,7 @@ export function makeImagesToPdfPage({ format }) {
 function ImagesToPdfWorking({ files, api }) {
   const [busy, setBusy] = useState(false);
   const [progress, setProgress] = useState({ pct: 0, msg: '' });
-  const [settings, setSettings] = useState({ pageSize: 'fit', orientation: 'portrait', margin: 'none' });
+  const [settings, setSettings] = useState({ pageSize: 'a4', orientation: 'portrait', margin: 'none' });
 
   function updateSettings(next) {
     setSettings((prev) => ({ ...prev, ...next }));
