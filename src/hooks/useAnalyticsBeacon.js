@@ -52,6 +52,9 @@ export function useAnalyticsBeacon() {
       session_id: getSessionId(),
       device_type: getDeviceType(),
       user_agent: navigator.userAgent,
-    }).then(() => {}, () => {}); // fire-and-forget, never surfaces errors to the user
+    }).then(
+      () => {},
+      (err) => { console.warn('[analytics] page_views insert failed:', err?.message || err); },
+    ); // fire-and-forget — never blocks navigation, but failures are now at least visible in the console
   }, [location.pathname]);
 }

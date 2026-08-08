@@ -1,10 +1,10 @@
-﻿import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+﻿import { useEffect, useState } from 'react';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, Wrench, LayoutGrid, Newspaper, PanelBottom, Megaphone, Bug, LogOut, ExternalLink,
   FileText, Settings, DatabaseBackup,
 } from 'lucide-react';
 import { adminApi } from './adminApi.js';
-import { useAdminGuard } from './useAdminGuard.js';
 import logoMark from '../assets/images/logo-64.png';
 
 const NAV_ITEMS = [
@@ -21,12 +21,35 @@ const NAV_ITEMS = [
 ];
 
 export default function AdminLayout() {
-  const { checking } = useAdminGuard();
+  const [checking, setChecking] = useState(true);
   const navigate = useNavigate();
+
+  function checkAuth() {
+    adminApi.me()
+      .then(() => setChecking(false))
+      .catch(() => navigate('/admin/login', { replace: true }));
+  }
+
+  useEffect(() => {
+    checkAuth();
+  }, [navigate]);
+
+  // Re-check whenever the page is restored from the browser's bfcache —
+  // hitting Back/Forward can restore a full snapshot of this page
+  // WITHOUT re-running any React code, so the effect above never re-fires
+  // on its own. This is what let a signed-out admin hit "back" straight
+  // into the dashboard without logging in again.
+  useEffect(() => {
+    function onPageShow(e) {
+      if (e.persisted) checkAuth();
+    }
+    window.addEventListener('pageshow', onPageShow);
+    return () => window.removeEventListener('pageshow', onPageShow);
+  }, [navigate]);
 
   async function handleLogout() {
     await adminApi.logout();
-    navigate('/admin/login');
+    navigate('/admin/login', { replace: true });
   }
 
   if (checking) {
