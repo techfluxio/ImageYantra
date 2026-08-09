@@ -20,18 +20,28 @@ const NAV_ITEMS = [
   { to: '/admin/backup', label: 'Backup', Icon: DatabaseBackup },
 ];
 
+// How often an open admin tab re-checks that its session hasn't been
+// superseded by a newer login elsewhere (see adminApi.checkSessionValid).
+const SESSION_POLL_MS = 20000;
+
 export default function AdminLayout() {
   const [checking, setChecking] = useState(true);
   const navigate = useNavigate();
 
-  function checkAuth() {
-    adminApi.me()
-      .then(() => setChecking(false))
-      .catch(() => navigate('/admin/login', { replace: true }));
+  async function checkAuth() {
+    try {
+      await adminApi.me();
+      const stillValid = await adminApi.checkSessionValid();
+      if (!stillValid) throw new Error('Session superseded');
+      setChecking(false);
+    } catch {
+      navigate('/admin/login', { replace: true });
+    }
   }
 
   useEffect(() => {
     checkAuth();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
   // Re-check whenever the page is restored from the browser's bfcache —
@@ -45,6 +55,21 @@ export default function AdminLayout() {
     }
     window.addEventListener('pageshow', onPageShow);
     return () => window.removeEventListener('pageshow', onPageShow);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigate]);
+
+  // Periodically confirm this tab's session is still the active one —
+  // catches the case where someone logs in elsewhere (or on another
+  // device) while this tab stays open and idle, without needing a
+  // navigation or a bfcache restore to trigger the check.
+  useEffect(() => {
+    const id = setInterval(() => {
+      adminApi.checkSessionValid().then((valid) => {
+        if (!valid) navigate('/admin/login', { replace: true });
+      });
+    }, SESSION_POLL_MS);
+    return () => clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
   async function handleLogout() {

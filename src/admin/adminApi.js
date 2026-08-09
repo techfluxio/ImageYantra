@@ -16,6 +16,35 @@ function unwrap({ data, error }) {
   return data;
 }
 
+/** Supabase's REST API caps any single query at a server-configured max
+ *  (1000 by default) — use this for any query whose row count can
+ *  realistically grow past that over time (analytics, logs). Two things
+ *  matter for this to actually work correctly, both of which the
+ *  earlier version got wrong:
+ *   1. An explicit, stable ORDER BY — without one, Postgres doesn't
+ *      guarantee the same row order across separate paginated requests,
+ *      so pages can silently skip or duplicate rows.
+ *   2. Advance by how many rows actually came back, not by an assumed
+ *      PAGE_SIZE — if the server's real per-request cap is ever lower
+ *      than PAGE_SIZE, assuming a full page arrived causes the loop to
+ *      stop early and silently drop data past that point. */
+async function fetchAllRows(table, buildQuery) {
+  const PAGE_SIZE = 1000;
+  let rows = [];
+  let from = 0;
+  while (true) {
+    const { data: page, error } = await buildQuery(supabase.from(table))
+      .order('created_at', { ascending: true })
+      .range(from, from + PAGE_SIZE - 1);
+    if (error) throw new Error(error.message);
+    if (!page || page.length === 0) break;
+    rows = rows.concat(page);
+    from += page.length;
+    if (page.length < PAGE_SIZE) break; // got fewer than asked for — that was the last page
+  }
+  return rows;
+}
+
 function browserFromUA(ua = '') {
   if (!ua) return 'Other';
   if (/Edg\//.test(ua)) return 'Edge';
@@ -36,17 +65,21 @@ function trafficSourceFromReferrer(host) {
   return 'Referral';
 }
 
+const ADMIN_SESSION_KEY = 'iy_admin_session_id';
+
 export const adminApi = {
   // ── Auth ──────────────────────────────────────────────
   async login(email, password) {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) throw new Error(error.message || 'Login failed');
 
-    // Single-device login: claim this browser as the one active session.
-    // Any other tab/device polling checkSessionStillActive() will see its
-    // own id no longer matches and sign itself out.
-    const sessionId = crypto.randomUUID();
-    localStorage.setItem('iy_admin_session_id', sessionId);
+    // Claim the single active-admin-session slot for this login. Any
+    // other tab/browser that was already logged in will notice its id
+    // no longer matches on its next check and sign itself out — this is
+    // what stops a stale or shared session from staying "logged in"
+    // once a fresh login has happened, on this device or another one.
+    const sessionId = Math.random().toString(36).slice(2) + Date.now().toString(36);
+    localStorage.setItem(ADMIN_SESSION_KEY, sessionId);
     await supabase.from('admin_sessions').update({ session_id: sessionId, updated_at: new Date().toISOString() }).eq('id', 1);
 
     return { token: data.session?.access_token };
@@ -56,17 +89,25 @@ export const adminApi = {
     if (error || !data?.user) throw new Error('Not signed in');
     return data.user;
   },
-  /** True if this browser's stored session id still matches the one row
-   *  in admin_sessions — false means someone signed in elsewhere since. */
-  async isSessionStillActive() {
-    const local = localStorage.getItem('iy_admin_session_id');
-    if (!local) return false;
+  /** Returns false (and signs out) if this tab's session has been
+   *  superseded by a newer login elsewhere. Call this on mount, on a
+   *  timer, and whenever the page is restored from the browser's
+   *  back/forward cache — a bfcache restore runs no React code on its
+   *  own, so without this a signed-out tab could still show cached,
+   *  stale admin content after hitting Back. */
+  async checkSessionValid() {
+    const mine = localStorage.getItem(ADMIN_SESSION_KEY);
+    if (!mine) return false;
     const { data, error } = await supabase.from('admin_sessions').select('session_id').eq('id', 1).single();
-    if (error) return true; // can't verify (e.g. table missing/offline) — fail open, don't lock the admin out
-    return data?.session_id === local;
+    if (error) return true; // can't verify right now — don't force-logout on a network blip
+    if (data.session_id && data.session_id !== mine) {
+      await adminApi.logout();
+      return false;
+    }
+    return true;
   },
   async logout() {
-    localStorage.removeItem('iy_admin_session_id');
+    localStorage.removeItem(ADMIN_SESSION_KEY);
     await supabase.auth.signOut();
   },
 
@@ -108,11 +149,9 @@ export const adminApi = {
   // ── Analytics (page views) ───────────────────────────
   async analyticsSummary(days = 30) {
     const since = new Date(Date.now() - days * 86400000).toISOString();
-    const { data, error } = await supabase
-      .from('page_views')
-      .select('path, tool_slug, device_type, referrer_host, session_id, user_agent, created_at')
-      .gte('created_at', since);
-    if (error) throw new Error(error.message);
+    const data = await fetchAllRows('page_views', (q) =>
+      q.select('path, tool_slug, device_type, referrer_host, session_id, user_agent, created_at').gte('created_at', since),
+    );
 
     const totalViews = data.length;
     const sessions = new Set();
@@ -162,12 +201,10 @@ export const adminApi = {
   // ── Tool health / completions ──────────────────────────
   async toolStats(days = 30) {
     const since = new Date(Date.now() - days * 86400000).toISOString();
-    const [{ data: completions, error: e1 }, { data: errors, error: e2 }] = await Promise.all([
-      supabase.from('tool_completions').select('tool_slug, files_count, duration_ms, created_at').gte('created_at', since),
-      supabase.from('error_reports').select('tool_slug, created_at').gte('created_at', since),
+    const [completions, errors] = await Promise.all([
+      fetchAllRows('tool_completions', (q) => q.select('tool_slug, files_count, duration_ms, created_at').gte('created_at', since)),
+      fetchAllRows('error_reports', (q) => q.select('tool_slug, created_at').gte('created_at', since)),
     ]);
-    if (e1) throw new Error(e1.message);
-    if (e2) throw new Error(e2.message);
 
     const filesProcessed = completions.reduce((sum, c) => sum + (c.files_count || 1), 0);
     const durations = completions.map((c) => c.duration_ms).filter((d) => typeof d === 'number' && d > 0);
