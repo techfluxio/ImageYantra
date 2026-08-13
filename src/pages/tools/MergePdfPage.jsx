@@ -18,7 +18,7 @@ const RELATED_TOOLS = [
 
 const FAQS = [
   { q: 'Will merging change the quality of my PDFs?', a: 'No — pages are copied exactly as they are (text stays selectable, images stay full quality). No rasterizing happens unless a source file is already very large.' },
-  { q: 'Why is the output always a small file size?', a: 'We losslessly compact the merged file (deduplicated structure, compressed cross-reference streams). If a source PDF already contains huge scanned images and the merged file would still be large, we apply one automatic high-quality pass to bring it under 500KB.' },
+  { q: 'Why is the output always a small file size?', a: 'We losslessly compact the merged file (deduplicated structure, compressed cross-reference streams). Only if a source PDF already contains huge scanned images and the merged file would still exceed 1MB do we apply one automatic high-quality pass to bring it under that size.' },
   { q: 'Can I change the order the files are merged in?', a: 'Yes — drag the file cards to reorder them before merging.' },
   { q: 'Is my PDF uploaded to a server?', a: 'No. Merging happens entirely in your browser — your files never leave your device.' },
 ];

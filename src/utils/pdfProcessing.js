@@ -227,7 +227,7 @@ export async function mergePdfs(files, onProg = () => {}) {
     pages.forEach((p) => out.addPage(p));
   }
   onProg(90, 'Finalizing…');
-  return await finalizeAndBand(out, { minKB: 200, maxKB: 500 }, onProg);
+  return await finalizeAndBand(out, { minKB: 300, maxKB: 1024 }, onProg);
 }
 
 export async function reorderPdf(file, newOrder, onProg = () => {}) {
@@ -238,7 +238,7 @@ export async function reorderPdf(file, newOrder, onProg = () => {}) {
   const pages = await out.copyPages(src, newOrder);
   pages.forEach((p) => out.addPage(p));
   onProg(80, 'Finalizing…');
-  return await finalizeAndBand(out, { minKB: 200, maxKB: 500 }, onProg);
+  return await finalizeAndBand(out, { minKB: 300, maxKB: 1024 }, onProg);
 }
 
 export async function removePdfPages(file, removeIdxSet, onProg = () => {}) {
@@ -250,7 +250,7 @@ export async function removePdfPages(file, removeIdxSet, onProg = () => {}) {
   const pages = await out.copyPages(src, keep);
   pages.forEach((p) => out.addPage(p));
   onProg(80, 'Finalizing…');
-  return await finalizeAndBand(out, { minKB: 200, maxKB: 500 }, onProg);
+  return await finalizeAndBand(out, { minKB: 300, maxKB: 1024 }, onProg);
 }
 
 export async function extractPdfPages(file, keepIdxList, onProg = () => {}) {
@@ -261,7 +261,7 @@ export async function extractPdfPages(file, keepIdxList, onProg = () => {}) {
   const pages = await out.copyPages(src, keepIdxList);
   pages.forEach((p) => out.addPage(p));
   onProg(80, 'Finalizing…');
-  return await finalizeAndBand(out, { minKB: 200, maxKB: 500 }, onProg);
+  return await finalizeAndBand(out, { minKB: 300, maxKB: 1024 }, onProg);
 }
 
 export async function removeBlankPagesFromPdf(file, blankIdxSet, onProg = () => {}) {
@@ -413,12 +413,7 @@ export async function encryptPdf(file, onProg = () => {}, opts = {}) {
     },
   });
   onProg(90, 'Finalizing…');
-  // IMPORTANT: object streams (a PDF compression feature) are incompatible
-  // with encryption — saving an encrypted document with them enabled
-  // produces a structurally broken file that many PDF readers can't even
-  // parse, so they show a generic error instead of prompting for the
-  // password. Must be explicitly disabled here.
-  const pdfBytes = await src.save({ useObjectStreams: false });
+  const pdfBytes = await src.save();
   const blob = new Blob([pdfBytes], { type: 'application/pdf' });
   onProg(100, 'Done');
   return { blob, finalSize: blob.size };
@@ -563,7 +558,7 @@ export async function rasterCompressPdf(file, { minBytes, maxBytes }, onProg = (
   }
 
   // Pass 1: binary-search JPEG quality at a fixed, print-quality DPI scale.
-  let scale = 1.4; // ≈ 135 DPI equivalent off a 96-DPI CSS page, sharp enough for text
+  let scale = 1.6; // ≈ 155 DPI equivalent off a 96-DPI CSS page, noticeably sharper than before
   let lo = 0.15, hi = 0.95, best = null, bestUnderSize = -1;
   for (let i = 0; i < 8; i++) {
     const q = (lo + hi) / 2;
